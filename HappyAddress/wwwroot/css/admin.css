@@ -1,0 +1,74 @@
+﻿.admin-box {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 6px solid var(--color-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
+}
+
+.admin-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-links a {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.admin-links a:hover {
+    color: var(--color-secondary);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-table th {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.admin-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--color-light);
+}
+
+.admin-ad-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 6px solid var(--color-secondary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+}
+
+.admin-ad-card img {
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.admin-form {
+    margin-top: 10px;
+}
+
+.admin-form select,
+.admin-form input {
+    max-width: 350px;
+}
+
+.admin-danger button {
+    background-color: #8b2f2f;
+}
+
+.admin-danger button:hover {
+    background-color: #6f2424;
+}

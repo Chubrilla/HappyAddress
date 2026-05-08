@@ -1,0 +1,676 @@
+﻿@using System.Text.Json
+@model HappyAddress.Models.Ad
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/ads.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+}
+
+@{
+    string statusClass = "";
+
+    if (Model.Status == "На модерации")
+    {
+        statusClass = "status-orange";
+    }
+    else if (Model.Status == "Опубликовано")
+    {
+        statusClass = "status-green";
+    }
+    else if (Model.Status == "Отклонено")
+    {
+        statusClass = "status-red";
+    }
+}
+
+<h2 class="details-title">@Model.Title</h2>
+
+<div class="details-layout">
+
+    <div class="details-left">
+        @if (Model.Images != null && Model.Images.Count > 0)
+        {
+            <div class="details-gallery">
+                <img src="@Model.Images[0].ImagePath"
+                     class="details-main-image"
+                     onclick="openGallery(0)"
+                     alt="Фото объявления" />
+
+                <div class="details-thumbs">
+                    @for (int i = 0; i < Model.Images.Count; i++)
+                    {
+                        <img src="@Model.Images[i].ImagePath"
+                             class="details-thumb"
+                             onclick="openGallery(@i)"
+                             alt="Миниатюра" />
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="ad-details-box">
+            <p><strong>Описание:</strong> @Model.Description</p>
+            <p><strong>Адрес:</strong> @Model.Address</p>
+            <p><strong>Тип недвижимости:</strong> @Model.PropertyType</p>
+            <p><strong>Статус:</strong> <span class="@statusClass">@Model.Status</span></p>
+
+            @if (Model.PropertyType == "Дом" || Model.PropertyType == "Коттедж" || Model.PropertyType == "Таунхаус")
+            {
+                <div class="details-section">
+                    <h3>О доме</h3>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.HouseType))
+                    {
+                        <p><strong>Тип дома:</strong> @Model.HouseType</p>
+                    }
+
+                    @if (Model.TotalArea.HasValue)
+                    {
+                        <p><strong>Площадь дома:</strong> @Model.TotalArea м²</p>
+                    }
+
+                    @if (Model.Bedrooms.HasValue)
+                    {
+                        <p><strong>Количество спален:</strong> @Model.Bedrooms</p>
+                    }
+
+                    @if (Model.TotalFloors.HasValue)
+                    {
+                        <p><strong>Количество этажей:</strong> @Model.TotalFloors</p>
+                    }
+
+                    @if (Model.BuildYear.HasValue)
+                    {
+                        <p><strong>Год постройки:</strong> @Model.BuildYear</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.HouseMaterial))
+                    {
+                        <p><strong>Материал дома:</strong> @Model.HouseMaterial</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.HouseCondition))
+                    {
+                        <p><strong>Состояние дома:</strong> @Model.HouseCondition</p>
+                    }
+                </div>
+
+                <div class="details-section">
+                    <h3>Коммуникации и удобства</h3>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.BathroomType))
+                    {
+                        <p><strong>Санузел:</strong> @Model.BathroomType</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Sewerage))
+                    {
+                        <p><strong>Канализация:</strong> @Model.Sewerage</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.WaterSupply))
+                    {
+                        <p><strong>Водоснабжение:</strong> @Model.WaterSupply</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Gas))
+                    {
+                        <p><strong>Газ:</strong> @Model.Gas</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Heating))
+                    {
+                        <p><strong>Отопление:</strong> @Model.Heating</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Electricity))
+                    {
+                        <p><strong>Электричество:</strong> @Model.Electricity</p>
+                    }
+
+                    <div class="features-list">
+                        @if (Model.HasGarage)
+                        {
+                            <span>Гараж</span>
+                        }
+
+                        @if (Model.HasTerrace)
+                        {
+                            <span>Терраса</span>
+                        }
+
+                        @if (Model.HasCellar)
+                        {
+                            <span>Погреб</span>
+                        }
+
+                        @if (Model.HasPool)
+                        {
+                            <span>Бассейн</span>
+                        }
+
+                        @if (Model.HasBathhouse)
+                        {
+                            <span>Баня</span>
+                        }
+
+                        @if (Model.HasSecurity)
+                        {
+                            <span>Охрана</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.PropertyType == "Квартира")
+            {
+                <div class="details-section">
+                    <h3>О квартире</h3>
+
+                    @if (Model.Rooms.HasValue)
+                    {
+                        if (Model.Rooms == 0)
+                        {
+                            <p><strong>Количество комнат:</strong> Студия</p>
+                        }
+                        else if (Model.Rooms >= 5)
+                        {
+                            <p><strong>Количество комнат:</strong> 5+</p>
+                        }
+                        else
+                        {
+                            <p><strong>Количество комнат:</strong> @Model.Rooms</p>
+                        }
+                    }
+
+                    @if (Model.TotalArea.HasValue)
+                    {
+                        <p><strong>Общая площадь:</strong> @Model.TotalArea м²</p>
+                    }
+
+                    @if (Model.LivingArea.HasValue)
+                    {
+                        <p><strong>Жилая площадь:</strong> @Model.LivingArea м²</p>
+                    }
+
+                    @if (Model.KitchenArea.HasValue)
+                    {
+                        <p><strong>Площадь кухни:</strong> @Model.KitchenArea м²</p>
+                    }
+
+                    @if (Model.Floor.HasValue || Model.TotalFloors.HasValue)
+                    {
+                        <p>
+                            <strong>Этаж:</strong>
+                            @(Model.Floor.HasValue ? Model.Floor.ToString() : "—")
+                            /
+                            @(Model.TotalFloors.HasValue ? Model.TotalFloors.ToString() : "—")
+                        </p>
+                    }
+
+                    @if (Model.BuildYear.HasValue)
+                    {
+                        <p><strong>Год постройки:</strong> @Model.BuildYear</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.BuildingType))
+                    {
+                        <p><strong>Тип дома:</strong> @Model.BuildingType</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Renovation))
+                    {
+                        <p><strong>Ремонт:</strong> @Model.Renovation</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.BathroomType))
+                    {
+                        <p><strong>Санузел:</strong> @Model.BathroomType</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.BalconyType))
+                    {
+                        <p><strong>Балкон / лоджия:</strong> @Model.BalconyType</p>
+                    }
+                </div>
+
+                <div class="details-section">
+                    <h3>Дополнительно</h3>
+
+                    <div class="features-list">
+                        @if (Model.HasElevator)
+                        {
+                            <span>Лифт</span>
+                        }
+
+                        @if (Model.HasParking)
+                        {
+                            <span>Парковка</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.PropertyType == "Участок")
+            {
+                <div class="details-section">
+                    <h3>Об участке</h3>
+
+                    @if (Model.LandArea.HasValue)
+                    {
+                        <p><strong>Площадь участка:</strong> @Model.LandArea сот.</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.LandCategory))
+                    {
+                        <p><strong>Категория земли:</strong> @Model.LandCategory</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.LandStatus))
+                    {
+                        <p><strong>Статус участка:</strong> @Model.LandStatus</p>
+                    }
+                </div>
+
+                <div class="details-section">
+                    <h3>Коммуникации</h3>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.WaterSupply))
+                    {
+                        <p><strong>Водоснабжение:</strong> @Model.WaterSupply</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Gas))
+                    {
+                        <p><strong>Газ:</strong> @Model.Gas</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Electricity))
+                    {
+                        <p><strong>Электричество:</strong> @Model.Electricity</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Sewerage))
+                    {
+                        <p><strong>Канализация:</strong> @Model.Sewerage</p>
+                    }
+                </div>
+            }
+
+            @if (Model.PropertyType == "Гараж")
+            {
+                <div class="details-section">
+                    <h3>О гараже</h3>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.GarageType))
+                    {
+                        <p><strong>Тип гаража:</strong> @Model.GarageType</p>
+                    }
+
+                    @if (Model.TotalArea.HasValue)
+                    {
+                        <p><strong>Площадь:</strong> @Model.TotalArea м²</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.GarageStatus))
+                    {
+                        <p><strong>Статус:</strong> @Model.GarageStatus</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Electricity))
+                    {
+                        <p><strong>Электричество:</strong> @Model.Electricity</p>
+                    }
+                </div>
+
+                <div class="details-section">
+                    <h3>Дополнительно</h3>
+
+                    <div class="features-list">
+                        @if (Model.HasSecurity)
+                        {
+                            <span>Охрана</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.DealType == "Долгосрочная аренда")
+            {
+                <div class="details-section">
+                    <h3>Условия аренды</h3>
+
+                    @if (Model.Deposit.HasValue)
+                    {
+                        <p><strong>Залог:</strong> @Model.Deposit.Value.ToString("N0") ₽</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Prepayment))
+                    {
+                        <p><strong>Предоплата:</strong> @Model.Prepayment</p>
+                    }
+
+                    <div class="features-list">
+                        @if (Model.AllowChildren)
+                        {
+                            <span>Можно с детьми</span>
+                        }
+
+                        @if (Model.AllowPets)
+                        {
+                            <span>Можно с животными</span>
+                        }
+
+                        @if (Model.HasFurniture)
+                        {
+                            <span>Есть мебель</span>
+                        }
+
+                        @if (Model.HasAppliances)
+                        {
+                            <span>Есть техника</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.DealType == "Посуточная аренда")
+            {
+                <div class="details-section">
+                    <h3>Посуточная аренда</h3>
+
+                    @if (Model.GuestsCount.HasValue)
+                    {
+                        <p><strong>Количество гостей:</strong> @Model.GuestsCount</p>
+                    }
+
+                    @if (Model.SleepingPlaces.HasValue)
+                    {
+                        <p><strong>Спальных мест:</strong> @Model.SleepingPlaces</p>
+                    }
+
+                    @if (Model.Rooms.HasValue)
+                    {
+                        if (Model.Rooms == 0)
+                        {
+                            <p><strong>Количество комнат:</strong> Студия</p>
+                        }
+                        else if (Model.Rooms >= 5)
+                        {
+                            <p><strong>Количество комнат:</strong> 5+</p>
+                        }
+                        else
+                        {
+                            <p><strong>Количество комнат:</strong> @Model.Rooms</p>
+                        }
+                    }
+
+                    @if (Model.TotalArea.HasValue)
+                    {
+                        <p><strong>Площадь:</strong> @Model.TotalArea м²</p>
+                    }
+
+                    @if (Model.Floor.HasValue || Model.TotalFloors.HasValue)
+                    {
+                        <p>
+                            <strong>Этаж:</strong>
+                            @(Model.Floor.HasValue ? Model.Floor.ToString() : "—")
+                            /
+                            @(Model.TotalFloors.HasValue ? Model.TotalFloors.ToString() : "—")
+                        </p>
+                    }
+
+                    @if (Model.AvailableFrom.HasValue)
+                    {
+                        <p><strong>Доступно с:</strong> @Model.AvailableFrom.Value.ToString("dd.MM.yyyy")</p>
+                    }
+
+                    @if (Model.AvailableTo.HasValue)
+                    {
+                        <p><strong>Доступно до:</strong> @Model.AvailableTo.Value.ToString("dd.MM.yyyy")</p>
+                    }
+                </div>
+
+                <div class="details-section">
+                    <h3>Удобства для проживания</h3>
+
+                    <div class="features-list">
+                        @if (Model.HasWifi)
+                        {
+                            <span>Wi-Fi</span>
+                        }
+
+                        @if (Model.HasAirConditioner)
+                        {
+                            <span>Кондиционер</span>
+                        }
+
+                        @if (Model.HasKitchen)
+                        {
+                            <span>Кухня</span>
+                        }
+
+                        @if (Model.HasTv)
+                        {
+                            <span>Телевизор</span>
+                        }
+
+                        @if (Model.HasWashingMachine)
+                        {
+                            <span>Стиральная машина</span>
+                        }
+
+                        @if (Model.HasBedLinen)
+                        {
+                            <span>Постельное бельё</span>
+                        }
+
+                        @if (Model.HasFurniture)
+                        {
+                            <span>Мебель</span>
+                        }
+
+                        @if (Model.HasAppliances)
+                        {
+                            <span>Техника</span>
+                        }
+
+                        @if (Model.HasParking)
+                        {
+                            <span>Парковка</span>
+                        }
+
+                        @if (Model.AllowChildren)
+                        {
+                            <span>Можно с детьми</span>
+                        }
+
+                        @if (Model.AllowPets)
+                        {
+                            <span>Можно с животными</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.RejectReason))
+            {
+                <p><strong>Причина отклонения:</strong> @Model.RejectReason</p>
+            }
+
+            <p><strong>Дата создания:</strong> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+        </div>
+    </div>
+
+    <div class="details-sidebar">
+        <div class="price-card">
+            <h2>@Model.Price ₽</h2>
+
+            @if (ViewBag.IsFavorite == true)
+            {
+                <form asp-controller="Ads" asp-action="RemoveFromFavorites" method="post">
+                    <input type="hidden" name="adId" value="@Model.Id" />
+                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+
+                    <button type="submit" class="favorite-button favorite-active">
+                        ❤️ В избранном
+                    </button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Ads" asp-action="AddToFavorites" method="post">
+                    <input type="hidden" name="adId" value="@Model.Id" />
+                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+
+                    <button type="submit" class="favorite-button">
+                        🤍 Добавить в избранное
+                    </button>
+                </form>
+            }
+
+            <button type="button"
+                    class="phone-button"
+                    data-phone="@Model.PhoneNumber"
+                    onclick="showPhone(this)">
+                Показать телефон
+            </button>
+
+            @if (Model.Latitude != null && Model.Longitude != null)
+            {
+                <button type="button" class="map-button" onclick="showMap()">
+                    Показать на карте
+                </button>
+            }
+
+            <a asp-controller="Home" asp-action="Index" class="back-link">Назад на главную</a>
+        </div>
+    </div>
+</div>
+
+@if (Model.Latitude != null && Model.Longitude != null)
+{
+    <div id="mapBlock" class="details-map-block" style="display:none;">
+        <h3>Расположение на карте</h3>
+        <p><strong>Адрес:</strong> @Model.City, @Model.Address</p>
+        <div id="detailsMap" class="details-map"></div>
+    </div>
+}
+
+@if (Model.Images != null && Model.Images.Count > 0)
+{
+    <div id="galleryModal" class="gallery-modal">
+        <div class="gallery-header">
+            <span>@Model.Title</span>
+            <button type="button" onclick="closeGallery()">×</button>
+        </div>
+
+        <button type="button" class="gallery-arrow left" onclick="prevImage()">‹</button>
+
+        <img id="galleryImage" class="gallery-full-image" src="" alt="Фото объявления" />
+
+        <button type="button" class="gallery-arrow right" onclick="nextImage()">›</button>
+
+        <div class="gallery-thumbs">
+            @for (int i = 0; i < Model.Images.Count; i++)
+            {
+                <img src="@Model.Images[i].ImagePath"
+                     class="gallery-thumb"
+                     onclick="setImage(@i)"
+                     alt="Миниатюра" />
+            }
+        </div>
+    </div>
+
+    <script>
+        const galleryImages = @Html.Raw(JsonSerializer.Serialize(Model.Images.Select(i => i.ImagePath).ToList()));
+
+        let currentImageIndex = 0;
+
+        function openGallery(index) {
+            currentImageIndex = index;
+            document.getElementById("galleryModal").style.display = "flex";
+            updateGalleryImage();
+        }
+
+        function closeGallery() {
+            document.getElementById("galleryModal").style.display = "none";
+        }
+
+        function setImage(index) {
+            currentImageIndex = index;
+            updateGalleryImage();
+        }
+
+        function nextImage() {
+            currentImageIndex++;
+
+            if (currentImageIndex >= galleryImages.length) {
+                currentImageIndex = 0;
+            }
+
+            updateGalleryImage();
+        }
+
+        function prevImage() {
+            currentImageIndex--;
+
+            if (currentImageIndex < 0) {
+                currentImageIndex = galleryImages.length - 1;
+            }
+
+            updateGalleryImage();
+        }
+
+        function updateGalleryImage() {
+            document.getElementById("galleryImage").src = galleryImages[currentImageIndex];
+        }
+    </script>
+}
+
+<script>
+    function showPhone(button) {
+        let phone = button.getAttribute("data-phone");
+
+        console.log(phone);
+
+        if (!phone || phone.trim() === "" || phone === "null") {
+            button.textContent = "Телефон не указан";
+            return;
+        }
+
+        button.textContent = "📞 " + phone.trim();
+        button.disabled = true;
+    }
+</script>
+
+@if (Model.Latitude != null && Model.Longitude != null)
+{
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        let detailsMap = null;
+
+        function showMap() {
+            const mapBlock = document.getElementById("mapBlock");
+            mapBlock.style.display = "block";
+
+            const lat = @Model.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const lng = @Model.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            if (detailsMap === null) {
+                detailsMap = L.map("detailsMap").setView([lat, lng], 16);
+
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "© OpenStreetMap"
+                }).addTo(detailsMap);
+
+                L.marker([lat, lng]).addTo(detailsMap);
+            }
+
+            setTimeout(function () {
+                detailsMap.invalidateSize();
+            }, 100);
+        }
+    </script>
+}

@@ -1,0 +1,54 @@
+﻿@model HappyAddress.Models.RegisterViewModel
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
+}
+
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<div class="account-box">
+    <h2>Регистрация</h2>
+    
+    <form asp-action="Register" asp-controller="Account" method="post">
+        <div asp-validation-summary="All" style="color:red"></div>
+    
+        <div>
+            <label asp-for="LastName">Фамилия</label><br />
+            <input asp-for="LastName" />
+            <span asp-validation-for="LastName" style="color:red"></span>
+        </div>
+    
+        <div>
+            <label asp-for="FirstName">Имя</label><br />
+            <input asp-for="FirstName" />
+            <span asp-validation-for="FirstName" style="color:red"></span>
+        </div>
+    
+        <div>
+            <label asp-for="MiddleName">Отчество</label><br />
+            <input asp-for="MiddleName" />
+            <span asp-validation-for="MiddleName" style="color:red"></span>
+        </div>
+    
+        <div>
+            <label asp-for="PhoneNumber">Телефон</label><br />
+            <input asp-for="PhoneNumber" placeholder="+79991234567" />
+            <span asp-validation-for="PhoneNumber" style="color:red"></span>
+        </div>
+    
+        <div>
+            <label asp-for="BirthDate">Дата рождения</label><br />
+            <input asp-for="BirthDate" type="date" />
+            <span asp-validation-for="BirthDate" style="color:red"></span>
+        </div>
+    
+        <br />
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

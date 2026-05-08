@@ -1,0 +1,98 @@
+﻿:root {
+    --color-primary: #424123; /* Moss */
+    --color-secondary: #80744C; /* Olive */
+    --color-light: #E6DED3; /* Oat */
+    --color-accent: #E8D1C1; /* Blush */
+
+    --color-text-main: #2c2c2c;
+    --color-text-light: #ffffff;
+}
+
+/* Общий фон */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--color-light);
+}
+
+/* Контейнер */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ШАПКА */
+.main-header {
+    background-color: var(--color-primary);
+    padding: 15px 0;
+}
+
+/* Внутренности шапки */
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Логотип */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-text-light);
+    text-decoration: none;
+}
+
+/* Меню */
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+ /* Ссылки */
+ .main-nav a {
+     color: var(--color-text-light);
+     text-decoration: none;
+ }
+
+ /* Ховер */
+ .main-nav a:hover {
+     color: var(--color-accent);
+ }
+
+/* Кнопка */
+.new-ad-btn {
+    background-color: var(--color-secondary);
+    padding: 8px 14px;
+    border-radius: 6px;
+}
+
+.new-ad-btn:hover {
+    background-color: var(--color-accent);
+}
+
+/* Кнопки в шапке */
+.nav-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--color-accent);
+}
+
+    .nav-btn:hover {
+        background-color: var(--color-accent);
+        color: var(--color-primary);
+    }
+
+/* Акцентная кнопка (регистрация) */
+.nav-btn-accent {
+    background-color: var(--color-secondary);
+    color: white;
+    border: none;
+}
+
+    .nav-btn-accent:hover {
+        background-color: var(--color-accent);
+        color: var(--color-primary);
+    }

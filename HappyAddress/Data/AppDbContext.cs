@@ -1,0 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore;
+using HappyAddress.Models;
+
+namespace HappyAddress.Data
+{
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Ad> Ads { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<AdImage> AdImages { get; set; }
+    }
+}

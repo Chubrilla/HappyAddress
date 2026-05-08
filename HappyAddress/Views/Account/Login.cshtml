@@ -1,0 +1,25 @@
+﻿@model HappyAddress.Models.LoginViewModel
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
+}
+
+<div class="account-box">
+    <h2>Вход</h2>
+    
+    <form asp-action="Login" asp-controller="Account" method="post">
+        <div asp-validation-summary="All" style="color:red"></div>
+    
+        <div>
+            <label asp-for="PhoneNumber">Телефон</label><br />
+            <input asp-for="PhoneNumber" placeholder="+79991234567" />
+            <span asp-validation-for="PhoneNumber" style="color:red"></span>
+        </div>
+    
+        <br />
+        <button type="submit">Войти</button>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,371 @@
+﻿/* Блок поиска */
+.search-panel {
+    background-color: var(--color-accent);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+.search-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.search-input-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.main-search-input {
+    width: 100%;
+    height: 50px;
+    padding-right: 60px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.search-submit-btn {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 0px 8px 8px 0px;
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+}
+
+.search-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Модальное окно фильтров */
+.filters-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.55);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.filters-modal-content {
+    width: min(1000px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.filters-modal-header {
+    margin-bottom: 20px;
+}
+
+    .filters-modal-header h3 {
+        margin: 0;
+    }
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.filters-actions {
+    position: sticky;
+    bottom: -28px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin: 24px -28px -28px;
+    padding: 18px 28px;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+}
+
+.reset-filter-btn {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* Карта на главной */
+.home-map-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 6px solid var(--color-secondary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+.home-map {
+    height: 450px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+/* Список */
+.ads-count {
+    color: var(--color-primary);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.no-ads {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.cards-list {
+    margin-top: 20px;
+}
+
+.ad-card {
+    transition: transform 0.15s ease;
+}
+
+    .ad-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .ad-card img {
+        width: 100%;
+        max-width: 300px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .ad-card p strong {
+        color: var(--color-primary);
+    }
+
+/* Адаптив */
+@media (max-width: 800px) {
+    .search-input-wrap {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .main-search-input,
+    .search-submit-btn {
+        border-radius: 8px;
+        width: 100%;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/*====================================
+   ФИЛЬТРЫ - ДИНАМИЧЕСКИЕ ПОЛЯ
+====================================*/
+
+.dynamic-filter-fields {
+    grid-column: 1 / -1;
+    margin-top: 18px;
+    padding: 18px;
+    background: #f7f8fb;
+    border-radius: 16px;
+    border: 1px solid #e3e7ef;
+}
+
+    .dynamic-filter-fields h4 {
+        margin: 0 0 14px;
+        font-size: 18px;
+        color: #222;
+    }
+
+.filter-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+    .filter-checkboxes label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: #ffffff;
+        border: 1px solid #d6ddea;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+
+    .filter-checkboxes input {
+        width: auto;
+    }
+
+.filters-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.filters-modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+}
+
+.filters-modal-content::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+    border-radius: 8px;
+}
+
+    .filters-modal-content::-webkit-scrollbar-thumb:hover {
+        background: #999;
+    }
+
+.home-map-box {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+    .map-header h3 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .map-header p {
+        margin: 6px 0 0;
+        color: #666;
+    }
+
+.map-close-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    background: #333333;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+#adsMap {
+    width: 100%;
+    height: 520px;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.map-popup {
+    min-width: 180px;
+    font-size: 14px;
+}
+
+    .map-popup strong {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .map-popup a {
+        display: inline-block;
+        margin-top: 8px;
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+@media (max-width: 768px) {
+    .home-map-box {
+        margin: 20px 12px;
+        padding: 16px;
+    }
+
+    .map-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #adsMap {
+        height: 420px;
+    }
+}
+
+.leaflet-control-attribution,
+.leaflet-bottom.leaflet-right {
+    display: none !important;
+}
+
+.cluster-ads-list {
+    margin-top: 22px;
+    padding: 20px;
+    background: #f8f8f3;
+    border-radius: 18px;
+    border: 1px solid #e1dfd2;
+}
+
+    .cluster-ads-list h4 {
+        margin: 0 0 16px;
+        font-size: 20px;
+        color: #222;
+    }
+
+.cluster-ad-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+    .cluster-ad-card h5 {
+        margin: 0 0 6px;
+        font-size: 17px;
+        color: #222;
+    }
+
+.cluster-ad-price {
+    margin: 0 0 4px;
+    font-weight: 700;
+    color: #222;
+}
+
+.cluster-ad-address {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.cluster-ad-link {
+    flex-shrink: 0;
+    padding: 9px 14px;
+    border-radius: 10px;
+    background: #3d3d1f;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+    .cluster-ad-link:hover {
+        background: #2d2d16;
+        color: #ffffff;
+    }

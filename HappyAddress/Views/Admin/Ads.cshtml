@@ -1,0 +1,81 @@
+﻿@model List<HappyAddress.Models.Ad>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin.css" />
+}
+
+<h2>Все объявления</h2>
+
+@if (Model.Count == 0)
+{
+    <div class="admin-box">
+        <p>Объявлений нет.</p>
+    </div>
+}
+else
+{
+    foreach (var ad in Model)
+    {
+        string statusClass = "";
+
+        if (ad.Status == "На модерации")
+        {
+            statusClass = "status-orange";
+        }
+        else if (ad.Status == "Опубликовано")
+        {
+            statusClass = "status-green";
+        }
+        else if (ad.Status == "Отклонено")
+        {
+            statusClass = "status-red";
+        }
+
+        <div class="admin-ad-card">
+            <h3>@ad.Title</h3>
+
+            @if (ad.Images != null && ad.Images.Count > 0)
+            {
+                <img src="@ad.Images[0].ImagePath" alt="Фото объявления" width="220" />
+            }
+
+            <p><strong>ID:</strong> @ad.Id</p>
+            <p><strong>Цена:</strong> @ad.Price</p>
+            <p><strong>Город:</strong> @ad.City</p>
+            <p><strong>Адрес:</strong> @ad.Address</p>
+            <p><strong>Тип:</strong> @ad.PropertyType</p>
+            <p><strong>Сделка:</strong> @ad.DealType</p>
+            <p><strong>Статус:</strong> <span class="@statusClass">@ad.Status</span></p>
+
+            @if (!string.IsNullOrEmpty(ad.RejectReason))
+            {
+                <p><strong>Причина отклонения:</strong> @ad.RejectReason</p>
+            }
+
+            <form asp-controller="Admin" asp-action="ChangeStatus" method="post" class="admin-form">
+                <input type="hidden" name="id" value="@ad.Id" />
+
+                <div class="form-group">
+                    <label>Статус</label>
+                    <select name="status">
+                        <option value="На модерации" selected="@(ad.Status == "На модерации")">На модерации</option>
+                        <option value="Опубликовано" selected="@(ad.Status == "Опубликовано")">Опубликовано</option>
+                        <option value="Отклонено" selected="@(ad.Status == "Отклонено")">Отклонено</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Причина отклонения</label>
+                    <input type="text" name="rejectReason" value="@ad.RejectReason" />
+                </div>
+
+                <button type="submit">Изменить статус</button>
+            </form>
+
+            <form asp-controller="Admin" asp-action="DeleteAd" method="post" class="admin-form admin-danger" onsubmit="return confirm('Удалить объявление?');">
+                <input type="hidden" name="id" value="@ad.Id" />
+                <button type="submit">Удалить</button>
+            </form>
+        </div>
+    }
+}

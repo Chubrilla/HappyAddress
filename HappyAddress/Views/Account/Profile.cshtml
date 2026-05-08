@@ -1,0 +1,27 @@
+﻿@model HappyAddress.Models.User
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
+}
+
+<div class="account-box">
+
+    <h2>Личный кабинет</h2>
+
+    <div class="profile-info">
+        <p><strong>Фамилия:</strong> @Model.LastName</p>
+        <p><strong>Имя:</strong> @Model.FirstName</p>
+        <p><strong>Отчество:</strong> @Model.MiddleName</p>
+        <p><strong>Телефон:</strong> @Model.PhoneNumber</p>
+        <p><strong>Дата рождения:</strong> @Model.BirthDate.ToString("dd.MM.yyyy")</p>
+        <p><strong>Роль:</strong> @Model.Role</p>
+    </div>
+
+    <div class="profile-actions">
+        <a asp-controller="Ads" asp-action="Create">Создать объявление</a>
+        <a asp-controller="Ads" asp-action="MyAds">Мои объявления</a>
+        <a asp-controller="Ads" asp-action="Favorites">Избранное</a>
+        <a asp-controller="Account" asp-action="Logout">Выйти</a>
+    </div>
+
+</div>

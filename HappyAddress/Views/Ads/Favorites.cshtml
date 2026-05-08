@@ -1,0 +1,63 @@
+﻿@model List<HappyAddress.Models.Ad>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/ads.css" />
+}
+
+<h2>Избранные объявления</h2>
+
+@if (Model.Count == 0)
+{
+    <p>У вас пока нет избранных объявлений.</p>
+}
+else
+{
+    foreach (var ad in Model)
+    {
+        <div style="border:1px solid gray; padding:10px; margin-bottom:10px;">
+            <h3>
+                <a asp-controller="Ads" asp-action="Details" asp-route-id="@ad.Id">
+                    @ad.Title
+                </a>
+            </h3>
+
+            @if (ad.Images != null && ad.Images.Count > 0)
+            {
+                <img src="@ad.Images[0].ImagePath" alt="Фото объявления" width="200" />
+            }
+
+            <p><strong>Цена:</strong> @ad.Price</p>
+            <p><strong>Город:</strong> @ad.City</p>
+            <p><strong>Адрес:</strong> @ad.Address</p>
+            <p><strong>Тип:</strong> @ad.PropertyType</p>
+            <p><strong>Сделка:</strong> @ad.DealType</p>
+
+            <form asp-controller="Ads" asp-action="RemoveFromFavorites" method="post">
+                <input type="hidden" name="adId" value="@ad.Id" />
+                <button type="submit">Удалить из избранного</button>
+            </form>
+        </div>
+    }
+
+    @if (ViewBag.Totalpages > 1)
+    {
+        <div style="margin-top:20px;">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                if (i == ViewBag.CurrentPage)
+                {
+                    <strong style="margin-right:10px;">@i</strong>
+                }
+                else
+                {
+                    <a asp-controller="Ads"
+                       asp-action="Favorites"
+                       asp-route-page="@i"
+                       style="margin-right:10px;">
+                        @i
+                    </a>
+                }
+            }
+        </div>
+    }
+}

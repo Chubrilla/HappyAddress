@@ -1,0 +1,93 @@
+﻿@model List<HappyAddress.Models.Ad>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/ads.css" />
+}
+
+<h2 class="ads-page-title">Мои объявления</h2>
+
+<p>
+    <a asp-controller="Ads" asp-action="Create" class="ads-link-button">Добавить объявление</a>
+</p>
+
+@if (Model.Count == 0)
+{
+    <div class="ads-empty-box">
+        <p>У вас пока нет объявлений.</p>
+    </div>
+}
+else
+{
+    <div class="ads-list">
+        @foreach (var ad in Model)
+        {
+            string statusClass = "";
+
+            if (ad.Status == "На модерации")
+            {
+                statusClass = "status-orange";
+            }
+            else if (ad.Status == "Опубликовано")
+            {
+                statusClass = "status-green";
+            }
+            else if (ad.Status == "Отклонено")
+            {
+                statusClass = "status-red";
+            }
+
+            <div class="ads-card">
+                <h3>
+                    <a asp-controller="Ads" asp-action="Details" asp-route-id="@ad.Id">
+                        @ad.Title
+                    </a>
+                </h3>
+
+                @if (ad.Images != null && ad.Images.Count > 0)
+                {
+                    <img src="@ad.Images[0].ImagePath" alt="Фото объявления" class="ads-card-image" />
+                }
+
+                <p><strong>Цена:</strong> @ad.Price</p>
+                <p><strong>Город:</strong> @ad.City</p>
+                <p><strong>Адрес:</strong> @ad.Address</p>
+                <p><strong>Тип:</strong> @ad.PropertyType</p>
+                <p><strong>Сделка:</strong> @ad.DealType</p>
+                <p><strong>Статус:</strong> <span class="@statusClass">@ad.Status</span></p>
+
+                @if (!string.IsNullOrEmpty(ad.RejectReason))
+                {
+                    <p><strong>Причина отклонения:</strong> @ad.RejectReason</p>
+                }
+
+                <p><strong>Дата:</strong> @ad.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+
+                <div class="ads-actions">
+                    <a asp-controller="Ads" asp-action="Edit" asp-route-id="@ad.Id">Редактировать</a>
+
+                    <form asp-controller="Ads" asp-action="Delete" method="post" onsubmit="return confirm('Удалить объявление?');">
+                        <input type="hidden" name="id" value="@ad.Id" />
+                        <button type="submit">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                if (i == ViewBag.CurrentPage)
+                {
+                    <strong>@i</strong>
+                }
+                else
+                {
+                    <a asp-controller="Ads" asp-action="MyAds" asp-route-page="@i">@i</a>
+                }
+            }
+        </div>
+    }
+}

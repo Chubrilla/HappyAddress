@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Http
+@using System.Text.Json;
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HappyAddress</title>
+   
+    <link rel="stylesheet" href="~/css/layout.css" />
+    <link rel="stylesheet" href="~/css/common.css" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-inner">
+            <div class="logo-block">
+                <a asp-controller="Home" asp-action="Index" class="logo">HappyAddress</a>
+            </div>
+
+            <nav class="main-nav">
+                <a asp-controller="Home" asp-action="Index">Главная</a>
+
+                @if (Context.Session.GetInt32("UserId") != null)
+                {
+                    <span class="welcome-text">
+                        Здравствуйте, @Context.Session.GetString("UserName")
+                    </span>
+
+                    <a asp-controller="Account" asp-action="Profile">Личный кабинет</a>
+
+                    <a asp-controller="Ads" asp-action="Create" class="new-ad-btn">
+                        Новое объявление
+                    </a>
+
+                    <a asp-controller="Account" asp-action="Logout">
+                        Выйти
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="nav-btn">
+                        Войти
+                    </a>
+
+                    <a asp-controller="Account" asp-action="Register" class="nav-btn nav-btn-accent">
+                        Регистрация
+                    </a>
+                }
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main-content">
+
+        <div id="toastContainer"></div>
+
+        @if (TempData["Success"] != null)
+        {
+            <script>
+                window.toastMessage = @Html.Raw(JsonSerializer.Serialize(TempData["Success"]));
+                window.toastType = 'success';
+            </script>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <script>
+                window.toastMessage = @Html.Raw(JsonSerializer.Serialize(TempData["Error"]));
+                window.toastType = 'error';
+            </script>
+        }
+
+        @RenderBody()
+    </main>
+
+    <script src="~/js/toast.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

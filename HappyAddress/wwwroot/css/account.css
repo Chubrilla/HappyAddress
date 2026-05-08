@@ -1,0 +1,32 @@
+﻿.account-box {
+    background-color: white;
+    max-width: 500px;
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 6px solid var(--color-secondary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.account-box h2 {
+    margin-top: 0;
+}
+
+.profile-info p {
+    margin: 10px 0;
+}
+
+.profile-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-actions a {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.profile-actions a:hover {
+    color: var(--color-secondary);
+}

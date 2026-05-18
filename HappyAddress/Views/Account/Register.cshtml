@@ -1,54 +1,137 @@
 ﻿@model HappyAddress.Models.RegisterViewModel
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/account.css" />
-}
-
 @{
     ViewData["Title"] = "Регистрация";
 }
 
-<div class="account-box">
-    <h2>Регистрация</h2>
-    
-    <form asp-action="Register" asp-controller="Account" method="post">
-        <div asp-validation-summary="All" style="color:red"></div>
-    
-        <div>
-            <label asp-for="LastName">Фамилия</label><br />
-            <input asp-for="LastName" />
-            <span asp-validation-for="LastName" style="color:red"></span>
+@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" />
+}
+
+<div class="auth-page register-auth-page">
+    <div class="auth-card register-auth-card">
+        <h1>Регистрация</h1>
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="error-message">
+                @TempData["Error"]
+            </div>
+        }
+
+        <form asp-action="Register" asp-controller="Account" method="post">
+            <div class="auth-form-row">
+                <div class="form-group">
+                    <label asp-for="LastName">Фамилия</label>
+                    <input asp-for="LastName" placeholder="Введите фамилию" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FirstName">Имя</label>
+                    <input asp-for="FirstName" placeholder="Введите имя" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="auth-form-row">
+                <div class="form-group">
+                    <label asp-for="MiddleName">Отчество</label>
+                    <input asp-for="MiddleName" placeholder="Введите отчество" />
+                    <span asp-validation-for="MiddleName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="BirthDate">Дата рождения</label>
+                    <input asp-for="BirthDate" type="date" />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="auth-form-row">
+                <div class="form-group">
+                    <label asp-for="PhoneNumber">Телефон</label>
+                    <input asp-for="PhoneNumber" placeholder="+7 (999) 123-45-67" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" type="email" placeholder="Введите email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="auth-form-row">
+                <div class="form-group">
+                    <label asp-for="Password">Пароль</label>
+                    <input asp-for="Password" type="password" placeholder="Введите пароль" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Повторите пароль</label>
+                    <input asp-for="ConfirmPassword" type="password" placeholder="Повторите пароль" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <button type="submit" class="auth-btn">
+                Зарегистрироваться
+            </button>
+        </form>
+
+        <div class="auth-bottom-text">
+            Уже есть аккаунт?
+            <a asp-controller="Account" asp-action="Login">
+                Войти
+            </a>
         </div>
-    
-        <div>
-            <label asp-for="FirstName">Имя</label><br />
-            <input asp-for="FirstName" />
-            <span asp-validation-for="FirstName" style="color:red"></span>
-        </div>
-    
-        <div>
-            <label asp-for="MiddleName">Отчество</label><br />
-            <input asp-for="MiddleName" />
-            <span asp-validation-for="MiddleName" style="color:red"></span>
-        </div>
-    
-        <div>
-            <label asp-for="PhoneNumber">Телефон</label><br />
-            <input asp-for="PhoneNumber" placeholder="+79991234567" />
-            <span asp-validation-for="PhoneNumber" style="color:red"></span>
-        </div>
-    
-        <div>
-            <label asp-for="BirthDate">Дата рождения</label><br />
-            <input asp-for="BirthDate" type="date" />
-            <span asp-validation-for="BirthDate" style="color:red"></span>
-        </div>
-    
-        <br />
-        <button type="submit">Зарегистрироваться</button>
-    </form>
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const phoneInput = document.querySelector('input[name="PhoneNumber"]');
+
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function () {
+                let x = phoneInput.value.replace(/\D/g, '');
+
+                if (x.startsWith('8')) {
+                    x = '7' + x.slice(1);
+                }
+
+                if (!x.startsWith('7')) {
+                    x = '7' + x;
+                }
+
+                x = x.substring(0, 11);
+
+                let formatted = '+7';
+
+                if (x.length > 1) {
+                    formatted += ' (' + x.substring(1, 4);
+                }
+
+                if (x.length >= 4) {
+                    formatted += ') ' + x.substring(4, 7);
+                }
+
+                if (x.length >= 7) {
+                    formatted += '-' + x.substring(7, 9);
+                }
+
+                if (x.length >= 9) {
+                    formatted += '-' + x.substring(9, 11);
+                }
+
+                phoneInput.value = formatted;
+            });
+        }
+    </script>
 }

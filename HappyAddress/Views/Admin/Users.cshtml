@@ -1,41 +1,156 @@
-﻿@model List<HappyAddress.Models.User>
+﻿@model IEnumerable<HappyAddress.Models.User>
+
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+@functions {
+    public string FormatPhone(string? phone)
+    {
+        if (string.IsNullOrWhiteSpace(phone))
+        {
+            return "Не указан";
+        }
+
+        string digits = new string(phone.Where(char.IsDigit).ToArray());
+
+        if (digits.Length == 11 && digits.StartsWith("8"))
+        {
+            digits = "7" + digits.Substring(1);
+        }
+
+        if (digits.Length == 10)
+        {
+            digits = "7" + digits;
+        }
+
+        if (digits.Length == 11 && digits.StartsWith("7"))
+        {
+            return $"+7 ({digits.Substring(1, 3)}) {digits.Substring(4, 3)}-{digits.Substring(7, 2)}-{digits.Substring(9, 2)}";
+        }
+
+        return phone;
+    }
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/admin.css" />
 }
 
-<div class="admin-box">
-    <h2>Пользователи</h2>
+<div class="admin-page">
+    <aside class="admin-sidebar">
+        <h2>Админ-панель</h2>
 
-    @if (Model.Count == 0)
-    {
-        <p>Пользователей нет.</p>
-    }
-    else
-    {
-        <table class="admin-table">
-            <tr>
-                <th>ID</th>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Отчество</th>
-                <th>Телефон</th>
-                <th>Дата рождения</th>
-                <th>Роль</th>
-            </tr>
+        <nav class="admin-menu">
+            <a asp-controller="Admin" asp-action="Users" class="active">
+                Пользователи
+            </a>
 
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@user.Id</td>
-                    <td>@user.LastName</td>
-                    <td>@user.FirstName</td>
-                    <td>@user.MiddleName</td>
-                    <td>@user.PhoneNumber</td>
-                    <td>@user.BirthDate.ToString("dd.MM.yyyy")</td>
-                    <td>@user.Role</td>
-                </tr>
-            }
-        </table>
-    }
+            <a asp-controller="Admin" asp-action="Ads">
+                Объявления
+            </a>
+
+            <a asp-controller="Home" asp-action="Index" class="admin-back-link">
+                На главную
+            </a>
+        </nav>
+    </aside>
+
+    <section class="admin-content-card">
+        <h1>Пользователи</h1>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="admin-empty-box">
+                Пользователей пока нет.
+            </div>
+        }
+        else
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>ФИО</th>
+                            <th class="admin-phone-cell">Телефон</th>
+                            <th>Дата рождения</th>
+                            <th>Роль</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(user.Email))
+                                    {
+                                        @user.Email
+                                    }
+                                    else
+                                    {
+                                        <span class="admin-muted">Не указан</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @user.LastName @user.FirstName @user.MiddleName
+                                </td>
+
+                                <td class="admin-phone-cell">
+                                    @if (!string.IsNullOrWhiteSpace(user.PhoneNumber))
+                                    {
+                                        @FormatPhone(user.PhoneNumber)
+                                    }
+                                    else
+                                    {
+                                        <span class="admin-muted">Не указан</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @user.BirthDate.ToString("dd.MM.yyyy")
+                                </td>
+
+                                <td>
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <span class="admin-role-badge admin-role-admin">
+                                            Admin
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="admin-role-badge">
+                                            @user.Role
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (user.IsEmailConfirmed)
+                                    {
+                                        <span class="admin-status-success">
+                                            Подтверждён
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="admin-status-danger">
+                                            Не подтверждён
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
 </div>

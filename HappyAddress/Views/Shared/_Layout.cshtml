@@ -14,6 +14,13 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
+    
+    <div class="site-video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="~/videos/city-bg.mp4" type="video/mp4" />
+        </video>
+    </div>
+
     <header class="main-header">
         <div class="container header-inner">
             <div class="logo-block">
@@ -25,19 +32,41 @@
 
                 @if (Context.Session.GetInt32("UserId") != null)
                 {
-                    <span class="welcome-text">
-                        Здравствуйте, @Context.Session.GetString("UserName")
-                    </span>
+                    @if (Context.Session.GetString("UserRole") == "Admin")
+                    {
+                        <a asp-controller="Admin" asp-action="Index">
+                            Админка
+                        </a>
+                    }
 
-                    <a asp-controller="Account" asp-action="Profile">Личный кабинет</a>
+                    <a asp-controller="Ads" asp-action="Favorites" class="favorites-header-link" title="Избранное">
+                        ❤
+                    </a>
 
                     <a asp-controller="Ads" asp-action="Create" class="new-ad-btn">
                         Новое объявление
                     </a>
 
-                    <a asp-controller="Account" asp-action="Logout">
-                        Выйти
-                    </a>
+                    <div class="user-dropdown">
+                        <button type="button" class="user-dropdown-btn" onclick="toggleUserMenu()">
+                            @Context.Session.GetString("UserName")
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+
+                        <div id="userDropdownMenu" class="user-dropdown-menu">
+                            <a asp-controller="Account" asp-action="Profile">
+                                Профиль
+                            </a>
+
+                            <a asp-controller="Ads" asp-action="MyAds">
+                                Мои объявления
+                            </a>
+
+                            <a asp-controller="Account" asp-action="Logout" class="dropdown-logout">
+                                Выйти
+                            </a>
+                        </div>
+                    </div>
                 }
                 else
                 {
@@ -77,6 +106,33 @@
     </main>
 
     <script src="~/js/toast.js"></script>
+    <script>
+        function toggleUserMenu() {
+            const menu = document.getElementById("userDropdownMenu");
+
+            if (!menu) {
+                return;
+            }
+
+            menu.classList.toggle("show");
+        }
+
+        document.addEventListener("click", function (event) {
+            const dropdown = document.querySelector(".user-dropdown");
+
+            if (!dropdown) {
+                return;
+            }
+
+            if (!dropdown.contains(event.target)) {
+                const menu = document.getElementById("userDropdownMenu");
+
+                if (menu) {
+                    menu.classList.remove("show");
+                }
+            }
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

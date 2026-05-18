@@ -69,6 +69,11 @@
                         <p><strong>Площадь дома:</strong> @Model.TotalArea м²</p>
                     }
 
+                    @if (Model.LandArea.HasValue)
+                    {
+                        <p><strong>Площадь участка:</strong> @Model.LandArea сот.</p>
+                    }
+
                     @if (Model.Bedrooms.HasValue)
                     {
                         <p><strong>Количество спален:</strong> @Model.Bedrooms</p>
@@ -309,7 +314,7 @@
 
                     @if (Model.TotalArea.HasValue)
                     {
-                        <p><strong>Площадь:</strong> @Model.TotalArea м²</p>
+                        <p><strong>Площадь:</strong> @Model.TotalArea m²</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.GarageStatus))
@@ -504,7 +509,9 @@
 
     <div class="details-sidebar">
         <div class="price-card">
-            <h2>@Model.Price ₽</h2>
+            <h2 class="details-price">
+                @Model.Price.ToString("N0") ₽
+            </h2>
 
             @if (ViewBag.IsFavorite == true)
             {
@@ -538,22 +545,47 @@
 
             @if (Model.Latitude != null && Model.Longitude != null)
             {
-                <button type="button" class="map-button" onclick="showMap()">
+                <button type="button" class="map-button" onclick="openDetailsMapModal()">
                     Показать на карте
                 </button>
             }
+            else
+            {
+                <button type="button" class="map-button" disabled>
+                    Карта недоступна
+                </button>
+            }
 
-            <a asp-controller="Home" asp-action="Index" class="back-link">Назад на главную</a>
+            <a asp-controller="Home" asp-action="Index" class="back-link">
+                Назад на главную
+            </a>
         </div>
     </div>
 </div>
 
 @if (Model.Latitude != null && Model.Longitude != null)
 {
-    <div id="mapBlock" class="details-map-block" style="display:none;">
-        <h3>Расположение на карте</h3>
-        <p><strong>Адрес:</strong> @Model.City, @Model.Address</p>
-        <div id="detailsMap" class="details-map"></div>
+    <div id="detailsMapModal" class="details-map-modal">
+        <div class="details-map-modal-content">
+            <div class="details-map-modal-header">
+                <div>
+                    <h3>Расположение на карте</h3>
+                    <p>
+                        @Model.City
+                        @if (!string.IsNullOrWhiteSpace(Model.Address))
+                        {
+                            <span>, @Model.Address</span>
+                        }
+                    </p>
+                </div>
+
+                <button type="button" class="details-map-modal-close" onclick="closeDetailsMapModal()">
+                    ×
+                </button>
+            </div>
+
+            <div id="detailsModalMap" class="details-modal-map"></div>
+        </div>
     </div>
 }
 
@@ -581,96 +613,150 @@
             }
         </div>
     </div>
-
-    <script>
-        const galleryImages = @Html.Raw(JsonSerializer.Serialize(Model.Images.Select(i => i.ImagePath).ToList()));
-
-        let currentImageIndex = 0;
-
-        function openGallery(index) {
-            currentImageIndex = index;
-            document.getElementById("galleryModal").style.display = "flex";
-            updateGalleryImage();
-        }
-
-        function closeGallery() {
-            document.getElementById("galleryModal").style.display = "none";
-        }
-
-        function setImage(index) {
-            currentImageIndex = index;
-            updateGalleryImage();
-        }
-
-        function nextImage() {
-            currentImageIndex++;
-
-            if (currentImageIndex >= galleryImages.length) {
-                currentImageIndex = 0;
-            }
-
-            updateGalleryImage();
-        }
-
-        function prevImage() {
-            currentImageIndex--;
-
-            if (currentImageIndex < 0) {
-                currentImageIndex = galleryImages.length - 1;
-            }
-
-            updateGalleryImage();
-        }
-
-        function updateGalleryImage() {
-            document.getElementById("galleryImage").src = galleryImages[currentImageIndex];
-        }
-    </script>
 }
 
-<script>
-    function showPhone(button) {
-        let phone = button.getAttribute("data-phone");
+@section Scripts {
+    @if (Model.Images != null && Model.Images.Count > 0)
+    {
+        <script>
+            const galleryImages = @Html.Raw(JsonSerializer.Serialize(Model.Images.Select(i => i.ImagePath).ToList()));
 
-        console.log(phone);
+            let currentImageIndex = 0;
 
-        if (!phone || phone.trim() === "" || phone === "null") {
-            button.textContent = "Телефон не указан";
-            return;
-        }
-
-        button.textContent = "📞 " + phone.trim();
-        button.disabled = true;
-    }
-</script>
-
-@if (Model.Latitude != null && Model.Longitude != null)
-{
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-    <script>
-        let detailsMap = null;
-
-        function showMap() {
-            const mapBlock = document.getElementById("mapBlock");
-            mapBlock.style.display = "block";
-
-            const lat = @Model.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            const lng = @Model.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-            if (detailsMap === null) {
-                detailsMap = L.map("detailsMap").setView([lat, lng], 16);
-
-                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                    attribution: "© OpenStreetMap"
-                }).addTo(detailsMap);
-
-                L.marker([lat, lng]).addTo(detailsMap);
+            function openGallery(index) {
+                currentImageIndex = index;
+                document.getElementById("galleryModal").style.display = "flex";
+                updateGalleryImage();
             }
 
-            setTimeout(function () {
-                detailsMap.invalidateSize();
-            }, 100);
+            function closeGallery() {
+                document.getElementById("galleryModal").style.display = "none";
+            }
+
+            function setImage(index) {
+                currentImageIndex = index;
+                updateGalleryImage();
+            }
+
+            function nextImage() {
+                currentImageIndex++;
+
+                if (currentImageIndex >= galleryImages.length) {
+                    currentImageIndex = 0;
+                }
+
+                updateGalleryImage();
+            }
+
+            function prevImage() {
+                currentImageIndex--;
+
+                if (currentImageIndex < 0) {
+                    currentImageIndex = galleryImages.length - 1;
+                }
+
+                updateGalleryImage();
+            }
+
+            function updateGalleryImage() {
+                document.getElementById("galleryImage").src = galleryImages[currentImageIndex];
+            }
+        </script>
+    }
+
+    <script>
+        function showPhone(button) {
+            let phone = button.getAttribute("data-phone");
+
+            if (!phone || phone.trim() === "" || phone === "null") {
+                button.textContent = "Телефон не указан";
+                return;
+            }
+
+            button.textContent = "📞 " + phone.trim();
+            button.disabled = true;
         }
     </script>
+
+    @if (Model.Latitude != null && Model.Longitude != null)
+    {
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+        <script>
+            let detailsModalMap = null;
+
+            const detailsAdLatitude = @Model.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const detailsAdLongitude = @Model.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const detailsAdTitle = @Html.Raw(JsonSerializer.Serialize(Model.Title));
+
+            function openDetailsMapModal() {
+                const modal = document.getElementById("detailsMapModal");
+
+                if (!modal) {
+                    return;
+                }
+
+                modal.style.display = "flex";
+                document.body.classList.add("modal-open");
+
+                setTimeout(function () {
+                    initDetailsModalMap();
+                }, 150);
+            }
+
+            function closeDetailsMapModal() {
+                const modal = document.getElementById("detailsMapModal");
+
+                if (!modal) {
+                    return;
+                }
+
+                modal.style.display = "none";
+                document.body.classList.remove("modal-open");
+            }
+
+            function initDetailsModalMap() {
+                const mapElement = document.getElementById("detailsModalMap");
+
+                if (!mapElement || typeof L === "undefined") {
+                    return;
+                }
+
+                if (detailsModalMap) {
+                    detailsModalMap.invalidateSize();
+                    detailsModalMap.setView([detailsAdLatitude, detailsAdLongitude], 16);
+                    return;
+                }
+
+                detailsModalMap = L.map("detailsModalMap").setView([detailsAdLatitude, detailsAdLongitude], 16);
+
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: ""
+                }).addTo(detailsModalMap);
+
+                L.marker([detailsAdLatitude, detailsAdLongitude])
+                    .addTo(detailsModalMap)
+                    .bindPopup(detailsAdTitle)
+                    .openPopup();
+
+                setTimeout(function () {
+                    detailsModalMap.invalidateSize();
+                }, 250);
+            }
+
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                    closeDetailsMapModal();
+                }
+            });
+
+            document.addEventListener("click", function (event) {
+                const modal = document.getElementById("detailsMapModal");
+
+                if (modal && event.target === modal) {
+                    closeDetailsMapModal();
+                }
+            });
+        </script>
+    }
 }

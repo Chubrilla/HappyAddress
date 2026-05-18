@@ -1,27 +1,159 @@
-﻿@model HappyAddress.Models.User
+﻿@model HappyAddress.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/account.css" />
 }
 
-<div class="account-box">
+<div class="profile-page">
+    <div class="profile-layout">
 
-    <h2>Личный кабинет</h2>
+        <aside class="profile-sidebar">
+            <h2>Личный кабинет</h2>
 
-    <div class="profile-info">
-        <p><strong>Фамилия:</strong> @Model.LastName</p>
-        <p><strong>Имя:</strong> @Model.FirstName</p>
-        <p><strong>Отчество:</strong> @Model.MiddleName</p>
-        <p><strong>Телефон:</strong> @Model.PhoneNumber</p>
-        <p><strong>Дата рождения:</strong> @Model.BirthDate.ToString("dd.MM.yyyy")</p>
-        <p><strong>Роль:</strong> @Model.Role</p>
+            <nav class="profile-menu">
+                <a asp-controller="Account" asp-action="Profile" class="active">
+                    Профиль
+                </a>
+
+                <a asp-controller="Ads" asp-action="MyAds">
+                    Мои объявления
+                </a>
+
+                <a asp-controller="Account" asp-action="Logout" class="logout-link">
+                    Выйти
+                </a>
+            </nav>
+        </aside>
+
+        <main class="profile-content">
+            <div class="profile-card">
+                <h1>Профиль пользователя</h1>
+
+                @if (TempData["Success"] != null)
+                {
+                    <div class="success-message">
+                        @TempData["Success"]
+                    </div>
+                }
+
+                <div class="email-status-box">
+                    <div>
+                        <strong>Email:</strong> @Model.Email
+                    </div>
+
+                    @if (Model.IsEmailConfirmed)
+                    {
+                        <span class="status-confirmed">Подтверждён</span>
+                    }
+                    else
+                    {
+                        <span class="status-not-confirmed">Не подтверждён</span>
+                    }
+                </div>
+
+                <form asp-action="Profile" asp-controller="Account" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Email" />
+                    <input type="hidden" asp-for="BirthDate" />
+                    <input type="hidden" asp-for="IsEmailConfirmed" />
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="LastName">Фамилия</label>
+                            <input asp-for="LastName" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="FirstName">Имя</label>
+                            <input asp-for="FirstName" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MiddleName">Отчество</label>
+                        <input asp-for="MiddleName" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber">Телефон</label>
+                        <input asp-for="PhoneNumber" placeholder="+7 (999) 999-99-99" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Дата рождения</label>
+                        <input value="@Model.BirthDate.ToString("dd.MM.yyyy")" disabled />
+                        <small>Дата рождения не редактируется</small>
+                    </div>
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <button type="submit" class="profile-save-btn">
+                        Сохранить изменения
+                    </button>
+                </form>
+            </div>
+        </main>
     </div>
-
-    <div class="profile-actions">
-        <a asp-controller="Ads" asp-action="Create">Создать объявление</a>
-        <a asp-controller="Ads" asp-action="MyAds">Мои объявления</a>
-        <a asp-controller="Ads" asp-action="Favorites">Избранное</a>
-        <a asp-controller="Account" asp-action="Logout">Выйти</a>
-    </div>
-
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const phoneInput = document.querySelector('input[name="PhoneNumber"]');
+
+        function formatPhone(value) {
+            let x = value.replace(/\D/g, '');
+
+            if (x.startsWith('8')) {
+                x = '7' + x.slice(1);
+            }
+
+            if (x.length === 10) {
+                x = '7' + x;
+            }
+
+            if (!x.startsWith('7') && x.length > 0) {
+                x = '7' + x;
+            }
+
+            x = x.substring(0, 11);
+
+            let formatted = '+7';
+
+            if (x.length > 1) {
+                formatted += ' (' + x.substring(1, 4);
+            }
+
+            if (x.length >= 4) {
+                formatted += ') ' + x.substring(4, 7);
+            }
+
+            if (x.length >= 7) {
+                formatted += '-' + x.substring(7, 9);
+            }
+
+            if (x.length >= 9) {
+                formatted += '-' + x.substring(9, 11);
+            }
+
+            return formatted;
+        }
+
+        if (phoneInput) {
+            phoneInput.value = formatPhone(phoneInput.value);
+
+            phoneInput.addEventListener('input', function () {
+                phoneInput.value = formatPhone(phoneInput.value);
+            });
+        }
+    </script>
+}

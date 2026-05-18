@@ -151,7 +151,8 @@ namespace HappyAddress.Controllers
                         AdImage adImage = new AdImage
                         {
                             AdId = model.Id,
-                            ImagePath = "/uploads/" + uniqueFileName
+                            ImagePath = "/uploads/" + uniqueFileName,
+                            Status = "Опубликовано"
                         };
 
                         _context.AdImages.Add(adImage);
@@ -208,12 +209,17 @@ namespace HappyAddress.Controllers
                 return NotFound();
             }
 
-            ad.Images = _context.AdImages.Where(i => i.AdId == ad.Id).ToList();
+            ad.Images = _context.AdImages
+                .Where(i => i.AdId == ad.Id &&
+                    (i.Status == "Опубликовано" ||
+                     i.Status == null ||
+                     i.Status.Trim() == ""))
+                .ToList();
 
             int? userId = HttpContext.Session.GetInt32("UserId");
-            
+
             bool isFavorite = false;
-            
+
             if (userId != null)
             {
                 isFavorite = _context.Favorites
@@ -309,6 +315,14 @@ namespace HappyAddress.Controllers
                 ModelState.AddModelError("PropertyType", "Выберите тип недвижимости");
             }
 
+            if ((model.PropertyType == "Дом" ||
+                model.PropertyType == "Коттедж" ||
+                model.PropertyType == "Таунхаус") &&
+                (!model.LandArea.HasValue || model.LandArea.Value <= 0))
+            {
+                ModelState.AddModelError("LandArea", "Введите площадь участка в сотках");
+            }
+
             if (imageFiles != null && imageFiles.Count > 30)
             {
                 ModelState.AddModelError("", "Можно загрузить не более 30 фотографий");
@@ -337,6 +351,66 @@ namespace HappyAddress.Controllers
                 model.Images = _context.AdImages.Where(i => i.AdId == model.Id).ToList();
                 return View(model);
             }
+
+            bool mainAdChanged =
+                ad.Title != model.Title ||
+                ad.Description != model.Description ||
+                ad.PhoneNumber != model.PhoneNumber ||
+                ad.Price != model.Price ||
+                ad.City != model.City ||
+                ad.Address != model.Address ||
+                ad.DealType != model.DealType ||
+                ad.PropertyType != model.PropertyType ||
+                ad.TotalArea != model.TotalArea ||
+                ad.Rooms != model.Rooms ||
+                ad.Bedrooms != model.Bedrooms ||
+                ad.Floor != model.Floor ||
+                ad.TotalFloors != model.TotalFloors ||
+                ad.BuildYear != model.BuildYear ||
+                ad.HouseType != model.HouseType ||
+                ad.HouseMaterial != model.HouseMaterial ||
+                ad.HouseCondition != model.HouseCondition ||
+                ad.LandArea != model.LandArea ||
+                ad.LandCategory != model.LandCategory ||
+                ad.LandStatus != model.LandStatus ||
+                ad.LivingArea != model.LivingArea ||
+                ad.KitchenArea != model.KitchenArea ||
+                ad.Renovation != model.Renovation ||
+                ad.BuildingType != model.BuildingType ||
+                ad.BathroomType != model.BathroomType ||
+                ad.BalconyType != model.BalconyType ||
+                ad.Sewerage != model.Sewerage ||
+                ad.WaterSupply != model.WaterSupply ||
+                ad.Gas != model.Gas ||
+                ad.Heating != model.Heating ||
+                ad.Electricity != model.Electricity ||
+                ad.HasGarage != model.HasGarage ||
+                ad.HasTerrace != model.HasTerrace ||
+                ad.HasCellar != model.HasCellar ||
+                ad.HasPool != model.HasPool ||
+                ad.HasBathhouse != model.HasBathhouse ||
+                ad.HasSecurity != model.HasSecurity ||
+                ad.HasParking != model.HasParking ||
+                ad.HasElevator != model.HasElevator ||
+                ad.MortgageAllowed != model.MortgageAllowed ||
+                ad.Deposit != model.Deposit ||
+                ad.Prepayment != model.Prepayment ||
+                ad.AllowChildren != model.AllowChildren ||
+                ad.AllowPets != model.AllowPets ||
+                ad.HasFurniture != model.HasFurniture ||
+                ad.HasAppliances != model.HasAppliances ||
+                ad.GuestsCount != model.GuestsCount ||
+                ad.SleepingPlaces != model.SleepingPlaces ||
+                ad.AvailableFrom != model.AvailableFrom ||
+                ad.AvailableTo != model.AvailableTo ||
+                ad.HasWifi != model.HasWifi ||
+                ad.HasAirConditioner != model.HasAirConditioner ||
+                ad.HasKitchen != model.HasKitchen ||
+                ad.HasTv != model.HasTv ||
+                ad.HasWashingMachine != model.HasWashingMachine ||
+                ad.HasBedLinen != model.HasBedLinen ||
+                ad.GarageType != model.GarageType ||
+                ad.GarageStatus != model.GarageStatus;
 
             ad.Title = model.Title;
             ad.Description = model.Description;
@@ -418,6 +492,12 @@ namespace HappyAddress.Controllers
             ad.GarageType = model.GarageType;
             ad.GarageStatus = model.GarageStatus;
 
+            if (mainAdChanged)
+            {
+                ad.Status = "На модерации";
+                ad.RejectReason = null;
+            }
+
             _context.SaveChanges();
 
             if (imageFiles != null && imageFiles.Count > 0)
@@ -444,7 +524,8 @@ namespace HappyAddress.Controllers
                         AdImage adImage = new AdImage
                         {
                             AdId = ad.Id,
-                            ImagePath = "/uploads/" + uniqueFileName
+                            ImagePath = "/uploads/" + uniqueFileName,
+                            Status = "На модерации"
                         };
 
                         _context.AdImages.Add(adImage);
@@ -453,7 +534,20 @@ namespace HappyAddress.Controllers
 
                 _context.SaveChanges();
             }
-            TempData["Success"] = "Объявление успешно обновлено";
+            
+            if (mainAdChanged)
+            {
+                TempData["Success"] = "Объявление обновлено и отправлено на модерацию";
+            }
+            else if (imageFiles != null && imageFiles.Count > 0)
+            {
+                TempData["Success"] = "Фото добавлены и отправлены на модерацию";
+            }
+            else
+            {
+                TempData["Success"] = "Изменения сохранены";
+            }
+            
             return RedirectToAction("MyAds");
         }
 
@@ -604,28 +698,35 @@ namespace HappyAddress.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var image = _context.AdImages.FirstOrDefault(i => i.Id == imageId);
+            var image = _context.AdImages
+                .FirstOrDefault(i => i.Id == imageId);
 
             if (image == null)
             {
-                return NotFound();
+                TempData["Error"] = "Фото не найдено";
+                return RedirectToAction("MyAds");
             }
 
-            var ad = _context.Ads.FirstOrDefault(a => a.Id == image.AdId);
+            var ad = _context.Ads
+                .FirstOrDefault(a => a.Id == image.AdId && a.UserId == userId.Value);
 
-            if (ad == null || ad.UserId != userId.Value)
+            if (ad == null)
             {
                 return NotFound();
             }
 
-            string fullPath = Path.Combine(_environment.WebRootPath, image.ImagePath.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString()));
+            string filePath = Path.Combine(
+                _environment.WebRootPath,
+                image.ImagePath.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString())
+            );
 
-            if (System.IO.File.Exists(fullPath))
+            if (System.IO.File.Exists(filePath))
             {
-                System.IO.File.Delete(fullPath);
+                System.IO.File.Delete(filePath);
             }
 
             _context.AdImages.Remove(image);
+
             _context.SaveChanges();
 
             TempData["Success"] = "Фото удалено";

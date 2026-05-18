@@ -1,12 +1,23 @@
-﻿@section Styles {
+﻿@{
+    ViewData["Title"] = "Админ-панель";
+}
+
+@section Styles {
     <link rel="stylesheet" href="~/css/admin.css" />
 }
 
-<div class="admin-box">
-    <h2>Админ-панель</h2>
+<div class="admin-page admin-page-center">
+    <aside class="admin-sidebar admin-sidebar-center">
+        <h2>Админ-панель</h2>
 
-    <div class="admin-links">
-        <a asp-controller="Admin" asp-action="Users">Пользователи</a>
-        <a asp-controller="Admin" asp-action="Ads">Объявления</a>
-    </div>
+        <nav class="admin-menu">
+            <a asp-controller="Admin" asp-action="Users">
+                Пользователи
+            </a>
+
+            <a asp-controller="Admin" asp-action="Ads">
+                Объявления
+            </a>
+        </nav>
+    </aside>
 </div>

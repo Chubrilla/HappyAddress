@@ -5,103 +5,150 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 }
 
-<h2>Создание объявления</h2>
+<h2 class="ads-page-title">Новое объявление</h2>
 
-<form asp-action="Create" asp-controller="Ads" method="post" enctype="multipart/form-data" class="form-box">
-    <div asp-validation-summary="All" style="color:red"></div>
+<form asp-action="Create"
+      asp-controller="Ads"
+      method="post"
+      enctype="multipart/form-data"
+      class="form-box">
+
+    <input type="hidden" asp-for="Latitude" id="latitudeInput" />
+    <input type="hidden" asp-for="Longitude" id="longitudeInput" />
+    <input type="hidden" asp-for="Status" value="На модерации" />
+
+    <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group">
         <label asp-for="Title">Заголовок</label>
-        <input asp-for="Title" />
-        <span asp-validation-for="Title" style="color:red"></span>
+        <input asp-for="Title" placeholder="Например, уютная квартира рядом с метро" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Description">Описание</label>
-        <textarea asp-for="Description"></textarea>
-        <span asp-validation-for="Description" style="color:red"></span>
+        <textarea asp-for="Description" placeholder="Опишите объект, район, состояние, преимущества"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Price">Цена</label>
-        <input asp-for="Price" type="number" step="0.01" />
-        <span asp-validation-for="Price" style="color:red"></span>
+    <div class="form-row">
+        <div class="form-group">
+            <label asp-for="PhoneNumber">Телефон</label>
+            <input asp-for="PhoneNumber"
+                   placeholder="+7 (999) 123-45-67"
+                   maxlength="18" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price">Цена, ₽</label>
+            <input asp-for="Price"
+                   type="number"
+                   min="0"
+                   step="1"
+                   placeholder="Например, 3000000" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Address">Адрес</label>
-        <input asp-for="Address" id="addressInput" />
-        <span asp-validation-for="Address" style="color:red"></span>
+    <div class="form-row">
+        <div class="form-group">
+            <label asp-for="City">Город</label>
+            <input asp-for="City"
+                   id="cityInput"
+                   placeholder="Например, Москва" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address">Адрес</label>
+            <input asp-for="Address"
+                   id="addressInput"
+                   placeholder="Введите адрес или выберите точку на карте" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
     </div>
 
-    <div class="form-group">
-        <button type="button" onclick="findAddressOnMap()">Найти адрес на карте</button>
+    <button type="button" onclick="findAddressOnMap()" class="ads-link-button">
+        Найти адрес на карте
+    </button>
+
+    <div class="details-map-block">
+        <h3>Выберите точку на карте</h3>
+        <p>Можно нажать на карту или перетащить метку.</p>
+        <div id="map" class="details-map"></div>
     </div>
 
-    <div class="form-group">
-        <label>Выберите точку на карте</label>
-        <div id="map" style="height:400px; border-radius:10px;"></div>
+    <div class="form-row">
+        <div class="form-group">
+            <label asp-for="DealType">Тип сделки</label>
+            <select asp-for="DealType" id="dealTypeSelect">
+                <option value="">Выберите</option>
+                <option value="Продажа">Продажа</option>
+                <option value="Долгосрочная аренда">Долгосрочная аренда</option>
+                <option value="Посуточная аренда">Посуточная аренда</option>
+            </select>
+            <span asp-validation-for="DealType" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PropertyType">Тип недвижимости</label>
+            <select asp-for="PropertyType" id="propertyTypeSelect">
+                <option value="">Выберите</option>
+                <option value="Квартира">Квартира</option>
+                <option value="Дом">Дом</option>
+                <option value="Коттедж">Коттедж</option>
+                <option value="Таунхаус">Таунхаус</option>
+                <option value="Участок">Участок</option>
+                <option value="Гараж">Гараж</option>
+            </select>
+            <span asp-validation-for="PropertyType" class="text-danger"></span>
+        </div>
     </div>
 
-    <input type="hidden" asp-for="City" id="cityInput" />
-    <input name="Latitude" type="hidden" id="latitudeInput" />
-    <input name="Longitude" type="hidden" id="longitudeInput" />
-
-    <div class="form-group">
-        <label asp-for="DealType">Тип сделки</label>
-        <select asp-for="DealType" id="dealTypeSelect">
-            <option value="">Выберите</option>
-            <option value="Продажа">Продажа</option>
-            <option value="Долгосрочная аренда">Долгосрочная аренда</option>
-            <option value="Посуточная аренда">Посуточная аренда</option>
-        </select>
-        <span asp-validation-for="DealType" style="color:red"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="PropertyType">Тип недвижимости</label>
-        <select asp-for="PropertyType" id="propertyTypeSelect">
-            <option value="">Выберите</option>
-            <option value="Квартира">Квартира</option>
-            <option value="Дом">Дом</option>
-            <option value="Коттедж">Коттедж</option>
-            <option value="Таунхаус">Таунхаус</option>
-            <option value="Участок">Участок</option>
-            <option value="Гараж">Гараж</option>
-        </select>
-        <span asp-validation-for="PropertyType" style="color:red"></span>
-    </div>
-
-    <div id="houseFields" class="dynamic-fields" style="display:none;">
+    <div id="houseFields" style="display:none;">
         <h3>О доме</h3>
 
         <div class="form-group">
             <label asp-for="HouseType">Тип дома</label>
             <select asp-for="HouseType">
                 <option value="">Выберите</option>
-                <option value="Для постоянного проживания">Для постоянного проживания</option>
+                <option value="Дом">Дом</option>
+                <option value="Коттедж">Коттедж</option>
+                <option value="Таунхаус">Таунхаус</option>
                 <option value="Дача">Дача</option>
             </select>
+            <span asp-validation-for="HouseType" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="TotalArea">Площадь дома, м²</label>
-            <input asp-for="TotalArea" type="number" step="0.1" min="0" />
+            <input asp-for="TotalArea" type="number" step="0.1" min="0" placeholder="Например, 120" />
+            <span asp-validation-for="TotalArea" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LandArea">Площадь участка, сот.</label>
+            <input asp-for="LandArea" type="number" step="0.1" min="0" placeholder="Например, 6" />
+            <span asp-validation-for="LandArea" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Bedrooms">Количество спален</label>
-            <input asp-for="Bedrooms" type="number" min="0" />
+            <input asp-for="Bedrooms" type="number" min="0" placeholder="Например, 3" />
+            <span asp-validation-for="Bedrooms" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="TotalFloors">Количество этажей</label>
-            <input asp-for="TotalFloors" type="number" min="0" />
+            <input asp-for="TotalFloors" type="number" min="0" placeholder="Например, 2" />
+            <span asp-validation-for="TotalFloors" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="BuildYear">Год постройки</label>
-            <input asp-for="BuildYear" type="number" min="1800" max="2100" />
+            <input asp-for="BuildYear" type="number" min="1800" max="2100" placeholder="Например, 2015" />
+            <span asp-validation-for="BuildYear" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -118,6 +165,7 @@
                 <option value="Газосиликатный блок">Газосиликатный блок</option>
                 <option value="Пенобетонный блок">Пенобетонный блок</option>
             </select>
+            <span asp-validation-for="HouseMaterial" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -129,17 +177,23 @@
                 <option value="Нужно достроить">Нужно достроить</option>
                 <option value="Нужен капремонт или под снос">Нужен капремонт или под снос</option>
             </select>
+            <span asp-validation-for="HouseCondition" class="text-danger"></span>
         </div>
 
-        <h3>Коммуникации и удобства</h3>
+        <h3>Коммуникации</h3>
 
         <div class="form-group">
             <label asp-for="BathroomType">Санузел</label>
             <select asp-for="BathroomType">
                 <option value="">Выберите</option>
-                <option value="На улице">На улице</option>
                 <option value="В доме">В доме</option>
+                <option value="На улице">На улице</option>
+                <option value="Совмещенный">Совмещенный</option>
+                <option value="Раздельный">Раздельный</option>
+                <option value="Несколько">Несколько</option>
+                <option value="Нет">Нет</option>
             </select>
+            <span asp-validation-for="BathroomType" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -151,7 +205,217 @@
                 <option value="Выгребная яма">Выгребная яма</option>
                 <option value="Нет">Нет</option>
             </select>
+            <span asp-validation-for="Sewerage" class="text-danger"></span>
         </div>
+
+        <div class="form-group">
+            <label asp-for="WaterSupply">Водоснабжение</label>
+            <select asp-for="WaterSupply">
+                <option value="">Выберите</option>
+                <option value="Центральное">Центральное</option>
+                <option value="Скважина">Скважина</option>
+                <option value="Колодец">Колодец</option>
+                <option value="Нет">Нет</option>
+            </select>
+            <span asp-validation-for="WaterSupply" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Gas">Газ</label>
+            <select asp-for="Gas">
+                <option value="">Выберите</option>
+                <option value="Магистральный в доме или на участке">Магистральный в доме или на участке</option>
+                <option value="По границе участка">По границе участка</option>
+                <option value="Газгольдер">Газгольдер</option>
+                <option value="Нет">Нет</option>
+            </select>
+            <span asp-validation-for="Gas" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Heating">Отопление</label>
+            <select asp-for="Heating">
+                <option value="">Выберите</option>
+                <option value="Центральное газовое">Центральное газовое</option>
+                <option value="Центральное угольное">Центральное угольное</option>
+                <option value="Печь">Печь</option>
+                <option value="Камин">Камин</option>
+                <option value="Электрическое">Электрическое</option>
+                <option value="Автономное газовое">Автономное газовое</option>
+                <option value="Дизельное">Дизельное</option>
+                <option value="Твердотопливный котёл">Твердотопливный котёл</option>
+                <option value="Без отопления">Без отопления</option>
+            </select>
+            <span asp-validation-for="Heating" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Electricity">Электричество</label>
+            <select asp-for="Electricity">
+                <option value="">Выберите</option>
+                <option value="Есть">Есть</option>
+                <option value="Нет">Нет</option>
+            </select>
+            <span asp-validation-for="Electricity" class="text-danger"></span>
+        </div>
+
+        <h3>Удобства</h3>
+
+        <div class="filter-checkboxes">
+            <label><input asp-for="HasGarage" /> Гараж</label>
+            <label><input asp-for="HasTerrace" /> Терраса</label>
+            <label><input asp-for="HasCellar" /> Погреб</label>
+            <label><input asp-for="HasPool" /> Бассейн</label>
+            <label><input asp-for="HasBathhouse" /> Баня</label>
+            <label><input asp-for="HasSecurity" /> Охрана</label>
+        </div>
+    </div>
+
+    <div id="flatFields" style="display:none;">
+        <h3>О квартире</h3>
+
+        <div class="form-group">
+            <label asp-for="Rooms">Количество комнат</label>
+            <select asp-for="Rooms">
+                <option value="">Выберите</option>
+                <option value="0">Студия</option>
+                <option value="1">1 комната</option>
+                <option value="2">2 комнаты</option>
+                <option value="3">3 комнаты</option>
+                <option value="4">4 комнаты</option>
+                <option value="5">5+ комнат</option>
+            </select>
+            <span asp-validation-for="Rooms" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TotalArea">Общая площадь, м²</label>
+            <input asp-for="TotalArea" type="number" step="0.1" min="0" placeholder="Например, 52.5" />
+            <span asp-validation-for="TotalArea" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LivingArea">Жилая площадь, м²</label>
+            <input asp-for="LivingArea" type="number" step="0.1" min="0" placeholder="Например, 32" />
+            <span asp-validation-for="LivingArea" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="KitchenArea">Площадь кухни, м²</label>
+            <input asp-for="KitchenArea" type="number" step="0.1" min="0" placeholder="Например, 10" />
+            <span asp-validation-for="KitchenArea" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Floor">Этаж</label>
+            <input asp-for="Floor" type="number" min="0" placeholder="Например, 5" />
+            <span asp-validation-for="Floor" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TotalFloors">Этажей в доме</label>
+            <input asp-for="TotalFloors" type="number" min="0" placeholder="Например, 17" />
+            <span asp-validation-for="TotalFloors" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BuildYear">Год постройки</label>
+            <input asp-for="BuildYear" type="number" min="1800" max="2100" placeholder="Например, 2010" />
+            <span asp-validation-for="BuildYear" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BuildingType">Тип дома</label>
+            <select asp-for="BuildingType">
+                <option value="">Выберите</option>
+                <option value="Кирпичный">Кирпичный</option>
+                <option value="Монолитный">Монолитный</option>
+                <option value="Панельный">Панельный</option>
+                <option value="Блочный">Блочный</option>
+                <option value="Деревянный">Деревянный</option>
+            </select>
+            <span asp-validation-for="BuildingType" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Renovation">Ремонт</label>
+            <select asp-for="Renovation">
+                <option value="">Выберите</option>
+                <option value="Без ремонта">Без ремонта</option>
+                <option value="Косметический">Косметический</option>
+                <option value="Евроремонт">Евроремонт</option>
+                <option value="Дизайнерский">Дизайнерский</option>
+            </select>
+            <span asp-validation-for="Renovation" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BathroomType">Санузел</label>
+            <select asp-for="BathroomType">
+                <option value="">Выберите</option>
+                <option value="Совмещенный">Совмещенный</option>
+                <option value="Раздельный">Раздельный</option>
+                <option value="Несколько">Несколько</option>
+            </select>
+            <span asp-validation-for="BathroomType" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BalconyType">Балкон / лоджия</label>
+            <select asp-for="BalconyType">
+                <option value="">Выберите</option>
+                <option value="Балкон">Балкон</option>
+                <option value="Лоджия">Лоджия</option>
+                <option value="Балкон и лоджия">Балкон и лоджия</option>
+                <option value="Нет">Нет</option>
+            </select>
+            <span asp-validation-for="BalconyType" class="text-danger"></span>
+        </div>
+
+        <h3>Дополнительно</h3>
+
+        <div class="filter-checkboxes">
+            <label><input asp-for="HasElevator" /> Лифт</label>
+            <label><input asp-for="HasParking" /> Парковка</label>
+        </div>
+    </div>
+
+    <div id="landFields" style="display:none;">
+        <h3>Об участке</h3>
+
+        <div class="form-group">
+            <label asp-for="LandArea">Площадь участка, сот.</label>
+            <input asp-for="LandArea" type="number" step="0.1" min="0" placeholder="Например, 10" />
+            <span asp-validation-for="LandArea" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LandCategory">Категория земли</label>
+            <select asp-for="LandCategory">
+                <option value="">Выберите</option>
+                <option value="ИЖС">ИЖС</option>
+                <option value="СНТ">СНТ</option>
+                <option value="ДНП">ДНП</option>
+                <option value="ЛПХ">ЛПХ</option>
+                <option value="Фермерское хозяйство">Фермерское хозяйство</option>
+                <option value="Промназначение">Промназначение</option>
+            </select>
+            <span asp-validation-for="LandCategory" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LandStatus">Статус участка</label>
+            <select asp-for="LandStatus">
+                <option value="">Выберите</option>
+                <option value="В собственности">В собственности</option>
+                <option value="В аренде">В аренде</option>
+                <option value="Документы готовы">Документы готовы</option>
+                <option value="Требуется оформление">Требуется оформление</option>
+            </select>
+            <span asp-validation-for="LandStatus" class="text-danger"></span>
+        </div>
+
+        <h3>Коммуникации</h3>
 
         <div class="form-group">
             <label asp-for="WaterSupply">Водоснабжение</label>
@@ -176,120 +440,6 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="Heating">Отопление</label>
-            <select asp-for="Heating">
-                <option value="">Выберите</option>
-                <option value="Центральное газовое">Центральное газовое</option>
-                <option value="Центральное угольное">Центральное угольное</option>
-                <option value="Печь">Печь</option>
-                <option value="Камин">Камин</option>
-                <option value="Электрическое">Электрическое</option>
-                <option value="Автономное газовое">Автономное газовое</option>
-                <option value="Дизельное">Дизельное</option>
-                <option value="Твердотопливный котёл">Твердотопливный котёл</option>
-                <option value="Без отопления">Без отопления</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Electricity">Электричество</label>
-            <select asp-for="Electricity">
-                <option value="">Выберите</option>
-                <option value="Есть">Есть</option>
-                <option value="Нет">Нет</option>
-            </select>
-        </div>
-
-        <div class="checkbox-group">
-            <label>
-                <input asp-for="HasGarage" />
-                Гараж
-            </label>
-
-            <label>
-                <input asp-for="HasTerrace" />
-                Терраса
-            </label>
-
-            <label>
-                <input asp-for="HasCellar" />
-                Погреб
-            </label>
-
-            <label>
-                <input asp-for="HasPool" />
-                Бассейн
-            </label>
-
-            <label>
-                <input asp-for="HasBathhouse" />
-                Баня
-            </label>
-
-            <label>
-                <input asp-for="HasSecurity" />
-                Охрана
-            </label>
-        </div>
-    </div>
-
-    <div id="landFields" class="dynamic-fields" style="display:none;">
-        <h3>Об участке</h3>
-
-        <div class="form-group">
-            <label asp-for="LandArea">Площадь участка</label>
-            <input asp-for="LandArea" type="number" step="0.1" min="0" placeholder="Например, 10" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="LandCategory">Категория земли</label>
-            <select asp-for="LandCategory">
-                <option value="">Выберите</option>
-                <option value="ИЖС">ИЖС</option>
-                <option value="СНТ">СНТ</option>
-                <option value="ДНП">ДНП</option>
-                <option value="ЛПХ">ЛПХ</option>
-                <option value="Фермерское хозяйство">Фермерское хозяйство</option>
-                <option value="Промназначение">Промназначение</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="LandStatus">Статус участка</label>
-            <select asp-for="LandStatus">
-                <option value="">Выберите</option>
-                <option value="В собственности">В собственности</option>
-                <option value="В аренде">В аренде</option>
-                <option value="Документы готовы">Документы готовы</option>
-                <option value="Требуется оформление">Требуется оформление</option>
-            </select>
-        </div>
-
-        <h3>Коммуникации</h3>
-
-        <div class="form-group">
-            <label asp-for="WaterSupply">Водоснабжение</label>
-            <select asp-for="WaterSupply">
-                <option value="">Выберите</option>
-                <option value="Центральное">Центральное</option>
-                <option value="Скважина">Скважина</option>
-                <option value="Колодец">Колодец</option>
-                <option value="Нет">Нет</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Gas">Газ</label>
-            <select asp-for="Gas">
-                <option value="">Выберите</option>
-                <option value="Магистральный в доме или на участке">Магистральный на участке</option>
-                <option value="По границе участка">По границе участка</option>
-                <option value="Газгольдер">Газгольдер</option>
-                <option value="Нет">Нет</option>
-            </select>
-        </div>
-
-        <div class="form-group">
             <label asp-for="Electricity">Электричество</label>
             <select asp-for="Electricity">
                 <option value="">Выберите</option>
@@ -310,7 +460,7 @@
         </div>
     </div>
 
-    <div id="garageFields" class="dynamic-fields" style="display:none;">
+    <div id="garageFields" style="display:none;">
         <h3>О гараже</h3>
 
         <div class="form-group">
@@ -324,11 +474,13 @@
                 <option value="Многоуровневый паркинг">Многоуровневый паркинг</option>
                 <option value="Открытая парковка">Открытая парковка</option>
             </select>
+            <span asp-validation-for="GarageType" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="TotalArea">Площадь, м²</label>
             <input asp-for="TotalArea" type="number" step="0.1" min="0" placeholder="Например, 18" />
+            <span asp-validation-for="TotalArea" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -340,138 +492,30 @@
                 <option value="ГСК">ГСК</option>
                 <option value="Документы готовы">Документы готовы</option>
             </select>
+            <span asp-validation-for="GarageStatus" class="text-danger"></span>
         </div>
-
-        <h3>Дополнительно</h3>
-
-        <h3>Дополнительно</h3>
-
-        <div class="checkbox-group">
-            <label>
-                <input asp-for="HasSecurity" />
-                Охрана
-            </label>
-
-            <label>
-                <input asp-for="Electricity" type="checkbox" value="Есть" />
-                Электричество
-            </label>
-        </div>
-    </div>
-
-    <div id="flatFields" class="dynamic-fields" style="display:none;">
-        <h3>О квартире</h3>
 
         <div class="form-group">
-            <label asp-for="Rooms">Количество комнат</label>
-            <select asp-for="Rooms">
+            <label asp-for="Electricity">Электричество</label>
+            <select asp-for="Electricity">
                 <option value="">Выберите</option>
-                <option value="0">Студия</option>
-                <option value="1">1 комната</option>
-                <option value="2">2 комнаты</option>
-                <option value="3">3 комнаты</option>
-                <option value="4">4 комнаты</option>
-                <option value="5">5+ комнат</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="TotalArea">Общая площадь, м²</label>
-            <input asp-for="TotalArea" type="number" step="0.1" min="0" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="LivingArea">Жилая площадь, м²</label>
-            <input asp-for="LivingArea" type="number" step="0.1" min="0" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="KitchenArea">Площадь кухни, м²</label>
-            <input asp-for="KitchenArea" type="number" step="0.1" min="0" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Floor">Этаж</label>
-            <input asp-for="Floor" type="number" min="0" />
-            <span asp-validation-for="Floor" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="TotalFloors">Этажей в доме</label>
-            <input asp-for="TotalFloors" type="number" min="0" />
-            <span asp-validation-for="TotalFloors" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="BuildYear">Год постройки</label>
-            <input asp-for="BuildYear" type="number" min="1800" max="2100" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="BuildingType">Тип дома</label>
-            <select asp-for="BuildingType">
-                <option value="">Выберите</option>
-                <option value="Кирпичный">Кирпичный</option>
-                <option value="Монолитный">Монолитный</option>
-                <option value="Панельный">Панельный</option>
-                <option value="Блочный">Блочный</option>
-                <option value="Деревянный">Деревянный</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Renovation">Ремонт</label>
-            <select asp-for="Renovation">
-                <option value="">Выберите</option>
-                <option value="Без ремонта">Без ремонта</option>
-                <option value="Косметический">Косметический</option>
-                <option value="Евроремонт">Евроремонт</option>
-                <option value="Дизайнерский">Дизайнерский</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="BathroomType">Санузел</label>
-            <select asp-for="BathroomType">
-                <option value="">Выберите</option>
-                <option value="Совмещенный">Совмещенный</option>
-                <option value="Раздельный">Раздельный</option>
-                <option value="Несколько">Несколько</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="BalconyType">Балкон / лоджия</label>
-            <select asp-for="BalconyType">
-                <option value="">Выберите</option>
-                <option value="Балкон">Балкон</option>
-                <option value="Лоджия">Лоджия</option>
-                <option value="Балкон и лоджия">Балкон и лоджия</option>
+                <option value="Есть">Есть</option>
                 <option value="Нет">Нет</option>
             </select>
         </div>
 
-        <h3>Дополнительно</h3>
-
-        <div class="checkbox-group">
-            <label>
-                <input asp-for="HasElevator" />
-                Лифт
-            </label>
-
-            <label>
-                <input asp-for="HasParking" />
-                Парковка
-            </label>
+        <div class="filter-checkboxes">
+            <label><input asp-for="HasSecurity" /> Охрана</label>
         </div>
     </div>
 
-    <div id="rentFields" class="dynamic-fields" style="display:none;">
-        <h3>Условия аренды</h3>
+    <div id="rentFields" style="display:none;">
+        <h3>Условия долгосрочной аренды</h3>
 
         <div class="form-group">
             <label asp-for="Deposit">Залог, ₽</label>
             <input asp-for="Deposit" type="number" min="0" placeholder="Например, 30000" />
+            <span asp-validation-for="Deposit" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -483,156 +527,72 @@
                 <option value="3 месяца">3 месяца</option>
                 <option value="Без предоплаты">Без предоплаты</option>
             </select>
+            <span asp-validation-for="Prepayment" class="text-danger"></span>
         </div>
 
-        <h3>Дополнительно</h3>
-
-        <div class="checkbox-group">
-            <label>
-                <input asp-for="AllowChildren" />
-                Можно с детьми
-            </label>
-
-            <label>
-                <input asp-for="AllowPets" />
-                Можно с животными
-            </label>
-
-            <label>
-                <input asp-for="HasFurniture" />
-                Есть мебель
-            </label>
-
-            <label>
-                <input asp-for="HasAppliances" />
-                Есть техника
-            </label>
+        <div class="filter-checkboxes">
+            <label><input asp-for="AllowChildren" /> Можно с детьми</label>
+            <label><input asp-for="AllowPets" /> Можно с животными</label>
+            <label><input asp-for="HasFurniture" /> Мебель</label>
+            <label><input asp-for="HasAppliances" /> Техника</label>
         </div>
     </div>
 
-    <div id="dailyRentFields" class="dynamic-fields" style="display:none;">
+    <div id="dailyRentFields" style="display:none;">
         <h3>Посуточная аренда</h3>
 
         <div class="form-group">
             <label asp-for="GuestsCount">Количество гостей</label>
-            <input asp-for="GuestsCount" type="number" min="1" placeholder="Например, 4" />
+            <input asp-for="GuestsCount" type="number" min="1" placeholder="Например, 2" />
+            <span asp-validation-for="GuestsCount" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="SleepingPlaces">Спальных мест</label>
             <input asp-for="SleepingPlaces" type="number" min="1" placeholder="Например, 2" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Rooms">Количество комнат</label>
-            <select asp-for="Rooms">
-                <option value="">Выберите</option>
-                <option value="0">Студия</option>
-                <option value="1">1 комната</option>
-                <option value="2">2 комнаты</option>
-                <option value="3">3 комнаты</option>
-                <option value="4">4 комнаты</option>
-                <option value="5">5+ комнат</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="TotalArea">Площадь, м²</label>
-            <input asp-for="TotalArea" type="number" step="0.1" min="0" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Floor">Этаж</label>
-            <input asp-for="Floor" type="number" min="0" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="TotalFloors">Этажей в доме</label>
-            <input asp-for="TotalFloors" type="number" min="0" />
+            <span asp-validation-for="SleepingPlaces" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="AvailableFrom">Доступно с</label>
             <input asp-for="AvailableFrom" type="date" />
+            <span asp-validation-for="AvailableFrom" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="AvailableTo">Доступно до</label>
             <input asp-for="AvailableTo" type="date" />
+            <span asp-validation-for="AvailableTo" class="text-danger"></span>
         </div>
 
-        <h3>Удобства для проживания</h3>
-
-        <div class="checkbox-group">
-            <label>
-                <input asp-for="HasWifi" />
-                Wi-Fi
-            </label>
-
-            <label>
-                <input asp-for="HasAirConditioner" />
-                Кондиционер
-            </label>
-
-            <label>
-                <input asp-for="HasKitchen" />
-                Кухня
-            </label>
-
-            <label>
-                <input asp-for="HasTv" />
-                Телевизор
-            </label>
-
-            <label>
-                <input asp-for="HasWashingMachine" />
-                Стиральная машина
-            </label>
-
-            <label>
-                <input asp-for="HasBedLinen" />
-                Постельное бельё
-            </label>
-
-            <label>
-                <input asp-for="HasFurniture" />
-                Мебель
-            </label>
-
-            <label>
-                <input asp-for="HasAppliances" />
-                Техника
-            </label>
-
-            <label>
-                <input asp-for="HasParking" />
-                Парковка
-            </label>
-
-            <label>
-                <input asp-for="AllowChildren" />
-                Можно с детьми
-            </label>
-
-            <label>
-                <input asp-for="AllowPets" />
-                Можно с животными
-            </label>
+        <div class="filter-checkboxes">
+            <label><input asp-for="HasWifi" /> Wi-Fi</label>
+            <label><input asp-for="HasAirConditioner" /> Кондиционер</label>
+            <label><input asp-for="HasKitchen" /> Кухня</label>
+            <label><input asp-for="HasTv" /> Телевизор</label>
+            <label><input asp-for="HasWashingMachine" /> Стиральная машина</label>
+            <label><input asp-for="HasBedLinen" /> Постельное бельё</label>
+            <label><input asp-for="HasFurniture" /> Мебель</label>
+            <label><input asp-for="HasAppliances" /> Техника</label>
+            <label><input asp-for="HasParking" /> Парковка</label>
+            <label><input asp-for="AllowChildren" /> Можно с детьми</label>
+            <label><input asp-for="AllowPets" /> Можно с животными</label>
         </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="PhoneNumber">Телефон</label>
-        <input asp-for="PhoneNumber" />
-        <span asp-validation-for="PhoneNumber" style="color:red"></span>
+        <label>Фото объявления</label>
+        <input type="file" name="imageFiles" multiple accept=".jpg,.jpeg,.png" />
+        <small>Можно загрузить до 30 фото. Форматы: JPG, PNG.</small>
     </div>
 
-    <div class="form-group">
-        <label>Фото</label>
-        <input type="file" name="imageFiles" accept=".jpg,.jpeg,.png" multiple />
-    </div>
+    <button type="submit">
+        Создать объявление
+    </button>
 
-    <button type="submit">Создать объявление</button>
+    <a asp-controller="Home" asp-action="Index" class="back-link">
+        Назад на главную
+    </a>
 </form>
 
 @section Scripts {
@@ -644,7 +604,7 @@
         const map = L.map('map').setView([55.751244, 37.618423], 10);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
+            attribution: ''
         }).addTo(map);
 
         let marker = null;
@@ -696,7 +656,7 @@
             }
         }
 
-        async function setMarker(lat, lng) {
+        async function setMarker(lat, lng, shouldUpdateAddress = true) {
             setCoordinateInputs(lat, lng);
 
             if (marker) {
@@ -708,12 +668,13 @@
                     const position = marker.getLatLng();
 
                     setCoordinateInputs(position.lat, position.lng);
-
                     await getAddressFromCoordinates(position.lat, position.lng);
                 });
             }
 
-            await getAddressFromCoordinates(lat, lng);
+            if (shouldUpdateAddress) {
+                await getAddressFromCoordinates(lat, lng);
+            }
         }
 
         map.on('click', async function (e) {
@@ -784,13 +745,12 @@
         }
 
         const propertyTypeSelect = document.getElementById('propertyTypeSelect');
-        const dealTypeSelect = document.getElementById('dealTypeSelect');
-
         const houseFields = document.getElementById('houseFields');
         const flatFields = document.getElementById('flatFields');
         const landFields = document.getElementById('landFields');
         const garageFields = document.getElementById('garageFields');
 
+        const dealTypeSelect = document.getElementById('dealTypeSelect');
         const rentFields = document.getElementById('rentFields');
         const dailyRentFields = document.getElementById('dailyRentFields');
 
@@ -830,36 +790,33 @@
 
             const propertyValue = propertyTypeSelect.value;
             const dealValue = dealTypeSelect ? dealTypeSelect.value : "";
-
             const isDailyRent = dealValue === "Посуточная аренда";
 
             if (flatFields) {
                 flatFields.style.display =
                     propertyValue === "Квартира" && !isDailyRent
-                        ? "block"
+                        ? "grid"
                         : "none";
             }
 
             if (houseFields) {
                 houseFields.style.display =
-                    (propertyValue === "Дом" ||
-                     propertyValue === "Коттедж" ||
-                     propertyValue === "Таунхаус") && !isDailyRent
-                        ? "block"
+                    (propertyValue === "Дом" || propertyValue === "Коттедж" || propertyValue === "Таунхаус") && !isDailyRent
+                        ? "grid"
                         : "none";
             }
 
             if (landFields) {
                 landFields.style.display =
                     propertyValue === "Участок" && !isDailyRent
-                        ? "block"
+                        ? "grid"
                         : "none";
             }
 
             if (garageFields) {
                 garageFields.style.display =
                     propertyValue === "Гараж" && !isDailyRent
-                        ? "block"
+                        ? "grid"
                         : "none";
             }
         }
@@ -874,14 +831,14 @@
             if (rentFields) {
                 rentFields.style.display =
                     value === "Долгосрочная аренда"
-                        ? "block"
+                        ? "grid"
                         : "none";
             }
 
             if (dailyRentFields) {
                 dailyRentFields.style.display =
                     value === "Посуточная аренда"
-                        ? "block"
+                        ? "grid"
                         : "none";
             }
 
@@ -897,8 +854,11 @@
             propertyTypeSelect.addEventListener('change', updateDynamicFields);
         }
 
-        updatePropertyOptionsByDealType();
         updateDealFields();
         updateDynamicFields();
+
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 300);
     </script>
 }

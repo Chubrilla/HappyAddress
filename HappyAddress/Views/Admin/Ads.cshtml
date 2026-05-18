@@ -1,81 +1,223 @@
-﻿@model List<HappyAddress.Models.Ad>
+﻿@model IEnumerable<HappyAddress.Models.Ad>
+
+@{
+    ViewData["Title"] = "Объявления";
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/admin.css" />
 }
 
-<h2>Все объявления</h2>
+<div class="admin-page">
+    <aside class="admin-sidebar">
+        <h2>Админ-панель</h2>
 
-@if (Model.Count == 0)
-{
-    <div class="admin-box">
-        <p>Объявлений нет.</p>
-    </div>
-}
-else
-{
-    foreach (var ad in Model)
-    {
-        string statusClass = "";
+        <nav class="admin-menu">
+            <a asp-controller="Admin" asp-action="Users">
+                Пользователи
+            </a>
 
-        if (ad.Status == "На модерации")
+            <a asp-controller="Admin" asp-action="Ads" class="active">
+                Объявления
+            </a>
+
+            <a asp-controller="Home" asp-action="Index" class="admin-back-link">
+                На главную
+            </a>
+        </nav>
+    </aside>
+
+    <section class="admin-content-card">
+        <h1>Объявления</h1>
+
+        @if (Model == null || !Model.Any())
         {
-            statusClass = "status-orange";
+            <div class="admin-empty-box">
+                Объявлений пока нет.
+            </div>
         }
-        else if (ad.Status == "Опубликовано")
+        else
         {
-            statusClass = "status-green";
+            <div class="admin-ads-list">
+                @foreach (var ad in Model)
+                {
+                    string statusClass = "admin-status-neutral";
+
+                    if (ad.Status == "Опубликовано")
+                    {
+                        statusClass = "admin-status-success";
+                    }
+                    else if (ad.Status == "На модерации")
+                    {
+                        statusClass = "admin-status-warning";
+                    }
+                    else if (ad.Status == "Отклонено")
+                    {
+                        statusClass = "admin-status-danger";
+                    }
+
+                    var mainImage = ad.Images?
+                    .FirstOrDefault(i => i.Status == "Опубликовано" || string.IsNullOrWhiteSpace(i.Status));
+
+                    var moderationImages = ad.Images?
+                        .Where(i => i.Status == "На модерации")
+                        .ToList();
+
+                    <article class="admin-ad-card">
+                        <div class="admin-ad-image">
+                            @if (mainImage != null)
+                            {
+                                <img src="@mainImage.ImagePath" alt="Фото объявления" />
+                            }
+                            else
+                            {
+                                <div class="admin-ad-no-image">
+                                    Нет фото
+                                </div>
+                            }
+                        </div>
+
+                        <div class="admin-ad-info">
+                            <h3>@ad.Title</h3>
+
+                            <p class="admin-ad-price">
+                                @ad.Price.ToString("N0") ₽
+                            </p>
+
+                            <p>
+                                <strong>Город:</strong>
+                                @ad.City
+                            </p>
+
+                            <p>
+                                <strong>Адрес:</strong>
+                                @ad.Address
+                            </p>
+
+                            <p>
+                                <strong>Тип:</strong>
+                                @ad.PropertyType · @ad.DealType
+                            </p>
+
+                            <p>
+                                <strong>Статус:</strong>
+                                <span class="@statusClass">
+                                    @ad.Status
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>Дата:</strong>
+                                @ad.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                            </p>
+
+                            @if (!string.IsNullOrWhiteSpace(ad.RejectReason))
+                            {
+                                <p>
+                                    <strong>Причина отклонения:</strong>
+                                    @ad.RejectReason
+                                </p>
+                            }
+                        </div>
+
+                        <div class="admin-ad-actions">
+                            <a asp-controller="Ads"
+                               asp-action="Details"
+                               asp-route-id="@ad.Id">
+                                Открыть
+                            </a>
+
+                            <form asp-controller="Admin" asp-action="ChangeStatus" method="post">
+                                <input type="hidden" name="id" value="@ad.Id" />
+                                <input type="hidden" name="status" value="Опубликовано" />
+
+                                <button type="submit" class="admin-approve-btn">
+                                    Опубликовать
+                                </button>
+                            </form>
+
+                            <form asp-controller="Admin" asp-action="ChangeStatus" method="post">
+                                <input type="hidden" name="id" value="@ad.Id" />
+                                <input type="hidden" name="status" value="Отклонено" />
+
+                                <input type="text"
+                                       name="rejectReason"
+                                       placeholder="Причина отклонения" />
+
+                                <button type="submit" class="admin-danger-btn">
+                                    Отклонить
+                                </button>
+                            </form>
+
+                            <form asp-controller="Admin"
+                                  asp-action="DeleteAd"
+                                  method="post"
+                                  onsubmit="return confirm('Удалить объявление?');">
+                                <input type="hidden" name="id" value="@ad.Id" />
+
+                                <button type="submit" class="admin-delete-btn">
+                                    Удалить
+                                </button>
+                            </form>
+                        </div>
+
+                        @if (moderationImages != null && moderationImages.Any())
+                        {
+                            <div class="admin-photo-moderation">
+                                <h4>Фото на проверке</h4>
+
+                                <div class="admin-photo-moderation-grid">
+                                    @foreach (var image in moderationImages)
+                                    {
+                                        <div class="admin-photo-moderation-item">
+                                            <img src="@image.ImagePath" alt="Фото на проверке" />
+
+                                            @if (image.Status == "На модерации")
+                                            {
+                                                <span class="admin-photo-status admin-photo-status-warning">
+                                                    На модерации
+                                                </span>
+                                            }
+
+                                            @if (!string.IsNullOrWhiteSpace(image.RejectReason))
+                                            {
+                                                <p class="admin-photo-reject-reason">
+                                                    @image.RejectReason
+                                                </p>
+                                            }
+
+                                            @if (image.Status == "На модерации")
+                                            {
+                                                <div class="admin-photo-actions">
+                                                    <form asp-controller="Admin" asp-action="ApproveImage" method="post">
+                                                        <input type="hidden" name="imageId" value="@image.Id" />
+
+                                                        <button type="submit" class="admin-photo-approve-btn">
+                                                            Одобрить
+                                                        </button>
+                                                    </form>
+
+                                                    <form asp-controller="Admin" asp-action="RejectImage" method="post">
+                                                        <input type="hidden" name="imageId" value="@image.Id" />
+
+                                                        <input type="text"
+                                                               name="rejectReason"
+                                                               placeholder="Причина" />
+
+                                                        <button type="submit" class="admin-photo-reject-btn">
+                                                            Отклонить
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </article>
+                }
+            </div>
         }
-        else if (ad.Status == "Отклонено")
-        {
-            statusClass = "status-red";
-        }
-
-        <div class="admin-ad-card">
-            <h3>@ad.Title</h3>
-
-            @if (ad.Images != null && ad.Images.Count > 0)
-            {
-                <img src="@ad.Images[0].ImagePath" alt="Фото объявления" width="220" />
-            }
-
-            <p><strong>ID:</strong> @ad.Id</p>
-            <p><strong>Цена:</strong> @ad.Price</p>
-            <p><strong>Город:</strong> @ad.City</p>
-            <p><strong>Адрес:</strong> @ad.Address</p>
-            <p><strong>Тип:</strong> @ad.PropertyType</p>
-            <p><strong>Сделка:</strong> @ad.DealType</p>
-            <p><strong>Статус:</strong> <span class="@statusClass">@ad.Status</span></p>
-
-            @if (!string.IsNullOrEmpty(ad.RejectReason))
-            {
-                <p><strong>Причина отклонения:</strong> @ad.RejectReason</p>
-            }
-
-            <form asp-controller="Admin" asp-action="ChangeStatus" method="post" class="admin-form">
-                <input type="hidden" name="id" value="@ad.Id" />
-
-                <div class="form-group">
-                    <label>Статус</label>
-                    <select name="status">
-                        <option value="На модерации" selected="@(ad.Status == "На модерации")">На модерации</option>
-                        <option value="Опубликовано" selected="@(ad.Status == "Опубликовано")">Опубликовано</option>
-                        <option value="Отклонено" selected="@(ad.Status == "Отклонено")">Отклонено</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Причина отклонения</label>
-                    <input type="text" name="rejectReason" value="@ad.RejectReason" />
-                </div>
-
-                <button type="submit">Изменить статус</button>
-            </form>
-
-            <form asp-controller="Admin" asp-action="DeleteAd" method="post" class="admin-form admin-danger" onsubmit="return confirm('Удалить объявление?');">
-                <input type="hidden" name="id" value="@ad.Id" />
-                <button type="submit">Удалить</button>
-            </form>
-        </div>
-    }
-}
+    </section>
+</div>

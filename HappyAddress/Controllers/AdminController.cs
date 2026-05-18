@@ -3,30 +3,25 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using HappyAddress.Data;
 using HappyAddress.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace HappyAddress.Controllers
 {
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public AdminController(AppDbContext context)
+        public AdminController(AppDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         private bool IsAdmin()
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
-
-            if (userId == null)
-            {
-                return false;
-            }
-
-            User? user = _context.Users.FirstOrDefault(u => u.Id == userId.Value);
-
-            return user != null && user.Role == "Admin";
+            return HttpContext.Session.GetString("UserRole") == "Admin";
         }
 
         [HttpGet]
@@ -89,21 +84,28 @@ namespace HappyAddress.Controllers
                 return RedirectToAction("Ads");
             }
 
-            var allowedStatuses = new[] { "На модерации", "Опубликовано", "Отклонено" };
+            var allowedStatuses = new[] { "Опубликовано", "Отклонено" };
 
             if (!allowedStatuses.Contains(status))
             {
                 return RedirectToAction("Ads");
             }
 
-            ad.Status = status;
-
             if (status == "Отклонено")
             {
-                ad.RejectReason = rejectReason;
+                if (string.IsNullOrWhiteSpace(rejectReason))
+                {
+                    TempData["Error"] = "Укажите причину отклонения объявления";
+                    return RedirectToAction("Ads");
+                }
+
+                ad.Status = "Отклонено";
+                ad.RejectReason = rejectReason.Trim();
             }
-            else
+
+            if (status == "Опубликовано")
             {
+                ad.Status = "Опубликовано";
                 ad.RejectReason = null;
             }
 
@@ -146,6 +148,64 @@ namespace HappyAddress.Controllers
             _context.SaveChanges();
 
             TempData["Success"] = "Объявление удалено администратором";
+            return RedirectToAction("Ads");
+        }
+       
+        [HttpPost]
+        public IActionResult ApproveImage(int imageId)
+        {
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var image = _context.AdImages.FirstOrDefault(i => i.Id == imageId);
+
+            if (image == null)
+            {
+                TempData["Error"] = "Фото не найдено";
+                return RedirectToAction("Ads");
+            }
+
+            image.Status = "Опубликовано";
+            image.RejectReason = null;
+
+            _context.SaveChanges();
+
+            TempData["Success"] = "Фото опубликовано";
+            return RedirectToAction("Ads");
+        }
+
+        [HttpPost]
+        public IActionResult RejectImage(int imageId, string? rejectReason)
+        {
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var image = _context.AdImages.FirstOrDefault(i => i.Id == imageId);
+
+            if (image == null)
+            {
+                TempData["Error"] = "Фото не найдено";
+                return RedirectToAction("Ads");
+            }
+
+            string filePath = Path.Combine(
+                _environment.WebRootPath,
+                image.ImagePath.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString())
+            );
+
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            _context.AdImages.Remove(image);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Фото отклонено и удалено";
             return RedirectToAction("Ads");
         }
     }

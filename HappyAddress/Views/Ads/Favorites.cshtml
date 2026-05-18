@@ -1,63 +1,107 @@
-﻿@model List<HappyAddress.Models.Ad>
+﻿@model IEnumerable<HappyAddress.Models.Ad>
+
+@{
+    ViewData["Title"] = "Избранное";
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/ads.css" />
 }
 
-<h2>Избранные объявления</h2>
+<section class="favorites-page">
+    <div class="favorites-header">
+        <h1>Избранные объявления</h1>
+        <p>Здесь находятся объявления, которые вы добавили в избранное.</p>
+    </div>
 
-@if (Model.Count == 0)
-{
-    <p>У вас пока нет избранных объявлений.</p>
-}
-else
-{
-    foreach (var ad in Model)
+    @if (Model == null || !Model.Any())
     {
-        <div style="border:1px solid gray; padding:10px; margin-bottom:10px;">
-            <h3>
-                <a asp-controller="Ads" asp-action="Details" asp-route-id="@ad.Id">
-                    @ad.Title
-                </a>
-            </h3>
+        <div class="favorites-empty">
+            <h2>В избранном пока пусто</h2>
+            <p>Добавляйте понравившиеся объявления, чтобы быстро вернуться к ним позже.</p>
 
-            @if (ad.Images != null && ad.Images.Count > 0)
-            {
-                <img src="@ad.Images[0].ImagePath" alt="Фото объявления" width="200" />
-            }
-
-            <p><strong>Цена:</strong> @ad.Price</p>
-            <p><strong>Город:</strong> @ad.City</p>
-            <p><strong>Адрес:</strong> @ad.Address</p>
-            <p><strong>Тип:</strong> @ad.PropertyType</p>
-            <p><strong>Сделка:</strong> @ad.DealType</p>
-
-            <form asp-controller="Ads" asp-action="RemoveFromFavorites" method="post">
-                <input type="hidden" name="adId" value="@ad.Id" />
-                <button type="submit">Удалить из избранного</button>
-            </form>
+            <a asp-controller="Home" asp-action="Index" class="favorites-main-btn">
+                Перейти на главную
+            </a>
         </div>
     }
-
-    @if (ViewBag.Totalpages > 1)
+    else
     {
-        <div style="margin-top:20px;">
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        <div class="favorites-list">
+            @foreach (var ad in Model)
             {
-                if (i == ViewBag.CurrentPage)
-                {
-                    <strong style="margin-right:10px;">@i</strong>
-                }
-                else
-                {
+                <article class="favorite-card">
                     <a asp-controller="Ads"
-                       asp-action="Favorites"
-                       asp-route-page="@i"
-                       style="margin-right:10px;">
-                        @i
+                       asp-action="Details"
+                       asp-route-id="@ad.Id"
+                       class="favorite-card-image">
+
+                        @if (ad.Images != null && ad.Images.Count > 0)
+                        {
+                            <img src="@ad.Images[0].ImagePath" alt="Фото объявления" />
+                        }
+                        else
+                        {
+                            <div class="favorite-no-image">
+                                Нет фото
+                            </div>
+                        }
                     </a>
-                }
+
+                    <div class="favorite-card-info">
+                        <a asp-controller="Ads"
+                           asp-action="Details"
+                           asp-route-id="@ad.Id"
+                           class="favorite-card-title">
+                            @ad.Title
+                        </a>
+
+                        <div class="favorite-card-price">
+                            @ad.Price.ToString("N0") ₽
+                        </div>
+
+                        <p>
+                            <strong>Город:</strong>
+                            @ad.City
+                        </p>
+
+                        <p>
+                            <strong>Адрес:</strong>
+                            @ad.Address
+                        </p>
+
+                        <p>
+                            <strong>Тип:</strong>
+                            @ad.PropertyType
+                        </p>
+
+                        <p>
+                            <strong>Сделка:</strong>
+                            @ad.DealType
+                        </p>
+                    </div>
+
+                    <div class="favorite-card-actions">
+                        <a asp-controller="Ads"
+                           asp-action="Details"
+                           asp-route-id="@ad.Id"
+                           class="favorite-open-btn">
+                            Подробнее
+                        </a>
+
+                        <form asp-controller="Ads"
+                              asp-action="RemoveFromFavorites"
+                              method="post">
+                            <input type="hidden" name="adId" value="@ad.Id" />
+                            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+
+                            <button type="submit" class="favorite-remove-btn">
+                                Удалить из избранного
+                            </button>
+                        </form>
+                    </div>
+                </article>
             }
         </div>
     }
-}
+</section>

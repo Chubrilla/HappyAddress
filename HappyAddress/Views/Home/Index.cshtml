@@ -5,6 +5,41 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
+    <style>
+        /* Исправление модального окна фильтров */
+        .filters-modal {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 9998 !important;
+
+            display: none;
+            align-items: center !important;
+            justify-content: center !important;
+
+            padding: 86px 20px 28px !important;
+            overflow: hidden !important;
+
+            background: rgba(0, 0, 0, 0.62) !important;
+        }
+
+        .filters-modal-content {
+            width: min(1120px, 100%) !important;
+            max-height: calc(100vh - 125px) !important;
+            overflow-y: auto !important;
+            margin: 0 auto !important;
+        }
+
+        .filter-actions,
+        .filters-actions {
+            position: sticky !important;
+            z-index: 5 !important;
+        }
+
+        body.modal-open {
+            overflow: hidden !important;
+        }
+    </style>
 }
 
 <section class="hero-search">
@@ -14,6 +49,7 @@
 
         <form method="get" asp-action="Index" asp-controller="Home" class="hero-search-form">
             <input type="hidden" name="searchMode" id="searchMode" value="filters" />
+
             <div class="search-row">
                 <div class="search-input-wrap">
                     <input type="text"
@@ -40,713 +76,714 @@
                     </button>
                 </div>
             </div>
-
-            <div id="filtersModal" class="filters-modal">
-                <div class="filters-modal-content">
-                    <div class="filters-modal-header">
-                        <h3>Фильтры</h3>
-
-                        <button type="button" class="filters-close-btn" onclick="toggleFilters()">
-                            ×
-                        </button>
-                    </div>
-
-                    <div class="filter-grid">
-                        <div class="form-group">
-                            <label for="city">Город</label>
-                            <input id="city"
-                                   type="text"
-                                   name="city"
-                                   value="@Model.City"
-                                   placeholder="Например, Москва" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="dealType">Тип сделки</label>
-                            <select id="dealType" name="dealType">
-                                <option value="">Все сделки</option>
-                                <option value="Продажа" selected="@(Model.DealType == "Продажа")">
-                                    Продажа
-                                </option>
-                                <option value="Долгосрочная аренда" selected="@(Model.DealType == "Долгосрочная аренда")">
-                                    Долгосрочная аренда
-                                </option>
-                                <option value="Посуточная аренда" selected="@(Model.DealType == "Посуточная аренда")">
-                                    Посуточная аренда
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="propertyType">Тип недвижимости</label>
-                            <select id="propertyType" name="propertyType">
-                                <option value="">Вся недвижимость</option>
-                                <option value="Квартира" selected="@(Model.PropertyType == "Квартира")">
-                                    Квартира
-                                </option>
-                                <option value="Дом" selected="@(Model.PropertyType == "Дом")">
-                                    Дом
-                                </option>
-                                <option value="Коттедж" selected="@(Model.PropertyType == "Коттедж")">
-                                    Коттедж
-                                </option>
-                                <option value="Таунхаус" selected="@(Model.PropertyType == "Таунхаус")">
-                                    Таунхаус
-                                </option>
-                                <option value="Участок" selected="@(Model.PropertyType == "Участок")">
-                                    Участок
-                                </option>
-                                <option value="Гараж" selected="@(Model.PropertyType == "Гараж")">
-                                    Гараж
-                                </option>
-                            </select>
-                        </div>
-                        
-                        <div id="houseFilterFields" class="dynamic-filter-fields" style="display:none;">
-                            <h4>Параметры дома</h4>
-
-                            <div class="filter-grid">
-                                <div class="form-group">
-                                    <label for="totalAreaFrom">Площадь дома от, м²</label>
-                                    <input id="totalAreaFrom"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="totalAreaFrom"
-                                           value="@Model.TotalAreaFrom"
-                                           placeholder="Например, 80" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="totalAreaTo">Площадь дома до, м²</label>
-                                    <input id="totalAreaTo"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="totalAreaTo"
-                                           value="@Model.TotalAreaTo"
-                                           placeholder="Например, 300" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="bedroomsFrom">Спален от</label>
-                                    <input id="bedroomsFrom"
-                                           type="number"
-                                           min="0"
-                                           name="bedroomsFrom"
-                                           value="@Model.BedroomsFrom"
-                                           placeholder="1" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="bedroomsTo">Спален до</label>
-                                    <input id="bedroomsTo"
-                                           type="number"
-                                           min="0"
-                                           name="bedroomsTo"
-                                           value="@Model.BedroomsTo"
-                                           placeholder="5" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="totalFloorsFrom">Этажей от</label>
-                                    <input id="totalFloorsFrom"
-                                           type="number"
-                                           min="0"
-                                           name="totalFloorsFrom"
-                                           value="@Model.TotalFloorsFrom"
-                                           placeholder="1" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="totalFloorsTo">Этажей до</label>
-                                    <input id="totalFloorsTo"
-                                           type="number"
-                                           min="0"
-                                           name="totalFloorsTo"
-                                           value="@Model.TotalFloorsTo"
-                                           placeholder="3" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="buildYearFrom">Год постройки от</label>
-                                    <input id="buildYearFrom"
-                                           type="number"
-                                           min="1800"
-                                           max="2100"
-                                           name="buildYearFrom"
-                                           value="@Model.BuildYearFrom"
-                                           placeholder="2000" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="buildYearTo">Год постройки до</label>
-                                    <input id="buildYearTo"
-                                           type="number"
-                                           min="1800"
-                                           max="2100"
-                                           name="buildYearTo"
-                                           value="@Model.BuildYearTo"
-                                           placeholder="2026" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="houseMaterial">Материал дома</label>
-                                    <select id="houseMaterial" name="houseMaterial">
-                                        <option value="">Любой</option>
-                                        <option value="Кирпичный" selected="@(Model.HouseMaterial == "Кирпичный")">Кирпичный</option>
-                                        <option value="Монолитный" selected="@(Model.HouseMaterial == "Монолитный")">Монолитный</option>
-                                        <option value="Деревянный" selected="@(Model.HouseMaterial == "Деревянный")">Деревянный</option>
-                                        <option value="Щитовой" selected="@(Model.HouseMaterial == "Щитовой")">Щитовой</option>
-                                        <option value="Каркасный" selected="@(Model.HouseMaterial == "Каркасный")">Каркасный</option>
-                                        <option value="Блочный" selected="@(Model.HouseMaterial == "Блочный")">Блочный</option>
-                                        <option value="Газобетонный блок" selected="@(Model.HouseMaterial == "Газобетонный блок")">Газобетонный блок</option>
-                                        <option value="Газосиликатный блок" selected="@(Model.HouseMaterial == "Газосиликатный блок")">Газосиликатный блок</option>
-                                        <option value="Пенобетонный блок" selected="@(Model.HouseMaterial == "Пенобетонный блок")">Пенобетонный блок</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="houseCondition">Состояние дома</label>
-                                    <select id="houseCondition" name="houseCondition">
-                                        <option value="">Любое</option>
-                                        <option value="Можно жить" selected="@(Model.HouseCondition == "Можно жить")">Можно жить</option>
-                                        <option value="Нужен ремонт" selected="@(Model.HouseCondition == "Нужен ремонт")">Нужен ремонт</option>
-                                        <option value="Нужно достроить" selected="@(Model.HouseCondition == "Нужно достроить")">Нужно достроить</option>
-                                        <option value="Нужен капремонт или под снос" selected="@(Model.HouseCondition == "Нужен капремонт или под снос")">Нужен капремонт или под снос</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="sewerage">Канализация</label>
-                                    <select id="sewerage" name="sewerage">
-                                        <option value="">Любая</option>
-                                        <option value="Центральная" selected="@(Model.Sewerage == "Центральная")">Центральная</option>
-                                        <option value="Септик" selected="@(Model.Sewerage == "Септик")">Септик</option>
-                                        <option value="Выгребная яма" selected="@(Model.Sewerage == "Выгребная яма")">Выгребная яма</option>
-                                        <option value="Нет" selected="@(Model.Sewerage == "Нет")">Нет</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="waterSupply">Водоснабжение</label>
-                                    <select id="waterSupply" name="waterSupply">
-                                        <option value="">Любое</option>
-                                        <option value="Центральное" selected="@(Model.WaterSupply == "Центральное")">Центральное</option>
-                                        <option value="Скважина" selected="@(Model.WaterSupply == "Скважина")">Скважина</option>
-                                        <option value="Колодец" selected="@(Model.WaterSupply == "Колодец")">Колодец</option>
-                                        <option value="Нет" selected="@(Model.WaterSupply == "Нет")">Нет</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="gas">Газ</label>
-                                    <select id="gas" name="gas">
-                                        <option value="">Любой</option>
-                                        <option value="Магистральный в доме или на участке" selected="@(Model.Gas == "Магистральный в доме или на участке")">Магистральный</option>
-                                        <option value="По границе участка" selected="@(Model.Gas == "По границе участка")">По границе участка</option>
-                                        <option value="Газгольдер" selected="@(Model.Gas == "Газгольдер")">Газгольдер</option>
-                                        <option value="Нет" selected="@(Model.Gas == "Нет")">Нет</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="heating">Отопление</label>
-                                    <select id="heating" name="heating">
-                                        <option value="">Любое</option>
-                                        <option value="Центральное газовое" selected="@(Model.Heating == "Центральное газовое")">Центральное газовое</option>
-                                        <option value="Центральное угольное" selected="@(Model.Heating == "Центральное угольное")">Центральное угольное</option>
-                                        <option value="Печь" selected="@(Model.Heating == "Печь")">Печь</option>
-                                        <option value="Камин" selected="@(Model.Heating == "Камин")">Камин</option>
-                                        <option value="Электрическое" selected="@(Model.Heating == "Электрическое")">Электрическое</option>
-                                        <option value="Автономное газовое" selected="@(Model.Heating == "Автономное газовое")">Автономное газовое</option>
-                                        <option value="Дизельное" selected="@(Model.Heating == "Дизельное")">Дизельное</option>
-                                        <option value="Твердотопливный котёл" selected="@(Model.Heating == "Твердотопливный котёл")">Твердотопливный котёл</option>
-                                        <option value="Без отопления" selected="@(Model.Heating == "Без отопления")">Без отопления</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h4>Удобства</h4>
-
-                            <div class="filter-checkboxes">
-                                <label>
-                                    <input type="checkbox" name="hasGarage" value="true" checked="@Model.HasGarage" />
-                                    Гараж
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="hasTerrace" value="true" checked="@Model.HasTerrace" />
-                                    Терраса
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="hasPool" value="true" checked="@Model.HasPool" />
-                                    Бассейн
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="hasBathhouse" value="true" checked="@Model.HasBathhouse" />
-                                    Баня
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="hasSecurity" value="true" checked="@Model.HasSecurity" />
-                                    Охрана
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="flatFilterFields" class="dynamic-filter-fields" style="display:none;">
-                            <h4>Параметры квартиры</h4>
-
-                            <div class="filter-grid">
-                                <div class="form-group">
-                                    <label for="roomsFilter">Количество комнат</label>
-                                    <select id="roomsFilter" name="roomsFilter">
-                                        <option value="">Любое</option>
-                                        <option value="studio" selected="@(Model.RoomsFilter == "studio")">Студия</option>
-                                        <option value="1" selected="@(Model.RoomsFilter == "1")">1 комната</option>
-                                        <option value="2" selected="@(Model.RoomsFilter == "2")">2 комнаты</option>
-                                        <option value="3" selected="@(Model.RoomsFilter == "3")">3 комнаты</option>
-                                        <option value="4" selected="@(Model.RoomsFilter == "4")">4 комнаты</option>
-                                        <option value="5plus" selected="@(Model.RoomsFilter == "5plus")">5+ комнат</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="floorFrom">Этаж от</label>
-                                    <input id="floorFrom"
-                                           type="number"
-                                           min="0"
-                                           name="floorFrom"
-                                           value="@Model.FloorFrom"
-                                           placeholder="1" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="floorTo">Этаж до</label>
-                                    <input id="floorTo"
-                                           type="number"
-                                           min="0"
-                                           name="floorTo"
-                                           value="@Model.FloorTo"
-                                           placeholder="20" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="livingAreaFrom">Жилая площадь от, м²</label>
-                                    <input id="livingAreaFrom"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="livingAreaFrom"
-                                           value="@Model.LivingAreaFrom"
-                                           placeholder="20" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="livingAreaTo">Жилая площадь до, м²</label>
-                                    <input id="livingAreaTo"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="livingAreaTo"
-                                           value="@Model.LivingAreaTo"
-                                           placeholder="100" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="kitchenAreaFrom">Площадь кухни от, м²</label>
-                                    <input id="kitchenAreaFrom"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="kitchenAreaFrom"
-                                           value="@Model.KitchenAreaFrom"
-                                           placeholder="6" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="kitchenAreaTo">Площадь кухни до, м²</label>
-                                    <input id="kitchenAreaTo"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="kitchenAreaTo"
-                                           value="@Model.KitchenAreaTo"
-                                           placeholder="30" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="renovation">Ремонт</label>
-                                    <select id="renovation" name="renovation">
-                                        <option value="">Любой</option>
-                                        <option value="Без ремонта" selected="@(Model.Renovation == "Без ремонта")">Без ремонта</option>
-                                        <option value="Косметический" selected="@(Model.Renovation == "Косметический")">Косметический</option>
-                                        <option value="Евроремонт" selected="@(Model.Renovation == "Евроремонт")">Евроремонт</option>
-                                        <option value="Дизайнерский" selected="@(Model.Renovation == "Дизайнерский")">Дизайнерский</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="buildingType">Тип дома</label>
-                                    <select id="buildingType" name="buildingType">
-                                        <option value="">Любой</option>
-                                        <option value="Кирпичный" selected="@(Model.BuildingType == "Кирпичный")">Кирпичный</option>
-                                        <option value="Монолитный" selected="@(Model.BuildingType == "Монолитный")">Монолитный</option>
-                                        <option value="Панельный" selected="@(Model.BuildingType == "Панельный")">Панельный</option>
-                                        <option value="Блочный" selected="@(Model.BuildingType == "Блочный")">Блочный</option>
-                                        <option value="Деревянный" selected="@(Model.BuildingType == "Деревянный")">Деревянный</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="bathroomType">Санузел</label>
-                                    <select id="bathroomType" name="bathroomType">
-                                        <option value="">Любой</option>
-                                        <option value="Совмещенный" selected="@(Model.BathroomType == "Совмещенный")">Совмещенный</option>
-                                        <option value="Раздельный" selected="@(Model.BathroomType == "Раздельный")">Раздельный</option>
-                                        <option value="Несколько" selected="@(Model.BathroomType == "Несколько")">Несколько</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="balconyType">Балкон / лоджия</label>
-                                    <select id="balconyType" name="balconyType">
-                                        <option value="">Не важно</option>
-                                        <option value="Балкон" selected="@(Model.BalconyType == "Балкон")">Балкон</option>
-                                        <option value="Лоджия" selected="@(Model.BalconyType == "Лоджия")">Лоджия</option>
-                                        <option value="Балкон и лоджия" selected="@(Model.BalconyType == "Балкон и лоджия")">Балкон и лоджия</option>
-                                        <option value="Нет" selected="@(Model.BalconyType == "Нет")">Нет</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h4>Дополнительно</h4>
-
-                            <div class="filter-checkboxes">
-                                <label>
-                                    <input type="checkbox" name="hasElevator" value="true" checked="@Model.HasElevator" />
-                                    Лифт
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="hasParking" value="true" checked="@Model.HasParking" />
-                                    Парковка
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="landFilterFields" class="dynamic-filter-fields" style="display:none;">
-                            <h4>Параметры участка</h4>
-
-                            <div class="filter-grid">
-                                <div class="form-group">
-                                    <label for="landAreaFrom">Площадь участка от, сот.</label>
-                                    <input id="landAreaFrom"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="landAreaFrom"
-                                           value="@Model.LandAreaFrom"
-                                           placeholder="Например, 6" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="landAreaTo">Площадь участка до, сот.</label>
-                                    <input id="landAreaTo"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="landAreaTo"
-                                           value="@Model.LandAreaTo"
-                                           placeholder="Например, 20" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="landCategory">Категория земли</label>
-                                    <select id="landCategory" name="landCategory">
-                                        <option value="">Любая</option>
-                                        <option value="ИЖС" selected="@(Model.LandCategory == "ИЖС")">ИЖС</option>
-                                        <option value="СНТ" selected="@(Model.LandCategory == "СНТ")">СНТ</option>
-                                        <option value="ДНП" selected="@(Model.LandCategory == "ДНП")">ДНП</option>
-                                        <option value="ЛПХ" selected="@(Model.LandCategory == "ЛПХ")">ЛПХ</option>
-                                        <option value="Фермерское хозяйство" selected="@(Model.LandCategory == "Фермерское хозяйство")">Фермерское хозяйство</option>
-                                        <option value="Промназначение" selected="@(Model.LandCategory == "Промназначение")">Промназначение</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="landStatus">Статус участка</label>
-                                    <select id="landStatus" name="landStatus">
-                                        <option value="">Любой</option>
-                                        <option value="В собственности" selected="@(Model.LandStatus == "В собственности")">В собственности</option>
-                                        <option value="В аренде" selected="@(Model.LandStatus == "В аренде")">В аренде</option>
-                                        <option value="Документы готовы" selected="@(Model.LandStatus == "Документы готовы")">Документы готовы</option>
-                                        <option value="Требуется оформление" selected="@(Model.LandStatus == "Требуется оформление")">Требуется оформление</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="electricity">Электричество</label>
-                                    <select id="electricity" name="electricity">
-                                        <option value="">Любое</option>
-                                        <option value="Есть" selected="@(Model.Electricity == "Есть")">Есть</option>
-                                        <option value="Нет" selected="@(Model.Electricity == "Нет")">Нет</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="garageFilterFields" class="dynamic-filter-fields" style="display:none;">
-                            <h4>Параметры гаража</h4>
-
-                            <div class="filter-grid">
-                                <div class="form-group">
-                                    <label for="garageType">Тип гаража</label>
-                                    <select id="garageType" name="garageType">
-                                        <option value="">Любой</option>
-                                        <option value="Гараж" selected="@(Model.GarageType == "Гараж")">Гараж</option>
-                                        <option value="Машино-место" selected="@(Model.GarageType == "Машино-место")">Машино-место</option>
-                                        <option value="Бокс" selected="@(Model.GarageType == "Бокс")">Бокс</option>
-                                        <option value="Подземный паркинг" selected="@(Model.GarageType == "Подземный паркинг")">Подземный паркинг</option>
-                                        <option value="Многоуровневый паркинг" selected="@(Model.GarageType == "Многоуровневый паркинг")">Многоуровневый паркинг</option>
-                                        <option value="Открытая парковка" selected="@(Model.GarageType == "Открытая парковка")">Открытая парковка</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="garageStatus">Статус</label>
-                                    <select id="garageStatus" name="garageStatus">
-                                        <option value="">Любой</option>
-                                        <option value="В собственности" selected="@(Model.GarageStatus == "В собственности")">В собственности</option>
-                                        <option value="В аренде" selected="@(Model.GarageStatus == "В аренде")">В аренде</option>
-                                        <option value="ГСК" selected="@(Model.GarageStatus == "ГСК")">ГСК</option>
-                                        <option value="Документы готовы" selected="@(Model.GarageStatus == "Документы готовы")">Документы готовы</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="garageAreaFrom">Площадь от, м²</label>
-                                    <input id="garageAreaFrom"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="totalAreaFrom"
-                                           value="@Model.TotalAreaFrom"
-                                           placeholder="Например, 15" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="garageAreaTo">Площадь до, м²</label>
-                                    <input id="garageAreaTo"
-                                           type="number"
-                                           step="0.1"
-                                           min="0"
-                                           name="totalAreaTo"
-                                           value="@Model.TotalAreaTo"
-                                           placeholder="Например, 40" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="garageElectricity">Электричество</label>
-                                    <select id="garageElectricity" name="electricity">
-                                        <option value="">Любое</option>
-                                        <option value="Есть" selected="@(Model.Electricity == "Есть")">Есть</option>
-                                        <option value="Нет" selected="@(Model.Electricity == "Нет")">Нет</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h4>Дополнительно</h4>
-
-                            <div class="filter-checkboxes">
-                                <label>
-                                    <input type="checkbox" name="hasSecurity" value="true" checked="@Model.HasSecurity" />
-                                    Охрана
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="dailyRentFilterFields" class="dynamic-filter-fields" style="display:none;">
-                            <h4>Посуточная аренда</h4>
-
-                            <div class="filter-grid">
-                                <div class="form-group">
-                                    <label for="guestsCountFrom">Гостей от</label>
-                                    <input id="guestsCountFrom"
-                                           type="number"
-                                           min="1"
-                                           name="guestsCountFrom"
-                                           value="@Model.GuestsCountFrom"
-                                           placeholder="Например, 2" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="sleepingPlacesFrom">Спальных мест от</label>
-                                    <input id="sleepingPlacesFrom"
-                                           type="number"
-                                           min="1"
-                                           name="sleepingPlacesFrom"
-                                           value="@Model.SleepingPlacesFrom"
-                                           placeholder="Например, 2" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="availableFrom">Дата заезда</label>
-                                    <input id="availableFrom"
-                                           type="date"
-                                           name="availableFrom"
-                                           value="@(Model.AvailableFrom.HasValue ? Model.AvailableFrom.Value.ToString("yyyy-MM-dd") : "")" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="availableTo">Дата выезда</label>
-                                    <input id="availableTo"
-                                           type="date"
-                                           name="availableTo"
-                                           value="@(Model.AvailableTo.HasValue ? Model.AvailableTo.Value.ToString("yyyy-MM-dd") : "")" />
-                                </div>
-                            </div>
-
-                            <h4>Удобства</h4>
-
-                            <div class="filter-checkboxes">
-                                <label><input type="checkbox" name="hasWifi" value="true" checked="@Model.HasWifi" /> Wi-Fi</label>
-                                <label><input type="checkbox" name="hasAirConditioner" value="true" checked="@Model.HasAirConditioner" /> Кондиционер</label>
-                                <label><input type="checkbox" name="hasKitchen" value="true" checked="@Model.HasKitchen" /> Кухня</label>
-                                <label><input type="checkbox" name="hasTv" value="true" checked="@Model.HasTv" /> Телевизор</label>
-                                <label><input type="checkbox" name="hasWashingMachine" value="true" checked="@Model.HasWashingMachine" /> Стиральная машина</label>
-                                <label><input type="checkbox" name="hasBedLinen" value="true" checked="@Model.HasBedLinen" /> Постельное бельё</label>
-                                <label><input type="checkbox" name="hasFurniture" value="true" checked="@Model.HasFurniture" /> Мебель</label>
-                                <label><input type="checkbox" name="hasAppliances" value="true" checked="@Model.HasAppliances" /> Техника</label>
-                                <label><input type="checkbox" name="allowChildren" value="true" checked="@Model.AllowChildren" /> Можно с детьми</label>
-                                <label><input type="checkbox" name="allowPets" value="true" checked="@Model.AllowPets" /> Можно с животными</label>
-                            </div>
-                        </div>
-
-                        <div id="longRentFilterFields" class="dynamic-filter-fields" style="display:none;">
-                            <h4>Долгосрочная аренда</h4>
-
-                            <div class="filter-grid">
-                                <div class="form-group">
-                                    <label for="depositFrom">Залог от, ₽</label>
-                                    <input id="depositFrom"
-                                           type="number"
-                                           min="0"
-                                           name="depositFrom"
-                                           value="@Model.DepositFrom"
-                                           placeholder="Например, 10000" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="depositTo">Залог до, ₽</label>
-                                    <input id="depositTo"
-                                           type="number"
-                                           min="0"
-                                           name="depositTo"
-                                           value="@Model.DepositTo"
-                                           placeholder="Например, 50000" />
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="prepayment">Предоплата</label>
-                                    <select id="prepayment" name="prepayment">
-                                        <option value="">Любая</option>
-                                        <option value="1 месяц" selected="@(Model.Prepayment == "1 месяц")">1 месяц</option>
-                                        <option value="2 месяца" selected="@(Model.Prepayment == "2 месяца")">2 месяца</option>
-                                        <option value="3 месяца" selected="@(Model.Prepayment == "3 месяца")">3 месяца</option>
-                                        <option value="Без предоплаты" selected="@(Model.Prepayment == "Без предоплаты")">Без предоплаты</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h4>Условия проживания</h4>
-
-                            <div class="filter-checkboxes">
-                                <label>
-                                    <input type="checkbox" name="allowChildren" value="true" checked="@Model.AllowChildren" />
-                                    Можно с детьми
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="allowPets" value="true" checked="@Model.AllowPets" />
-                                    Можно с животными
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="hasFurniture" value="true" checked="@Model.HasFurniture" />
-                                    Мебель
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="hasAppliances" value="true" checked="@Model.HasAppliances" />
-                                    Техника
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="priceFrom">Цена от</label>
-                            <input id="priceFrom"
-                                   type="number"
-                                   name="priceFrom"
-                                   value="@Model.PriceFrom"
-                                   min="0"
-                                   placeholder="0" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="priceTo">Цена до</label>
-                            <input id="priceTo"
-                                   type="number"
-                                   name="priceTo"
-                                   value="@Model.PriceTo"
-                                   min="0"
-                                   placeholder="10000000" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="sortBy">Сортировка</label>
-                            <select id="sortBy" name="sortBy">
-                                <option value="" selected="@(string.IsNullOrEmpty(Model.SortBy))">
-                                    Сначала новые
-                                </option>
-
-                                <option value="date_old" selected="@(Model.SortBy == "date_old")">
-                                    Сначала старые
-                                </option>
-
-                                <option value="price_asc" selected="@(Model.SortBy == "price_asc")">
-                                    Сначала дешёвые
-                                </option>
-
-                                <option value="price_desc" selected="@(Model.SortBy == "price_desc")">
-                                    Сначала дорогие
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="filters-actions">
-                        <button type="submit"
-                                class="apply-filter-btn"
-                                onclick="document.getElementById('searchMode').value = 'filters';">
-                            Применить фильтры
-                        </button>
-
-                        <a asp-controller="Home"
-                           asp-action="Index"
-                           class="reset-filter-btn">
-                            Сбросить фильтры
-                        </a>
-                    </div>
-                </div>
-            </div>
         </form>
     </div>
 </section>
+
+<div id="filtersModal" class="filters-modal">
+    <form method="get" asp-action="Index" asp-controller="Home" class="filters-modal-content">
+        <input type="hidden" name="searchMode" value="filters" />
+        <input type="hidden" name="searchText" value="@Model.SearchText" />
+
+        <div class="filters-modal-header">
+            <h3>Фильтры</h3>
+
+            <button type="button" class="filters-close-btn" onclick="toggleFilters()">
+                ×
+            </button>
+        </div>
+
+        <div class="filter-grid">
+            <div class="form-group">
+                <label for="city">Город</label>
+                <input id="city"
+                       type="text"
+                       name="city"
+                       value="@Model.City"
+                       placeholder="Например, Москва" />
+            </div>
+
+            <div class="form-group">
+                <label for="dealType">Тип сделки</label>
+                <select id="dealType" name="dealType">
+                    <option value="">Все сделки</option>
+                    <option value="Продажа" selected="@(Model.DealType == "Продажа")">
+                        Продажа
+                    </option>
+                    <option value="Долгосрочная аренда" selected="@(Model.DealType == "Долгосрочная аренда")">
+                        Долгосрочная аренда
+                    </option>
+                    <option value="Посуточная аренда" selected="@(Model.DealType == "Посуточная аренда")">
+                        Посуточная аренда
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="propertyType">Тип недвижимости</label>
+                <select id="propertyType" name="propertyType">
+                    <option value="">Вся недвижимость</option>
+                    <option value="Квартира" selected="@(Model.PropertyType == "Квартира")">
+                        Квартира
+                    </option>
+                    <option value="Дом" selected="@(Model.PropertyType == "Дом")">
+                        Дом
+                    </option>
+                    <option value="Коттедж" selected="@(Model.PropertyType == "Коттедж")">
+                        Коттедж
+                    </option>
+                    <option value="Таунхаус" selected="@(Model.PropertyType == "Таунхаус")">
+                        Таунхаус
+                    </option>
+                    <option value="Участок" selected="@(Model.PropertyType == "Участок")">
+                        Участок
+                    </option>
+                    <option value="Гараж" selected="@(Model.PropertyType == "Гараж")">
+                        Гараж
+                    </option>
+                </select>
+            </div>
+
+            <div id="houseFilterFields" class="dynamic-filter-fields" style="display:none;">
+                <h4>Параметры дома</h4>
+
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="totalAreaFrom">Площадь дома от, м²</label>
+                        <input id="totalAreaFrom"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="totalAreaFrom"
+                               value="@Model.TotalAreaFrom"
+                               placeholder="Например, 80" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="totalAreaTo">Площадь дома до, м²</label>
+                        <input id="totalAreaTo"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="totalAreaTo"
+                               value="@Model.TotalAreaTo"
+                               placeholder="Например, 300" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bedroomsFrom">Спален от</label>
+                        <input id="bedroomsFrom"
+                               type="number"
+                               min="0"
+                               name="bedroomsFrom"
+                               value="@Model.BedroomsFrom"
+                               placeholder="1" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bedroomsTo">Спален до</label>
+                        <input id="bedroomsTo"
+                               type="number"
+                               min="0"
+                               name="bedroomsTo"
+                               value="@Model.BedroomsTo"
+                               placeholder="5" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="totalFloorsFrom">Этажей от</label>
+                        <input id="totalFloorsFrom"
+                               type="number"
+                               min="0"
+                               name="totalFloorsFrom"
+                               value="@Model.TotalFloorsFrom"
+                               placeholder="1" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="totalFloorsTo">Этажей до</label>
+                        <input id="totalFloorsTo"
+                               type="number"
+                               min="0"
+                               name="totalFloorsTo"
+                               value="@Model.TotalFloorsTo"
+                               placeholder="3" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buildYearFrom">Год постройки от</label>
+                        <input id="buildYearFrom"
+                               type="number"
+                               min="1800"
+                               max="2100"
+                               name="buildYearFrom"
+                               value="@Model.BuildYearFrom"
+                               placeholder="2000" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buildYearTo">Год постройки до</label>
+                        <input id="buildYearTo"
+                               type="number"
+                               min="1800"
+                               max="2100"
+                               name="buildYearTo"
+                               value="@Model.BuildYearTo"
+                               placeholder="2026" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="houseMaterial">Материал дома</label>
+                        <select id="houseMaterial" name="houseMaterial">
+                            <option value="">Любой</option>
+                            <option value="Кирпичный" selected="@(Model.HouseMaterial == "Кирпичный")">Кирпичный</option>
+                            <option value="Монолитный" selected="@(Model.HouseMaterial == "Монолитный")">Монолитный</option>
+                            <option value="Деревянный" selected="@(Model.HouseMaterial == "Деревянный")">Деревянный</option>
+                            <option value="Щитовой" selected="@(Model.HouseMaterial == "Щитовой")">Щитовой</option>
+                            <option value="Каркасный" selected="@(Model.HouseMaterial == "Каркасный")">Каркасный</option>
+                            <option value="Блочный" selected="@(Model.HouseMaterial == "Блочный")">Блочный</option>
+                            <option value="Газобетонный блок" selected="@(Model.HouseMaterial == "Газобетонный блок")">Газобетонный блок</option>
+                            <option value="Газосиликатный блок" selected="@(Model.HouseMaterial == "Газосиликатный блок")">Газосиликатный блок</option>
+                            <option value="Пенобетонный блок" selected="@(Model.HouseMaterial == "Пенобетонный блок")">Пенобетонный блок</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="houseCondition">Состояние дома</label>
+                        <select id="houseCondition" name="houseCondition">
+                            <option value="">Любое</option>
+                            <option value="Можно жить" selected="@(Model.HouseCondition == "Можно жить")">Можно жить</option>
+                            <option value="Нужен ремонт" selected="@(Model.HouseCondition == "Нужен ремонт")">Нужен ремонт</option>
+                            <option value="Нужно достроить" selected="@(Model.HouseCondition == "Нужно достроить")">Нужно достроить</option>
+                            <option value="Нужен капремонт или под снос" selected="@(Model.HouseCondition == "Нужен капремонт или под снос")">Нужен капремонт или под снос</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sewerage">Канализация</label>
+                        <select id="sewerage" name="sewerage">
+                            <option value="">Любая</option>
+                            <option value="Центральная" selected="@(Model.Sewerage == "Центральная")">Центральная</option>
+                            <option value="Септик" selected="@(Model.Sewerage == "Септик")">Септик</option>
+                            <option value="Выгребная яма" selected="@(Model.Sewerage == "Выгребная яма")">Выгребная яма</option>
+                            <option value="Нет" selected="@(Model.Sewerage == "Нет")">Нет</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="waterSupply">Водоснабжение</label>
+                        <select id="waterSupply" name="waterSupply">
+                            <option value="">Любое</option>
+                            <option value="Центральное" selected="@(Model.WaterSupply == "Центральное")">Центральное</option>
+                            <option value="Скважина" selected="@(Model.WaterSupply == "Скважина")">Скважина</option>
+                            <option value="Колодец" selected="@(Model.WaterSupply == "Колодец")">Колодец</option>
+                            <option value="Нет" selected="@(Model.WaterSupply == "Нет")">Нет</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gas">Газ</label>
+                        <select id="gas" name="gas">
+                            <option value="">Любой</option>
+                            <option value="Магистральный в доме или на участке" selected="@(Model.Gas == "Магистральный в доме или на участке")">Магистральный</option>
+                            <option value="По границе участка" selected="@(Model.Gas == "По границе участка")">По границе участка</option>
+                            <option value="Газгольдер" selected="@(Model.Gas == "Газгольдер")">Газгольдер</option>
+                            <option value="Нет" selected="@(Model.Gas == "Нет")">Нет</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="heating">Отопление</label>
+                        <select id="heating" name="heating">
+                            <option value="">Любое</option>
+                            <option value="Центральное газовое" selected="@(Model.Heating == "Центральное газовое")">Центральное газовое</option>
+                            <option value="Центральное угольное" selected="@(Model.Heating == "Центральное угольное")">Центральное угольное</option>
+                            <option value="Печь" selected="@(Model.Heating == "Печь")">Печь</option>
+                            <option value="Камин" selected="@(Model.Heating == "Камин")">Камин</option>
+                            <option value="Электрическое" selected="@(Model.Heating == "Электрическое")">Электрическое</option>
+                            <option value="Автономное газовое" selected="@(Model.Heating == "Автономное газовое")">Автономное газовое</option>
+                            <option value="Дизельное" selected="@(Model.Heating == "Дизельное")">Дизельное</option>
+                            <option value="Твердотопливный котёл" selected="@(Model.Heating == "Твердотопливный котёл")">Твердотопливный котёл</option>
+                            <option value="Без отопления" selected="@(Model.Heating == "Без отопления")">Без отопления</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4>Удобства</h4>
+
+                <div class="filter-checkboxes">
+                    <label>
+                        <input type="checkbox" name="hasGarage" value="true" checked="@Model.HasGarage" />
+                        Гараж
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="hasTerrace" value="true" checked="@Model.HasTerrace" />
+                        Терраса
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="hasPool" value="true" checked="@Model.HasPool" />
+                        Бассейн
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="hasBathhouse" value="true" checked="@Model.HasBathhouse" />
+                        Баня
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="hasSecurity" value="true" checked="@Model.HasSecurity" />
+                        Охрана
+                    </label>
+                </div>
+            </div>
+
+            <div id="flatFilterFields" class="dynamic-filter-fields" style="display:none;">
+                <h4>Параметры квартиры</h4>
+
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="roomsFilter">Количество комнат</label>
+                        <select id="roomsFilter" name="roomsFilter">
+                            <option value="">Любое</option>
+                            <option value="studio" selected="@(Model.RoomsFilter == "studio")">Студия</option>
+                            <option value="1" selected="@(Model.RoomsFilter == "1")">1 комната</option>
+                            <option value="2" selected="@(Model.RoomsFilter == "2")">2 комнаты</option>
+                            <option value="3" selected="@(Model.RoomsFilter == "3")">3 комнаты</option>
+                            <option value="4" selected="@(Model.RoomsFilter == "4")">4 комнаты</option>
+                            <option value="5plus" selected="@(Model.RoomsFilter == "5plus")">5+ комнат</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="floorFrom">Этаж от</label>
+                        <input id="floorFrom"
+                               type="number"
+                               min="0"
+                               name="floorFrom"
+                               value="@Model.FloorFrom"
+                               placeholder="1" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="floorTo">Этаж до</label>
+                        <input id="floorTo"
+                               type="number"
+                               min="0"
+                               name="floorTo"
+                               value="@Model.FloorTo"
+                               placeholder="20" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="livingAreaFrom">Жилая площадь от, м²</label>
+                        <input id="livingAreaFrom"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="livingAreaFrom"
+                               value="@Model.LivingAreaFrom"
+                               placeholder="20" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="livingAreaTo">Жилая площадь до, м²</label>
+                        <input id="livingAreaTo"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="livingAreaTo"
+                               value="@Model.LivingAreaTo"
+                               placeholder="100" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kitchenAreaFrom">Площадь кухни от, м²</label>
+                        <input id="kitchenAreaFrom"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="kitchenAreaFrom"
+                               value="@Model.KitchenAreaFrom"
+                               placeholder="6" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kitchenAreaTo">Площадь кухни до, м²</label>
+                        <input id="kitchenAreaTo"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="kitchenAreaTo"
+                               value="@Model.KitchenAreaTo"
+                               placeholder="30" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="renovation">Ремонт</label>
+                        <select id="renovation" name="renovation">
+                            <option value="">Любой</option>
+                            <option value="Без ремонта" selected="@(Model.Renovation == "Без ремонта")">Без ремонта</option>
+                            <option value="Косметический" selected="@(Model.Renovation == "Косметический")">Косметический</option>
+                            <option value="Евроремонт" selected="@(Model.Renovation == "Евроремонт")">Евроремонт</option>
+                            <option value="Дизайнерский" selected="@(Model.Renovation == "Дизайнерский")">Дизайнерский</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buildingType">Тип дома</label>
+                        <select id="buildingType" name="buildingType">
+                            <option value="">Любой</option>
+                            <option value="Кирпичный" selected="@(Model.BuildingType == "Кирпичный")">Кирпичный</option>
+                            <option value="Монолитный" selected="@(Model.BuildingType == "Монолитный")">Монолитный</option>
+                            <option value="Панельный" selected="@(Model.BuildingType == "Панельный")">Панельный</option>
+                            <option value="Блочный" selected="@(Model.BuildingType == "Блочный")">Блочный</option>
+                            <option value="Деревянный" selected="@(Model.BuildingType == "Деревянный")">Деревянный</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bathroomType">Санузел</label>
+                        <select id="bathroomType" name="bathroomType">
+                            <option value="">Любой</option>
+                            <option value="Совмещенный" selected="@(Model.BathroomType == "Совмещенный")">Совмещенный</option>
+                            <option value="Раздельный" selected="@(Model.BathroomType == "Раздельный")">Раздельный</option>
+                            <option value="Несколько" selected="@(Model.BathroomType == "Несколько")">Несколько</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="balconyType">Балкон / лоджия</label>
+                        <select id="balconyType" name="balconyType">
+                            <option value="">Не важно</option>
+                            <option value="Балкон" selected="@(Model.BalconyType == "Балкон")">Балкон</option>
+                            <option value="Лоджия" selected="@(Model.BalconyType == "Лоджия")">Лоджия</option>
+                            <option value="Балкон и лоджия" selected="@(Model.BalconyType == "Балкон и лоджия")">Балкон и лоджия</option>
+                            <option value="Нет" selected="@(Model.BalconyType == "Нет")">Нет</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4>Дополнительно</h4>
+
+                <div class="filter-checkboxes">
+                    <label>
+                        <input type="checkbox" name="hasElevator" value="true" checked="@Model.HasElevator" />
+                        Лифт
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="hasParking" value="true" checked="@Model.HasParking" />
+                        Парковка
+                    </label>
+                </div>
+            </div>
+
+            <div id="landFilterFields" class="dynamic-filter-fields" style="display:none;">
+                <h4>Параметры участка</h4>
+
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="landAreaFrom">Площадь участка от, сот.</label>
+                        <input id="landAreaFrom"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="landAreaFrom"
+                               value="@Model.LandAreaFrom"
+                               placeholder="Например, 6" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="landAreaTo">Площадь участка до, сот.</label>
+                        <input id="landAreaTo"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="landAreaTo"
+                               value="@Model.LandAreaTo"
+                               placeholder="Например, 20" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="landCategory">Категория земли</label>
+                        <select id="landCategory" name="landCategory">
+                            <option value="">Любая</option>
+                            <option value="ИЖС" selected="@(Model.LandCategory == "ИЖС")">ИЖС</option>
+                            <option value="СНТ" selected="@(Model.LandCategory == "СНТ")">СНТ</option>
+                            <option value="ДНП" selected="@(Model.LandCategory == "ДНП")">ДНП</option>
+                            <option value="ЛПХ" selected="@(Model.LandCategory == "ЛПХ")">ЛПХ</option>
+                            <option value="Фермерское хозяйство" selected="@(Model.LandCategory == "Фермерское хозяйство")">Фермерское хозяйство</option>
+                            <option value="Промназначение" selected="@(Model.LandCategory == "Промназначение")">Промназначение</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="landStatus">Статус участка</label>
+                        <select id="landStatus" name="landStatus">
+                            <option value="">Любой</option>
+                            <option value="В собственности" selected="@(Model.LandStatus == "В собственности")">В собственности</option>
+                            <option value="В аренде" selected="@(Model.LandStatus == "В аренде")">В аренде</option>
+                            <option value="Документы готовы" selected="@(Model.LandStatus == "Документы готовы")">Документы готовы</option>
+                            <option value="Требуется оформление" selected="@(Model.LandStatus == "Требуется оформление")">Требуется оформление</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="electricity">Электричество</label>
+                        <select id="electricity" name="electricity">
+                            <option value="">Любое</option>
+                            <option value="Есть" selected="@(Model.Electricity == "Есть")">Есть</option>
+                            <option value="Нет" selected="@(Model.Electricity == "Нет")">Нет</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="garageFilterFields" class="dynamic-filter-fields" style="display:none;">
+                <h4>Параметры гаража</h4>
+
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="garageType">Тип гаража</label>
+                        <select id="garageType" name="garageType">
+                            <option value="">Любой</option>
+                            <option value="Гараж" selected="@(Model.GarageType == "Гараж")">Гараж</option>
+                            <option value="Машино-место" selected="@(Model.GarageType == "Машино-место")">Машино-место</option>
+                            <option value="Бокс" selected="@(Model.GarageType == "Бокс")">Бокс</option>
+                            <option value="Подземный паркинг" selected="@(Model.GarageType == "Подземный паркинг")">Подземный паркинг</option>
+                            <option value="Многоуровневый паркинг" selected="@(Model.GarageType == "Многоуровневый паркинг")">Многоуровневый паркинг</option>
+                            <option value="Открытая парковка" selected="@(Model.GarageType == "Открытая парковка")">Открытая парковка</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="garageStatus">Статус</label>
+                        <select id="garageStatus" name="garageStatus">
+                            <option value="">Любой</option>
+                            <option value="В собственности" selected="@(Model.GarageStatus == "В собственности")">В собственности</option>
+                            <option value="В аренде" selected="@(Model.GarageStatus == "В аренде")">В аренде</option>
+                            <option value="ГСК" selected="@(Model.GarageStatus == "ГСК")">ГСК</option>
+                            <option value="Документы готовы" selected="@(Model.GarageStatus == "Документы готовы")">Документы готовы</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="garageAreaFrom">Площадь от, м²</label>
+                        <input id="garageAreaFrom"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="totalAreaFrom"
+                               value="@Model.TotalAreaFrom"
+                               placeholder="Например, 15" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="garageAreaTo">Площадь до, м²</label>
+                        <input id="garageAreaTo"
+                               type="number"
+                               step="0.1"
+                               min="0"
+                               name="totalAreaTo"
+                               value="@Model.TotalAreaTo"
+                               placeholder="Например, 40" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="garageElectricity">Электричество</label>
+                        <select id="garageElectricity" name="electricity">
+                            <option value="">Любое</option>
+                            <option value="Есть" selected="@(Model.Electricity == "Есть")">Есть</option>
+                            <option value="Нет" selected="@(Model.Electricity == "Нет")">Нет</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4>Дополнительно</h4>
+
+                <div class="filter-checkboxes">
+                    <label>
+                        <input type="checkbox" name="hasSecurity" value="true" checked="@Model.HasSecurity" />
+                        Охрана
+                    </label>
+                </div>
+            </div>
+
+            <div id="dailyRentFilterFields" class="dynamic-filter-fields" style="display:none;">
+                <h4>Посуточная аренда</h4>
+
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="guestsCountFrom">Гостей от</label>
+                        <input id="guestsCountFrom"
+                               type="number"
+                               min="1"
+                               name="guestsCountFrom"
+                               value="@Model.GuestsCountFrom"
+                               placeholder="Например, 2" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sleepingPlacesFrom">Спальных мест от</label>
+                        <input id="sleepingPlacesFrom"
+                               type="number"
+                               min="1"
+                               name="sleepingPlacesFrom"
+                               value="@Model.SleepingPlacesFrom"
+                               placeholder="Например, 2" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="availableFrom">Дата заезда</label>
+                        <input id="availableFrom"
+                               type="date"
+                               name="availableFrom"
+                               value="@(Model.AvailableFrom.HasValue ? Model.AvailableFrom.Value.ToString("yyyy-MM-dd") : "")" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="availableTo">Дата выезда</label>
+                        <input id="availableTo"
+                               type="date"
+                               name="availableTo"
+                               value="@(Model.AvailableTo.HasValue ? Model.AvailableTo.Value.ToString("yyyy-MM-dd") : "")" />
+                    </div>
+                </div>
+
+                <h4>Удобства</h4>
+
+                <div class="filter-checkboxes">
+                    <label><input type="checkbox" name="hasWifi" value="true" checked="@Model.HasWifi" /> Wi-Fi</label>
+                    <label><input type="checkbox" name="hasAirConditioner" value="true" checked="@Model.HasAirConditioner" /> Кондиционер</label>
+                    <label><input type="checkbox" name="hasKitchen" value="true" checked="@Model.HasKitchen" /> Кухня</label>
+                    <label><input type="checkbox" name="hasTv" value="true" checked="@Model.HasTv" /> Телевизор</label>
+                    <label><input type="checkbox" name="hasWashingMachine" value="true" checked="@Model.HasWashingMachine" /> Стиральная машина</label>
+                    <label><input type="checkbox" name="hasBedLinen" value="true" checked="@Model.HasBedLinen" /> Постельное бельё</label>
+                    <label><input type="checkbox" name="hasFurniture" value="true" checked="@Model.HasFurniture" /> Мебель</label>
+                    <label><input type="checkbox" name="hasAppliances" value="true" checked="@Model.HasAppliances" /> Техника</label>
+                    <label><input type="checkbox" name="allowChildren" value="true" checked="@Model.AllowChildren" /> Можно с детьми</label>
+                    <label><input type="checkbox" name="allowPets" value="true" checked="@Model.AllowPets" /> Можно с животными</label>
+                </div>
+            </div>
+
+            <div id="longRentFilterFields" class="dynamic-filter-fields" style="display:none;">
+                <h4>Долгосрочная аренда</h4>
+
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="depositFrom">Залог от, ₽</label>
+                        <input id="depositFrom"
+                               type="number"
+                               min="0"
+                               name="depositFrom"
+                               value="@Model.DepositFrom"
+                               placeholder="Например, 10000" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="depositTo">Залог до, ₽</label>
+                        <input id="depositTo"
+                               type="number"
+                               min="0"
+                               name="depositTo"
+                               value="@Model.DepositTo"
+                               placeholder="Например, 50000" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prepayment">Предоплата</label>
+                        <select id="prepayment" name="prepayment">
+                            <option value="">Любая</option>
+                            <option value="1 месяц" selected="@(Model.Prepayment == "1 месяц")">1 месяц</option>
+                            <option value="2 месяца" selected="@(Model.Prepayment == "2 месяца")">2 месяца</option>
+                            <option value="3 месяца" selected="@(Model.Prepayment == "3 месяца")">3 месяца</option>
+                            <option value="Без предоплаты" selected="@(Model.Prepayment == "Без предоплаты")">Без предоплаты</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4>Условия проживания</h4>
+
+                <div class="filter-checkboxes">
+                    <label>
+                        <input type="checkbox" name="allowChildren" value="true" checked="@Model.AllowChildren" />
+                        Можно с детьми
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="allowPets" value="true" checked="@Model.AllowPets" />
+                        Можно с животными
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="hasFurniture" value="true" checked="@Model.HasFurniture" />
+                        Мебель
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="hasAppliances" value="true" checked="@Model.HasAppliances" />
+                        Техника
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="priceFrom">Цена от</label>
+                <input id="priceFrom"
+                       type="number"
+                       name="priceFrom"
+                       value="@Model.PriceFrom"
+                       min="0"
+                       placeholder="0" />
+            </div>
+
+            <div class="form-group">
+                <label for="priceTo">Цена до</label>
+                <input id="priceTo"
+                       type="number"
+                       name="priceTo"
+                       value="@Model.PriceTo"
+                       min="0"
+                       placeholder="10000000" />
+            </div>
+
+            <div class="form-group">
+                <label for="sortBy">Сортировка</label>
+                <select id="sortBy" name="sortBy">
+                    <option value="" selected="@(string.IsNullOrEmpty(Model.SortBy))">
+                        Сначала новые
+                    </option>
+
+                    <option value="date_old" selected="@(Model.SortBy == "date_old")">
+                        Сначала старые
+                    </option>
+
+                    <option value="price_asc" selected="@(Model.SortBy == "price_asc")">
+                        Сначала дешёвые
+                    </option>
+
+                    <option value="price_desc" selected="@(Model.SortBy == "price_desc")">
+                        Сначала дорогие
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filters-actions">
+            <button type="submit" class="apply-filter-btn">
+                Применить фильтры
+            </button>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="reset-filter-btn">
+                Сбросить фильтры
+            </a>
+        </div>
+    </form>
+</div>
 
 <section id="homeMapBox" class="home-map-box" style="display: none;">
     <div class="map-header">
@@ -772,168 +809,124 @@
     <div class="ads-section-header">
         <div>
             <h2>Список объявлений</h2>
-            <p class="ads-count">Найдено объявлений: @Model.TotalAds</p>
+            <p>Найдено объявлений: @Model.TotalAds</p>
         </div>
     </div>
 
-    @if (Model.Ads == null || Model.Ads.Count == 0)
+    @if (Model.Ads == null || !Model.Ads.Any())
     {
-        <div class="no-ads">
-            <h3>Объявления не найдены</h3>
-            <p>Попробуйте изменить параметры поиска или сбросить фильтры.</p>
-
-            <a asp-controller="Home"
-               asp-action="Index"
-               class="reset-filter-btn">
-                Сбросить фильтры
-            </a>
+        <div class="ads-empty-box">
+            <p>Объявления не найдены.</p>
         </div>
     }
     else
     {
-        <div class="cards-list">
+        <div class="ads-grid">
             @foreach (var ad in Model.Ads)
             {
-                string statusClass = "";
+                string statusClass = "ad-status-default";
 
-                if (ad.Status == "На модерации")
+                if (ad.Status == "Опубликовано")
                 {
-                    statusClass = "status-orange";
+                    statusClass = "ad-status-published";
                 }
-                else if (ad.Status == "Опубликовано")
+                else if (ad.Status == "На модерации")
                 {
-                    statusClass = "status-green";
+                    statusClass = "ad-status-moderation";
                 }
                 else if (ad.Status == "Отклонено")
                 {
-                    statusClass = "status-red";
+                    statusClass = "ad-status-rejected";
                 }
 
-                <div class="ad-card">
-                    <div class="ad-card-image">
-                        @if (ad.Images != null && ad.Images.Count > 0)
-                        {
-                            <img src="@ad.Images[0].ImagePath" alt="Фото объявления" />
-                        }
-                        else
-                        {
-                            <div class="ad-no-image">
-                                Нет фото
-                            </div>
-                        }
-                    </div>
+                <article class="ad-tile">
+                    <a asp-controller="Ads"
+                       asp-action="Details"
+                       asp-route-id="@ad.Id"
+                       class="ad-tile-image-link">
 
-                    <div class="ad-card-content">
-                        <h3>
-                            <a asp-controller="Ads"
-                               asp-action="Details"
-                               asp-route-id="@ad.Id">
-                                @ad.Title
-                            </a>
-                        </h3>
+                        <div class="ad-tile-image">
+                            @if (ad.Images != null && ad.Images.Count > 0)
+                            {
+                                <img src="@ad.Images[0].ImagePath" alt="Фото объявления" />
+                            }
+                            else
+                            {
+                                <div class="ad-tile-no-image">
+                                    Нет фото
+                                </div>
+                            }
+                        </div>
+                    </a>
 
-                        <p class="ad-price">
-                            @ad.Price.ToString("N0") ₽
-                        </p>
-
-                        <p>
-                            <strong>Город:</strong> @ad.City
-                        </p>
-
-                        <p>
-                            <strong>Адрес:</strong> @ad.Address
-                        </p>
-
-                        <p>
-                            <strong>Тип недвижимости:</strong> @ad.PropertyType
-                        </p>
-
-                        <p>
-                            <strong>Тип сделки:</strong> @ad.DealType
-                        </p>
-
-                        <p>
-                            <strong>Статус:</strong>
-                            <span class="@statusClass">@ad.Status</span>
-                        </p>
-
-                        <p class="ad-date">
-                            <strong>Дата:</strong> @ad.CreatedAt.ToString("dd.MM.yyyy")
-                        </p>
-
+                    <div class="ad-tile-body">
                         <a asp-controller="Ads"
                            asp-action="Details"
                            asp-route-id="@ad.Id"
-                           class="details-btn">
-                            Подробнее
+                           class="ad-tile-title">
+                            @ad.Title
                         </a>
+
+                        <div class="ad-tile-price">
+                            @ad.Price.ToString("N0") ₽
+                        </div>
+
+                        <div class="ad-tile-meta">
+                            @ad.PropertyType · @ad.DealType
+                        </div>
+
+                        <div class="ad-tile-address">
+                            @ad.City
+
+                            @if (!string.IsNullOrWhiteSpace(ad.Address))
+                            {
+                                <span>, @ad.Address</span>
+                            }
+                        </div>
+
+                        <div class="ad-tile-footer">
+                            <span class="ad-tile-status @statusClass">
+                                @ad.Status
+                            </span>
+
+                            <a asp-controller="Ads"
+                               asp-action="Details"
+                               asp-route-id="@ad.Id"
+                               class="ad-tile-details">
+                                Подробнее
+                            </a>
+                        </div>
                     </div>
-                </div>
+                </article>
             }
         </div>
+    }
 
-        @if (Model.TotalPages > 1)
-        {
-            <div class="pagination">
-                @if (Model.CurrentPage > 1)
+    @if (Model.TotalPages > 1)
+    {
+        <div class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
                 {
-                    <a asp-controller="Home"
-                       asp-action="Index"
+                    <strong>@i</strong>
+                }
+                else
+                {
+                    <a asp-action="Index"
+                       asp-route-page="@i"
                        asp-route-searchText="@Model.SearchText"
                        asp-route-city="@Model.City"
                        asp-route-dealType="@Model.DealType"
                        asp-route-propertyType="@Model.PropertyType"
                        asp-route-priceFrom="@Model.PriceFrom"
                        asp-route-priceTo="@Model.PriceTo"
-                       asp-route-sortBy="@Model.SortBy"
-                       asp-route-page="@(Model.CurrentPage - 1)"
-                       class="page-link">
-                        Назад
+                       asp-route-sortBy="@Model.SortBy">
+                        @i
                     </a>
                 }
-
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    if (i == Model.CurrentPage)
-                    {
-                        <span class="page-link active">@i</span>
-                    }
-                    else
-                    {
-                        <a asp-controller="Home"
-                           asp-action="Index"
-                           asp-route-searchText="@Model.SearchText"
-                           asp-route-city="@Model.City"
-                           asp-route-dealType="@Model.DealType"
-                           asp-route-propertyType="@Model.PropertyType"
-                           asp-route-priceFrom="@Model.PriceFrom"
-                           asp-route-priceTo="@Model.PriceTo"
-                           asp-route-sortBy="@Model.SortBy"
-                           asp-route-page="@i"
-                           class="page-link">
-                            @i
-                        </a>
-                    }
-                }
-
-                @if (Model.CurrentPage < Model.TotalPages)
-                {
-                    <a asp-controller="Home"
-                       asp-action="Index"
-                       asp-route-searchText="@Model.SearchText"
-                       asp-route-city="@Model.City"
-                       asp-route-dealType="@Model.DealType"
-                       asp-route-propertyType="@Model.PropertyType"
-                       asp-route-priceFrom="@Model.PriceFrom"
-                       asp-route-priceTo="@Model.PriceTo"
-                       asp-route-sortBy="@Model.SortBy"
-                       asp-route-page="@(Model.CurrentPage + 1)"
-                       class="page-link">
-                        Вперёд
-                    </a>
-                }
-            </div>
-        }
+            }
+        </div>
     }
 </section>
 
@@ -958,6 +951,28 @@
 </script>
 
 <script>
+    function openFilters() {
+        const filtersModal = document.getElementById("filtersModal");
+
+        if (!filtersModal) {
+            return;
+        }
+
+        filtersModal.style.display = "flex";
+        document.body.classList.add("modal-open");
+    }
+
+    function closeFilters() {
+        const filtersModal = document.getElementById("filtersModal");
+
+        if (!filtersModal) {
+            return;
+        }
+
+        filtersModal.style.display = "none";
+        document.body.classList.remove("modal-open");
+    }
+
     function toggleFilters() {
         const filtersModal = document.getElementById("filtersModal");
 
@@ -965,12 +980,28 @@
             return;
         }
 
-        if (filtersModal.style.display === "flex") {
-            filtersModal.style.display = "none";
+        const isOpen = filtersModal.style.display === "flex";
+
+        if (isOpen) {
+            closeFilters();
         } else {
-            filtersModal.style.display = "flex";
+            openFilters();
         }
     }
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeFilters();
+        }
+    });
+
+    document.addEventListener("click", function (event) {
+        const filtersModal = document.getElementById("filtersModal");
+
+        if (filtersModal && event.target === filtersModal) {
+            closeFilters();
+        }
+    });
 
     let homeMap = null;
     let homeClusterGroup = null;
@@ -999,6 +1030,8 @@
             if (adsSection) {
                 adsSection.style.display = "block";
             }
+
+            clearClusterAdsList();
         }
     }
 
@@ -1102,7 +1135,7 @@
         }
     }
 
-        function showClusterAdsList(ads) {
+    function showClusterAdsList(ads) {
         const listBox = document.getElementById("clusterAdsList");
         const itemsBox = document.getElementById("clusterAdsItems");
 

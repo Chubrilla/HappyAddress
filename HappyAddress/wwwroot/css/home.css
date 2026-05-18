@@ -1,16 +1,48 @@
-﻿/* Блок поиска */
-.search-panel {
-    background-color: var(--color-accent);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    margin-bottom: 25px;
+/* =========================================
+   HOME.CSS — главная страница
+========================================= */
+
+/* Верхний блок поиска */
+.hero-search {
+    max-width: 1200px;
+    margin: 34px auto 28px;
+}
+
+.hero-search-content {
+    padding: 15px 30px;
+    border-radius: 24px;
+    background: rgba(199, 199, 199, 0.42);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.20);
+}
+
+.hero-search-content h1 {
+    margin: 0 0 10px;
+    color: #ffffff;
+    font-size: 38px;
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.hero-search-content p {
+    margin: 0 0 24px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.hero-search-form {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
 }
 
 .search-row {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
 .search-input-wrap {
@@ -20,24 +52,39 @@
 
 .main-search-input {
     width: 100%;
-    height: 50px;
-    padding-right: 60px;
-    font-size: 16px;
+    height: 58px;
+    padding: 0 70px 0 20px;
+    border: none;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 17px;
     box-sizing: border-box;
     margin: 0;
 }
 
+.main-search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(63, 84, 167, 0.25);
+}
+
 .search-submit-btn {
     position: absolute;
-    top: 50%;
-    right: 0px;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 0px 8px 8px 0px;
-    padding: 0;
-    margin: 0;
+    top: 0;
+    right: 0;
+    transform: none;
+    width: 58px;
+    height: 58px;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff;
+    cursor: pointer;
     font-size: 18px;
+}
+
+.search-submit-btn:hover {
+    background: linear-gradient(135deg, #596FC7, #253959);
 }
 
 .search-actions {
@@ -46,149 +93,104 @@
     flex-wrap: wrap;
 }
 
+.filter-open-btn,
+.map-open-btn {
+    padding: 13px 20px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.filter-open-btn:hover,
+.map-open-btn:hover {
+    background: linear-gradient(135deg, #596FC7, #253959);
+}
+
 /* Модальное окно фильтров */
 .filters-modal {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 1000;
-    padding: 24px;
-    background: rgba(0, 0, 0, 0.55);
+    z-index: 9998;
+    padding: 90px 20px 30px;
+    background: rgba(0, 0, 0, 0.62);
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
 
+.filters-modal.active,
+.filters-modal.show {
+    display: flex;
+}
+
 .filters-modal-content {
-    width: min(1000px, 100%);
-    max-height: 90vh;
+    width: min(1120px, 100%);
+    max-height: calc(100vh - 130px);
     overflow-y: auto;
-    background: #ffffff;
-    border-radius: 20px;
+    margin: 0 auto;
+    background: rgba(147, 147, 147, 0.42);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px;
     padding: 28px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
 .filters-modal-header {
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
 }
 
-    .filters-modal-header h3 {
-        margin: 0;
-    }
+.filters-modal-header h3 {
+    margin: 0;
+    font-size: 26px;
+    color: #ffffff;
+}
+
+.filters-close-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 900;
+}
 
 .filter-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 18px;
 }
-
-.filters-actions {
-    position: sticky;
-    bottom: -28px;
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    margin: 24px -28px -28px;
-    padding: 18px 28px;
-    background: #ffffff;
-    border-top: 1px solid #e5e7eb;
-}
-
-.reset-filter-btn {
-    color: var(--color-primary);
-    font-weight: bold;
-}
-
-/* Карта на главной */
-.home-map-box {
-    background-color: white;
-    padding: 20px;
-    border-radius: 12px;
-    border-left: 6px solid var(--color-secondary);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    margin-bottom: 25px;
-}
-
-.home-map {
-    height: 450px;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-
-/* Список */
-.ads-count {
-    color: var(--color-primary);
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.no-ads {
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-}
-
-.cards-list {
-    margin-top: 20px;
-}
-
-.ad-card {
-    transition: transform 0.15s ease;
-}
-
-    .ad-card:hover {
-        transform: translateY(-3px);
-    }
-
-    .ad-card img {
-        width: 100%;
-        max-width: 300px;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-    .ad-card p strong {
-        color: var(--color-primary);
-    }
-
-/* Адаптив */
-@media (max-width: 800px) {
-    .search-input-wrap {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .main-search-input,
-    .search-submit-btn {
-        border-radius: 8px;
-        width: 100%;
-    }
-
-    .filter-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/*====================================
-   ФИЛЬТРЫ - ДИНАМИЧЕСКИЕ ПОЛЯ
-====================================*/
 
 .dynamic-filter-fields {
     grid-column: 1 / -1;
     margin-top: 18px;
     padding: 18px;
-    background: #f7f8fb;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.32);
     border-radius: 16px;
-    border: 1px solid #e3e7ef;
+    backdrop-filter: blur(8px);
 }
 
-    .dynamic-filter-fields h4 {
-        margin: 0 0 14px;
-        font-size: 18px;
-        color: #222;
-    }
+.dynamic-filter-fields h4 {
+    margin: 0 0 14px;
+    font-size: 18px;
+    color: #111827;
+}
+
+.dynamic-filter-fields label {
+    color: #111827;
+}
 
 .filter-checkboxes {
     display: flex;
@@ -196,46 +198,76 @@
     gap: 10px;
 }
 
-    .filter-checkboxes label {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 14px;
-        background: #ffffff;
-        border: 1px solid #d6ddea;
-        border-radius: 12px;
-        cursor: pointer;
-    }
-
-    .filter-checkboxes input {
-        width: auto;
-    }
-
-.filters-modal-content::-webkit-scrollbar {
-    width: 8px;
+.filter-checkboxes label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #ffffff;
+    border: 1px solid #d6ddea;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
 }
 
-.filters-modal-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 8px;
+.filter-checkboxes label:hover {
+    border-color: #3F54A7;
 }
 
-.filters-modal-content::-webkit-scrollbar-thumb {
-    background: #c7c7c7;
-    border-radius: 8px;
+.filter-checkboxes input {
+    width: auto;
 }
 
-    .filters-modal-content::-webkit-scrollbar-thumb:hover {
-        background: #999;
-    }
+.filters-actions {
+    position: sticky;
+    bottom: -28px;
+    z-index: 5;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin: 24px -28px -28px;
+    padding: 18px 28px;
+    background: rgba(230, 230, 230, 0.9);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(63, 84, 167, 0.45);
+}
 
+.apply-filter-btn {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.apply-filter-btn:hover {
+    background: linear-gradient(135deg, #596FC7, #253959);
+}
+
+.reset-filter-btn {
+    color: #303030;
+    font-weight: 800;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #A1C2DA, #6c9fb8);
+}
+
+.reset-filter-btn:hover {
+    background: linear-gradient(135deg, #d9e9f4, #6c9fb8);
+}
+
+/* Карта */
 .home-map-box {
     max-width: 1200px;
     margin: 30px auto;
     padding: 24px;
-    background: #ffffff;
+    background: rgba(147, 147, 147, 0.42);
+    backdrop-filter: blur(12px);
     border-radius: 22px;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
 }
 
 .map-header {
@@ -246,23 +278,25 @@
     margin-bottom: 18px;
 }
 
-    .map-header h3 {
-        margin: 0;
-        font-size: 24px;
-    }
+.map-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #ffffff;
+}
 
-    .map-header p {
-        margin: 6px 0 0;
-        color: #666;
-    }
+.map-header p {
+    margin: 6px 0 0;
+    color: rgba(255, 255, 255, 0.78);
+}
 
 .map-close-btn {
-    padding: 10px 16px;
+    padding: 11px 18px;
     border: none;
-    border-radius: 10px;
-    background: #333333;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
     color: #ffffff;
     cursor: pointer;
+    font-weight: 800;
 }
 
 #adsMap {
@@ -272,23 +306,325 @@
     overflow: hidden;
 }
 
-.map-popup {
-    min-width: 180px;
+.leaflet-control-attribution,
+.leaflet-bottom.leaflet-right {
+    display: none !important;
+}
+
+.map-popup,
+.map-popup-card {
+    min-width: 210px;
+    max-width: 260px;
     font-size: 14px;
 }
 
-    .map-popup strong {
-        display: block;
-        margin-bottom: 4px;
+.map-popup strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #111827;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.map-popup a,
+.map-popup-link {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 7px 11px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* Список объявлений под картой */
+.cluster-ads-list {
+    margin-top: 22px;
+    padding: 20px;
+    background: rgba(147, 147, 147, 0.42);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.cluster-ads-list h4 {
+    margin: 0 0 16px;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.cluster-ad-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 14px;
+}
+
+.cluster-ad-card:last-child {
+    margin-bottom: 0;
+}
+
+.cluster-ad-card h5 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    color: #111827;
+}
+
+.cluster-ad-price {
+    margin: 0 0 4px;
+    font-weight: 900;
+    color: #0f172a;
+}
+
+.cluster-ad-address {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.cluster-ad-link {
+    flex-shrink: 0;
+    padding: 9px 14px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* Кластеры Leaflet */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+    background-color: rgba(63, 84, 167, 0.25);
+}
+
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+    background-color: #3F54A7;
+    color: #ffffff;
+    font-weight: 900;
+}
+
+/* Плитки объявлений */
+.ads-section {
+    max-width: 1200px;
+    margin: 36px auto;
+    padding: 10px 16px;
+    background: rgba(199, 199, 199, 0.42);
+    border-radius: 20px;
+}
+
+.ads-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.ads-section-header h2 {
+    margin: 0 0 6px;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+.ads-section-header p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.90);
+    font-weight: 700;
+}
+
+.ads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+    gap: 22px;
+    align-items: stretch;
+}
+
+.ad-tile {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ad-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+.ad-tile-image-link {
+    display: block;
+    text-decoration: none;
+}
+
+.ad-tile-image {
+    flex-shrink: 0;
+    width: 100%;
+    height: 190px;
+    background: #e5e7eb;
+    overflow: hidden;
+}
+
+.ad-tile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s ease;
+}
+
+.ad-tile:hover .ad-tile-image img {
+    transform: scale(1.04);
+}
+
+.ad-tile-no-image {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+.ad-tile-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.ad-tile-title {
+    display: block;
+    min-height: 48px;
+    margin-bottom: 8px;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.25;
+    text-decoration: none;
+}
+
+.ad-tile-title:hover {
+    color: #3F54A7;
+}
+
+.ad-tile-price {
+    margin-bottom: 8px;
+    color: #0f172a;
+    font-size: 21px;
+    font-weight: 900;
+}
+
+.ad-tile-meta {
+    margin-bottom: 6px;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.ad-tile-address {
+    min-height: 44px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.ad-tile-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.ad-tile-status {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.ad-status-published {
+    background: rgba(22, 163, 74, 0.12);
+    color: #15803d;
+}
+
+.ad-status-moderation {
+    background: rgba(249, 115, 22, 0.14);
+    color: #c2410c;
+}
+
+.ad-status-rejected {
+    background: rgba(220, 38, 38, 0.12);
+    color: #b91c1c;
+}
+
+.ad-status-default {
+    background: rgba(100, 116, 139, 0.12);
+    color: #475569;
+}
+
+.ad-tile-details {
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 900;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.ad-tile-details:hover {
+    background: linear-gradient(135deg, #596FC7, #253959);
+    color: #ffffff;
+}
+
+.ads-empty-box {
+    padding: 26px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
+}
+
+.ads-empty-box p {
+    margin: 0;
+    font-weight: 800;
+}
+
+/* Старый список скрываем, если где-то остался */
+.cards-list {
+    display: none;
+}
+
+/* Адаптив */
+@media (max-width: 800px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
     }
 
-    .map-popup a {
-        display: inline-block;
-        margin-top: 8px;
-        color: #2563eb;
-        text-decoration: none;
-        font-weight: 600;
+    .search-input-wrap {
+        width: 100%;
     }
+}
 
 @media (max-width: 768px) {
     .home-map-box {
@@ -304,68 +640,65 @@
     #adsMap {
         height: 420px;
     }
-}
 
-.leaflet-control-attribution,
-.leaflet-bottom.leaflet-right {
-    display: none !important;
-}
-
-.cluster-ads-list {
-    margin-top: 22px;
-    padding: 20px;
-    background: #f8f8f3;
-    border-radius: 18px;
-    border: 1px solid #e1dfd2;
-}
-
-    .cluster-ads-list h4 {
-        margin: 0 0 16px;
-        font-size: 20px;
-        color: #222;
+    .cluster-ad-card {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-.cluster-ad-card {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    align-items: center;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    background: #ffffff;
-    border-radius: 14px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    .cluster-ad-link {
+        width: 100%;
+        text-align: center;
+    }
 }
 
-    .cluster-ad-card h5 {
-        margin: 0 0 6px;
-        font-size: 17px;
-        color: #222;
+@media (max-width: 700px) {
+    .hero-search {
+        margin: 22px auto;
+        padding: 0 12px;
     }
 
-.cluster-ad-price {
-    margin: 0 0 4px;
-    font-weight: 700;
-    color: #222;
-}
-
-.cluster-ad-address {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-}
-
-.cluster-ad-link {
-    flex-shrink: 0;
-    padding: 9px 14px;
-    border-radius: 10px;
-    background: #3d3d1f;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-    .cluster-ad-link:hover {
-        background: #2d2d16;
-        color: #ffffff;
+    .hero-search-content {
+        padding: 22px;
+        border-radius: 20px;
     }
+
+    .hero-search-content h1 {
+        font-size: 28px;
+    }
+
+    .hero-search-content p {
+        font-size: 15px;
+    }
+
+    .main-search-input,
+    .search-submit-btn {
+        height: 54px;
+    }
+
+    .search-submit-btn {
+        width: 54px;
+    }
+
+    .ads-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ad-tile-image {
+        height: 220px;
+    }
+
+    .ads-section-header h2 {
+        font-size: 26px;
+    }
+
+    .ad-tile-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ad-tile-details {
+        width: 100%;
+        text-align: center;
+    }
+}

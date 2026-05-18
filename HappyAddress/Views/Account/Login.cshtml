@@ -1,25 +1,60 @@
 ﻿@model HappyAddress.Models.LoginViewModel
 
+@{
+    ViewData["Title"] = "Вход";
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/css/account.css" />
 }
 
-<div class="account-box">
-    <h2>Вход</h2>
-    
-    <form asp-action="Login" asp-controller="Account" method="post">
-        <div asp-validation-summary="All" style="color:red"></div>
-    
-        <div>
-            <label asp-for="PhoneNumber">Телефон</label><br />
-            <input asp-for="PhoneNumber" placeholder="+79991234567" />
-            <span asp-validation-for="PhoneNumber" style="color:red"></span>
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Вход</h1>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="success-message">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="error-message">
+                @TempData["Error"]
+            </div>
+        }
+
+        <form asp-action="Login" asp-controller="Account" method="post">
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" type="email" placeholder="Введите email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Пароль</label>
+                <input asp-for="Password" type="password" placeholder="Введите пароль" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <button type="submit" class="auth-btn">
+                Войти
+            </button>
+        </form>
+
+        <div class="auth-bottom-text">
+            Нет аккаунта?
+            <a asp-controller="Account" asp-action="Register">
+                Зарегистрироваться
+            </a>
         </div>
-    
-        <br />
-        <button type="submit">Войти</button>
-    </form>
+    </div>
 </div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

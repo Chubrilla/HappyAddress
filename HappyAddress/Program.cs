@@ -1,9 +1,13 @@
 using HappyAddress.Data;
 using Microsoft.EntityFrameworkCore;
+using HappyAddress.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
+
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
@@ -12,7 +16,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     ));
 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession();
 
 var app = builder.Build();
 

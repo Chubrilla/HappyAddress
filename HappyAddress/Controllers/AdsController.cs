@@ -226,7 +226,14 @@ namespace HappyAddress.Controllers
                     .Any(f => f.UserId == userId.Value && f.AdId == ad.Id);
             }
 
+            var seller = _context.Users.FirstOrDefault(u => u.Id == ad.UserId);
+
+            int sellerAdsCount = _context.Ads
+                .Count(a => a.UserId == ad.UserId && a.Status == "Опубликовано");
+
             ViewBag.IsFavorite = isFavorite;
+            ViewBag.Seller = seller;
+            ViewBag.SellerAdsCount = sellerAdsCount;
 
             return View(ad);
         }

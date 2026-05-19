@@ -513,6 +513,60 @@
                 @Model.Price.ToString("N0") ₽
             </h2>
 
+            @{
+                var seller = ViewBag.Seller as HappyAddress.Models.User;
+                int sellerAdsCount = ViewBag.SellerAdsCount != null ? (int)ViewBag.SellerAdsCount : 0;
+            }
+
+            @if (seller != null)
+            {
+                string sellerName = $"{seller.FirstName} {seller.LastName}".Trim();
+
+                if (string.IsNullOrWhiteSpace(sellerName))
+                {
+                    sellerName = "Пользователь";
+                }
+
+                <div class="seller-card">
+                    <div class="seller-card-header">
+                        <div class="seller-avatar">
+                            @if (!string.IsNullOrWhiteSpace(seller.AvatarPath))
+                            {
+                                <img src="@seller.AvatarPath" alt="Аватар продавца" />
+                            }
+                            else
+                            {
+                                @sellerName.Substring(0, 1).ToUpper()
+                            }
+                        </div>
+
+                        <div>
+                            <div class="seller-name">
+                                @sellerName
+                            </div>
+
+                            <div class="seller-meta">
+                                @sellerAdsCount объявлений
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (seller.IsEmailConfirmed)
+                    {
+                        <div class="seller-confirmed">
+                            Email подтверждён
+                        </div>
+                    }
+
+                    <a asp-controller="Users"
+                       asp-action="Profile"
+                       asp-route-id="@seller.Id"
+                       class="seller-profile-link">
+                        Все объявления продавца
+                    </a>
+                </div>
+            }
+
             @if (ViewBag.IsFavorite == true)
             {
                 <form asp-controller="Ads" asp-action="RemoveFromFavorites" method="post">

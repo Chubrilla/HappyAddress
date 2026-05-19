@@ -23,6 +23,8 @@ namespace HappyAddress.Models
 
         public DateTime BirthDate { get; set; }
 
+        public string? AvatarPath { get; set; }
+
         public string Role { get; set; } = "User";
     }
 }

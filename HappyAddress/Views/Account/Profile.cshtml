@@ -1,107 +1,126 @@
 ﻿@model HappyAddress.Models.ProfileViewModel
 
 @{
-    ViewData["Title"] = "Личный кабинет";
+    ViewData["Title"] = "Редактирование профиля";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/account.css" />
 }
 
-<div class="profile-page">
-    <div class="profile-layout">
+<div class="profile-edit-page">
+    <main class="profile-edit-card">
+        <h1>Профиль пользователя</h1>
 
-        <aside class="profile-sidebar">
-            <h2>Личный кабинет</h2>
+        @if (TempData["Success"] != null)
+        {
+            <div class="success-message">
+                @TempData["Success"]
+            </div>
+        }
 
-            <nav class="profile-menu">
-                <a asp-controller="Account" asp-action="Profile" class="active">
-                    Профиль
-                </a>
+        <div class="email-status-box">
+            <div>
+                <strong>Email:</strong> @Model.Email
+            </div>
 
-                <a asp-controller="Ads" asp-action="MyAds">
-                    Мои объявления
-                </a>
+            @if (Model.IsEmailConfirmed)
+            {
+                <span class="status-confirmed">Подтверждён</span>
+            }
+            else
+            {
+                <span class="status-not-confirmed">Не подтверждён</span>
+            }
+        </div>
 
-                <a asp-controller="Account" asp-action="Logout" class="logout-link">
-                    Выйти
-                </a>
-            </nav>
-        </aside>
+        <form asp-action="Profile"
+              asp-controller="Account"
+              method="post"
+              enctype="multipart/form-data">
 
-        <main class="profile-content">
-            <div class="profile-card">
-                <h1>Профиль пользователя</h1>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Email" />
+            <input type="hidden" asp-for="BirthDate" />
+            <input type="hidden" asp-for="IsEmailConfirmed" />
+            <input type="hidden" asp-for="AvatarPath" />
 
-                @if (TempData["Success"] != null)
-                {
-                    <div class="success-message">
-                        @TempData["Success"]
-                    </div>
-                }
-
-                <div class="email-status-box">
-                    <div>
-                        <strong>Email:</strong> @Model.Email
-                    </div>
-
-                    @if (Model.IsEmailConfirmed)
+            <div class="profile-avatar-edit-box">
+                <div class="profile-avatar-preview">
+                    @if (!string.IsNullOrWhiteSpace(Model.AvatarPath))
                     {
-                        <span class="status-confirmed">Подтверждён</span>
+                        <img src="@Model.AvatarPath" alt="Аватар" />
                     }
                     else
                     {
-                        <span class="status-not-confirmed">Не подтверждён</span>
+                        <span>
+                            @(string.IsNullOrWhiteSpace(Model.FirstName)
+                                ? "П"
+                                : Model.FirstName.Substring(0, 1).ToUpper())
+                        </span>
                     }
                 </div>
 
-                <form asp-action="Profile" asp-controller="Account" method="post">
-                    <input type="hidden" asp-for="Id" />
-                    <input type="hidden" asp-for="Email" />
-                    <input type="hidden" asp-for="BirthDate" />
-                    <input type="hidden" asp-for="IsEmailConfirmed" />
+                <div class="profile-avatar-upload">
+                    <label for="avatarFile">Аватарка</label>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label asp-for="LastName">Фамилия</label>
-                            <input asp-for="LastName" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                        </div>
+                    <input type="file"
+                           id="avatarFile"
+                           name="avatarFile"
+                           accept=".jpg,.jpeg,.png" />
 
-                        <div class="form-group">
-                            <label asp-for="FirstName">Имя</label>
-                            <input asp-for="FirstName" />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="MiddleName">Отчество</label>
-                        <input asp-for="MiddleName" />
-                        <span asp-validation-for="MiddleName" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="PhoneNumber">Телефон</label>
-                        <input asp-for="PhoneNumber" placeholder="+7 (999) 999-99-99" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Дата рождения</label>
-                        <input value="@Model.BirthDate.ToString("dd.MM.yyyy")" disabled />
-                        <small>Дата рождения не редактируется</small>
-                    </div>
-
-                    <div asp-validation-summary="All" class="text-danger"></div>
-
-                    <button type="submit" class="profile-save-btn">
-                        Сохранить изменения
-                    </button>
-                </form>
+                    <small>Можно загрузить JPG или PNG до 5 МБ</small>
+                </div>
             </div>
-        </main>
-    </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="LastName">Фамилия</label>
+                    <input asp-for="LastName" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FirstName">Имя</label>
+                    <input asp-for="FirstName" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MiddleName">Отчество</label>
+                <input asp-for="MiddleName" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber">Телефон</label>
+                <input asp-for="PhoneNumber" placeholder="+7 (999) 999-99-99" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Дата рождения</label>
+                <input value="@Model.BirthDate.ToString("dd.MM.yyyy")" disabled />
+                <small>Дата рождения не редактируется</small>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="profile-edit-actions">
+                <button type="submit" class="profile-save-btn">
+                    Сохранить изменения
+                </button>
+
+                <a asp-controller="Users"
+                   asp-action="Profile"
+                   asp-route-id="@Model.Id"
+                   class="profile-back-btn">
+                    Назад в профиль
+                </a>
+            </div>
+        </form>
+    </main>
 </div>
 
 @section Scripts {

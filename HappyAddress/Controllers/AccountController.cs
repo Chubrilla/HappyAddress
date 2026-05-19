@@ -6,6 +6,8 @@ using HappyAddress.Data;
 using HappyAddress.Models;
 using System.Security.Cryptography;
 using HappyAddress.Services;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace HappyAddress.Controllers
 {
@@ -13,11 +15,16 @@ namespace HappyAddress.Controllers
     {
         private readonly AppDbContext _context;
         private readonly EmailService _emailService;
+        private readonly IWebHostEnvironment _environment;
 
-        public AccountController(AppDbContext context, EmailService emailService)
+        public AccountController(
+            AppDbContext context,
+            EmailService emailService,
+            IWebHostEnvironment environment)
         {
             _context = context;
             _emailService = emailService;
+            _environment = environment;
         }
 
         private string NormalizePhoneNumber(string phoneNumber)
@@ -287,6 +294,15 @@ namespace HappyAddress.Controllers
             HttpContext.Session.SetString("UserName", $"{user.FirstName} {user.LastName}".Trim());
             HttpContext.Session.SetString("UserRole", user.Role);
 
+            if (!string.IsNullOrWhiteSpace(user.AvatarPath))
+            {
+                HttpContext.Session.SetString("UserAvatarPath", user.AvatarPath);
+            }
+            else
+            {
+                HttpContext.Session.Remove("UserAvatarPath");
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -323,14 +339,15 @@ namespace HappyAddress.Controllers
                 Email = user.Email,
                 IsEmailConfirmed = user.IsEmailConfirmed,
                 PhoneNumber = user.PhoneNumber,
-                BirthDate = user.BirthDate
+                BirthDate = user.BirthDate,
+                AvatarPath = user.AvatarPath
             };
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Profile(ProfileViewModel model)
+        public IActionResult Profile(ProfileViewModel model, IFormFile? avatarFile)
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
 
@@ -368,8 +385,68 @@ namespace HappyAddress.Controllers
                 model.Email = user.Email;
                 model.IsEmailConfirmed = user.IsEmailConfirmed;
                 model.BirthDate = user.BirthDate;
+                model.AvatarPath = user.AvatarPath;
 
                 return View(model);
+            }
+
+            if (avatarFile != null && avatarFile.Length > 0)
+            {
+                string extension = Path.GetExtension(avatarFile.FileName).ToLower();
+
+                if (extension != ".jpg" && extension != ".jpeg" && extension != ".png")
+                {
+                    ModelState.AddModelError("", "Аватар можно загрузить только в формате JPG или PNG");
+
+                    model.Email = user.Email;
+                    model.IsEmailConfirmed = user.IsEmailConfirmed;
+                    model.BirthDate = user.BirthDate;
+                    model.AvatarPath = user.AvatarPath;
+
+                    return View(model);
+                }
+
+                if (avatarFile.Length > 5 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("", "Размер аватара не должен превышать 5 МБ");
+
+                    model.Email = user.Email;
+                    model.IsEmailConfirmed = user.IsEmailConfirmed;
+                    model.BirthDate = user.BirthDate;
+                    model.AvatarPath = user.AvatarPath;
+
+                    return View(model);
+                }
+
+                string avatarsFolder = Path.Combine(_environment.WebRootPath, "uploads", "avatars");
+
+                if (!Directory.Exists(avatarsFolder))
+                {
+                    Directory.CreateDirectory(avatarsFolder);
+                }
+
+                if (!string.IsNullOrWhiteSpace(user.AvatarPath))
+                {
+                    string oldAvatarPath = Path.Combine(
+                        _environment.WebRootPath,
+                        user.AvatarPath.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString())
+                    );
+
+                    if (System.IO.File.Exists(oldAvatarPath))
+                    {
+                        System.IO.File.Delete(oldAvatarPath);
+                    }
+                }
+
+                string uniqueFileName = Guid.NewGuid().ToString() + extension;
+                string filePath = Path.Combine(avatarsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    avatarFile.CopyTo(stream);
+                }
+
+                user.AvatarPath = "/uploads/avatars/" + uniqueFileName;
             }
 
             user.LastName = model.LastName;
@@ -380,6 +457,15 @@ namespace HappyAddress.Controllers
             _context.SaveChanges();
 
             HttpContext.Session.SetString("UserName", $"{user.FirstName} {user.LastName}".Trim());
+
+            if (!string.IsNullOrWhiteSpace(user.AvatarPath))
+            {
+                HttpContext.Session.SetString("UserAvatarPath", user.AvatarPath);
+            }
+            else
+            {
+                HttpContext.Session.Remove("UserAvatarPath");
+            }
 
             TempData["Success"] = "Профиль успешно обновлён";
 

@@ -14,5 +14,8 @@ namespace HappyAddress.Data
         public DbSet<Ad> Ads { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<AdImage> AdImages { get; set; }
+
+        public DbSet<UserRating> UserRatings { get; set; }
+        public DbSet<UserSubscription> UserSubscriptions { get; set; }
     }
 }

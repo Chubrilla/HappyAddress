@@ -1,0 +1,233 @@
+@model HappyAddress.Models.PublicUserProfileViewModel
+
+@{
+    ViewData["Title"] = "Профиль пользователя";
+
+    string fullName = $"{Model.User.FirstName} {Model.User.LastName}".Trim();
+
+    if (string.IsNullOrWhiteSpace(fullName))
+    {
+        fullName = "Пользователь";
+    }
+
+    string avatarLetter = fullName.Substring(0, 1).ToUpper();
+
+    string ratingText = Model.RatingsCount > 0
+        ? Model.AverageRating.ToString("0.0")
+        : "0.0";
+
+    int roundedRating = (int)Math.Round(Model.AverageRating);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" />
+    <link rel="stylesheet" href="~/css/ads.css" />
+}
+
+<div class="seller-profile-page-v2">
+
+    <aside class="seller-profile-card-v2">
+        <div class="seller-avatar-v2">
+            @if (!string.IsNullOrWhiteSpace(Model.User.AvatarPath))
+            {
+                <img src="@Model.User.AvatarPath" alt="Аватар" />
+            }
+            else
+            {
+                @avatarLetter
+            }
+        </div>
+
+        <h1>@fullName</h1>
+
+        <div class="seller-rating-v2">
+            <strong>@ratingText</strong>
+
+            <span class="seller-stars-v2">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    if (i <= roundedRating)
+                    {
+                        <span class="star filled">★</span>
+                    }
+                    else
+                    {
+                        <span class="star empty">★</span>
+                    }
+                }
+            </span>
+
+            <small>@Model.RatingsCount отзывов</small>
+        </div>
+
+        <div class="seller-meta-v2">
+            <div>
+                <strong>@Model.PublishedAdsCount</strong>
+                <span>объявлений</span>
+            </div>
+
+            <div>
+                <strong>@Model.SubscribersCount</strong>
+                <span>подписчиков</span>
+            </div>
+        </div>
+
+        <div class="seller-checks-v2">
+            @if (Model.User.IsEmailConfirmed)
+            {
+                <div class="seller-check-v2">
+                    <span>✓</span>
+                    Email подтверждён
+                </div>
+            }
+            else
+            {
+                <div class="seller-check-v2 seller-check-warning-v2">
+                    <span>!</span>
+                    Email не подтверждён
+                </div>
+            }
+
+            <div class="seller-check-v2">
+                <span>✓</span>
+                Телефон указан
+            </div>
+        </div>
+
+        @if (Model.IsOwner)
+        {
+            <a asp-controller="Account"
+               asp-action="Profile"
+               class="seller-owner-btn-v2">
+                Редактировать профиль
+            </a>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               class="seller-owner-btn-v2 seller-owner-logout-btn-v2">
+                Выйти
+            </a>
+        }
+        else
+        {
+            <form asp-controller="Users" asp-action="Rate" method="post" class="seller-rate-form-v2">
+                <input type="hidden" name="ratedUserId" value="@Model.User.Id" />
+
+                <label>Оценить пользователя</label>
+
+                <div class="seller-rate-row-v2">
+                    <select name="value">
+                        <option value="5" selected="@(Model.CurrentUserRating == 5)">5</option>
+                        <option value="4" selected="@(Model.CurrentUserRating == 4)">4</option>
+                        <option value="3" selected="@(Model.CurrentUserRating == 3)">3</option>
+                        <option value="2" selected="@(Model.CurrentUserRating == 2)">2</option>
+                        <option value="1" selected="@(Model.CurrentUserRating == 1)">1</option>
+                    </select>
+
+                    <button type="submit">
+                        Оценить
+                    </button>
+                </div>
+            </form>
+
+            <form asp-controller="Users" asp-action="ToggleSubscription" method="post">
+                <input type="hidden" name="targetUserId" value="@Model.User.Id" />
+
+                <button type="submit" class="seller-subscribe-btn-v2 @(Model.IsSubscribed ? "subscribed" : "")">
+                    @(Model.IsSubscribed ? "Вы подписаны" : "Подписаться")
+                </button>
+            </form>
+        }
+    </aside>
+
+    <main class="seller-ads-panel-v2">
+        <div class="seller-ads-header-v2">
+            <div>
+                <h2>@(Model.IsOwner ? "Мои объявления" : "Объявления пользователя")</h2>
+                <p>Активные объявления: @Model.PublishedAdsCount</p>
+            </div>
+        </div>
+
+        @if (Model.Ads == null || !Model.Ads.Any())
+        {
+            <div class="seller-empty-v2">
+                @(Model.IsOwner ? "У вас пока нет опубликованных объявлений." : "У пользователя пока нет опубликованных объявлений.")
+            </div>
+        }
+        else
+        {
+            <div class="seller-ads-grid-v2">
+                @foreach (var ad in Model.Ads)
+                {
+                    <article class="seller-ad-card-v2">
+                        <a href="/Ads/Details/@ad.Id" class="seller-ad-image-v2">
+                            @if (ad.Images != null && ad.Images.Count > 0)
+                            {
+                                <img src="@ad.Images[0].ImagePath" alt="Фото объявления" />
+                            }
+                            else
+                            {
+                                <div class="seller-no-image-v2">
+                                    Нет фото
+                                </div>
+                            }
+                        </a>
+
+                        <div class="seller-ad-body-v2">
+                            <a href="/Ads/Details/@ad.Id" class="seller-ad-title-v2">
+                                @ad.Title
+                            </a>
+
+                            <div class="seller-ad-price-v2">
+                                @ad.Price.ToString("N0") ₽
+                            </div>
+
+                            <div class="seller-ad-meta-v2">
+                                @ad.PropertyType · @ad.DealType
+                            </div>
+
+                            <div class="seller-ad-address-v2">
+                                @ad.City
+
+                                @if (!string.IsNullOrWhiteSpace(ad.Address))
+                                {
+                                    <span>, @ad.Address</span>
+                                }
+                            </div>
+
+                            @if (Model.IsOwner)
+                            {
+                                <div class="seller-owner-ad-actions-v2">
+                                    <a href="/Ads/Details/@ad.Id" class="seller-ad-more-v2">
+                                        Подробнее
+                                    </a>
+
+                                    <a href="/Ads/Edit/@ad.Id" class="seller-ad-edit-v2">
+                                        Редактировать
+                                    </a>
+
+                                    <form asp-controller="Ads"
+                                          asp-action="Delete"
+                                          method="post"
+                                          onsubmit="return confirm('Удалить объявление?');">
+                                        <input type="hidden" name="id" value="@ad.Id" />
+
+                                        <button type="submit" class="seller-ad-delete-v2">
+                                            Удалить
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="/Ads/Details/@ad.Id" class="seller-ad-more-v2">
+                                    Подробнее
+                                </a>
+                            }
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </main>
+</div>

@@ -30,5 +30,6 @@ namespace HappyAddress.Models
 
         [Required(ErrorMessage = "Введите дату рождения")]
         public DateTime BirthDate { get; set; }
+
     }
 }

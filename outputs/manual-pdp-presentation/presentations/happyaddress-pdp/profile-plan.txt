@@ -1,7 +1,0 @@
-task mode: create
-primary deck-profile: engineering-platform
-secondary gates: product-platform clarity for user-facing modules
-required proof objects: architecture slide, algorithm image, module map, testing table
-source requirements: report draft "ПДП Чубаров.docx", local HappyAddress ASP.NET Core MVC codebase, generated algorithm PNG
-known missing inputs: no official corporate template or screenshots requested
-QA gates: readable Russian text at thumbnail size, no dense paragraphs, distinct slide rhythms, final PPTX export and rendered preview check

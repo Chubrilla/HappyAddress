@@ -1,0 +1,11 @@
+**/.git
+**/.vs
+**/bin
+**/obj
+publish
+tmp_render
+rendered_report
+outputs
+*.zip
+*.user
+*.suo

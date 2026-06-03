@@ -15,11 +15,11 @@ namespace HappyAddress.Services
 
         public void SendEmailConfirmationCode(string toEmail, string code)
         {
-            string smtpHost = _configuration["EmailSettings:SmtpHost"];
-            int smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"]);
-            string smtpUser = _configuration["EmailSettings:SmtpUser"];
-            string smtpPassword = _configuration["EmailSettings:SmtpPassword"];
-            string fromEmail = _configuration["EmailSettings:FromEmail"];
+            string smtpHost = GetRequiredSetting("EmailSettings:SmtpHost");
+            int smtpPort = int.Parse(GetRequiredSetting("EmailSettings:SmtpPort"));
+            string smtpUser = GetRequiredSetting("EmailSettings:SmtpUser");
+            string smtpPassword = GetRequiredSetting("EmailSettings:SmtpPassword");
+            string fromEmail = GetRequiredSetting("EmailSettings:FromEmail");
 
             using MailMessage message = new MailMessage();
 
@@ -48,10 +48,22 @@ namespace HappyAddress.Services
                 EnableSsl = true,
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(smtpUser, smtpPassword),
-                DeliveryMethod = SmtpDeliveryMethod.Network
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Timeout = 15000
             };
 
             client.Send(message);
+        }
+
+        private string GetRequiredSetting(string key)
+        {
+            string? value = _configuration[key];
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException($"Не задана настройка {key}.");
+            }
+
+            return value;
         }
     }
 }

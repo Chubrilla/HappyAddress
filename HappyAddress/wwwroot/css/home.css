@@ -9,9 +9,10 @@
 }
 
 .hero-search-content {
+    margin: 0;
     padding: 15px 30px;
     border-radius: 24px;
-    background: rgba(199, 199, 199, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(10px);
     box-shadow: 0 16px 45px rgba(0, 0, 0, 0.20);
 }
@@ -115,7 +116,7 @@
     position: fixed;
     inset: 0;
     z-index: 9998;
-    padding: 90px 20px 30px;
+    padding: 86px 20px 28px;
     background: rgba(0, 0, 0, 0.62);
     align-items: center;
     justify-content: center;
@@ -129,10 +130,10 @@
 
 .filters-modal-content {
     width: min(1120px, 100%);
-    max-height: calc(100vh - 130px);
+    max-height: calc(100vh - 125px);
     overflow-y: auto;
     margin: 0 auto;
-    background: rgba(147, 147, 147, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -264,7 +265,7 @@
     max-width: 1200px;
     margin: 30px auto;
     padding: 24px;
-    background: rgba(147, 147, 147, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(12px);
     border-radius: 22px;
     box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
@@ -341,9 +342,9 @@
 
 /* Список объявлений под картой */
 .cluster-ads-list {
-    margin-top: 22px;
+    margin: 22px 0 0;
     padding: 20px;
-    background: rgba(147, 147, 147, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(12px);
     border-radius: 18px;
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -419,7 +420,7 @@
     max-width: 1200px;
     margin: 36px auto;
     padding: 10px 16px;
-    background: rgba(199, 199, 199, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     border-radius: 20px;
 }
 

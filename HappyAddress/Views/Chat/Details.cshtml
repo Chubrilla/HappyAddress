@@ -1,0 +1,129 @@
+@model HappyAddress.Models.ChatDetailsViewModel
+
+@{
+    ViewData["Title"] = "Чат";
+
+    string otherUserName = "Пользователь";
+
+    if (Model.OtherUser != null)
+    {
+        otherUserName = $"{Model.OtherUser.FirstName} {Model.OtherUser.LastName}".Trim();
+
+        if (string.IsNullOrWhiteSpace(otherUserName))
+        {
+            otherUserName = "Пользователь";
+        }
+    }
+
+    if (string.IsNullOrWhiteSpace(otherUserName))
+    {
+        otherUserName = "Пользователь";
+    }
+
+    string otherAvatarLetter = otherUserName.Substring(0, 1).ToUpper();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" />
+}
+
+<div class="chat-page">
+    <section class="chat-dialog-panel">
+        <div class="chat-dialog-header">
+            <a asp-controller="Chat" asp-action="Index" class="chat-back-link">
+                ← Все сообщения
+            </a>
+
+            <div class="chat-dialog-user">
+                <div class="chat-dialog-avatar">
+                    @if (Model.OtherUser != null && !string.IsNullOrWhiteSpace(Model.OtherUser.AvatarPath))
+                    {
+                        <img src="@Model.OtherUser.AvatarPath" alt="Аватар" />
+                    }
+                    else
+                    {
+                        @otherAvatarLetter
+                    }
+                </div>
+
+                <div>
+                    <h1>@otherUserName</h1>
+                    <p>Диалог по объявлению</p>
+                </div>
+            </div>
+        </div>
+
+        <a asp-controller="Ads"
+           asp-action="Details"
+           asp-route-id="@Model.Ad.Id"
+           class="chat-ad-card">
+
+            <div class="chat-ad-card-image">
+                @if (!string.IsNullOrWhiteSpace(Model.AdImagePath))
+                {
+                    <img src="@Model.AdImagePath" alt="Фото объявления" />
+                }
+                else
+                {
+                    <span>Нет фото</span>
+                }
+            </div>
+
+            <div>
+                <h2>@Model.Ad.Title</h2>
+                <p>@Model.Ad.Price.ToString("N0") ₽</p>
+                <span>@Model.Ad.PropertyType · @Model.Ad.DealType</span>
+            </div>
+        </a>
+
+        <div class="chat-messages-box" id="chatMessages">
+            @if (Model.Messages == null || !Model.Messages.Any())
+            {
+                <div class="chat-empty-dialog">
+                    Сообщений пока нет. Начните диалог.
+                </div>
+            }
+            else
+            {
+                @foreach (var message in Model.Messages)
+                {
+                    bool isMine = message.SenderUserId == Model.CurrentUser.Id;
+
+                    <div class="chat-message-row @(isMine ? "mine" : "other")">
+                        <div class="chat-message-bubble">
+                            <div class="chat-message-text">
+                                @message.Text
+                            </div>
+
+                            <div class="chat-message-date">
+                                @message.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <form asp-controller="Chat"
+              asp-action="Send"
+              method="post"
+              class="chat-send-form"
+              id="chatMessageForm">
+            <input type="hidden" name="chatId" value="@Model.Chat.Id" />
+
+            <textarea name="text"
+                      id="chatMessageInput"
+                      maxlength="2000"
+                      placeholder="Напишите сообщение..."
+                      required></textarea>
+
+            <button type="submit">
+                Отправить
+            </button>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/js/chat-details.js" asp-append-version="true"></script>
+}

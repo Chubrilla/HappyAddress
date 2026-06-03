@@ -1,0 +1,344 @@
+/* Optional visual polish. Remove this file link from _Layout.cshtml to roll back. */
+
+:root {
+    --ha-glass-bg: rgba(110, 110, 110, 0.42);
+    --ha-glass-bg-hover: rgba(124, 124, 124, 0.48);
+    --ha-glass-border: rgba(255, 255, 255, 0.20);
+    --ha-accent: #3F54A7;
+    --ha-accent-dark: #253959;
+    --ha-text-dark: #111827;
+    --ha-muted: #475569;
+}
+
+.auth-card,
+.profile-sidebar,
+.profile-card,
+.profile-edit-card,
+.admin-box,
+.admin-ad-card,
+.form-box,
+.ads-section,
+.home-map-box,
+.filters-modal-content,
+.cluster-ads-list,
+.ad-details-box,
+.details-gallery,
+.price-card,
+.details-map-block,
+.details-section,
+.seller-card,
+.seller-profile-card-v2,
+.seller-ads-panel-v2,
+.favorites-page,
+.chat-page {
+    border-color: var(--ha-glass-border);
+}
+
+.hero-search-content {
+    background: linear-gradient(135deg, rgba(110, 110, 110, 0.50), rgba(86, 94, 104, 0.42));
+    border: 1px solid var(--ha-glass-border);
+}
+
+.ads-section,
+.form-box,
+.ad-details-box,
+.details-section,
+.profile-card,
+.auth-card,
+.admin-box {
+    border-radius: 22px;
+}
+
+.details-section,
+.seller-card,
+.ad-tile,
+.favorite-card,
+.seller-ad-card-v2,
+.profile-myads-card {
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.details-section:hover,
+.seller-card:hover {
+    background: var(--ha-glass-bg-hover);
+}
+
+button,
+.btn,
+.auth-btn,
+.secondary-btn,
+.ads-link-button,
+.favorite-button,
+.phone-button,
+.map-button,
+.message-button,
+.seller-profile-link,
+.ad-tile-details,
+.profile-save-btn,
+.profile-create-ad-btn,
+.profile-back-btn,
+.back-link {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(37, 57, 89, 0.18);
+    line-height: 1.15;
+    text-align: center;
+}
+
+button:focus-visible,
+.btn:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(63, 84, 167, 0.42);
+    outline-offset: 3px;
+}
+
+input,
+select,
+textarea {
+    border-color: rgba(255, 255, 255, 0.42);
+}
+
+.details-section h3,
+.form-box h1,
+.form-box h2,
+.form-box h3,
+.ads-section-header h2,
+.filters-modal-header h3,
+.map-header h3 {
+    letter-spacing: 0;
+}
+
+.details-section-lined h3 {
+    border-bottom-color: var(--ha-accent);
+}
+
+.ad-tile,
+.favorite-card,
+.seller-ad-card-v2 {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.ads-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.ad-tile {
+    min-height: 435px;
+    border-radius: 18px;
+}
+
+.ad-tile:hover,
+.favorite-card:hover,
+.seller-ad-card-v2:hover,
+.profile-myads-card:hover {
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.25);
+}
+
+.ad-tile-image {
+    height: 184px;
+}
+
+.ad-tile-body {
+    padding: 15px;
+}
+
+.ad-tile-title,
+.favorite-card-title,
+.seller-ad-title-v2 {
+    color: var(--ha-text-dark);
+}
+
+.ad-tile-title {
+    min-height: 46px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1.22;
+}
+
+.ad-tile-price {
+    margin-bottom: 9px;
+    font-size: 22px;
+    line-height: 1.15;
+}
+
+.ad-tile-meta,
+.ad-tile-address,
+.favorite-card-info p,
+.seller-ad-meta-v2,
+.seller-ad-address-v2 {
+    color: var(--ha-muted);
+}
+
+.ad-tile-meta {
+    min-height: 20px;
+}
+
+.ad-tile-address {
+    min-height: 40px;
+}
+
+.ad-tile-footer {
+    gap: 10px;
+    padding-top: 14px;
+}
+
+.ad-tile-status {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ad-tile-details {
+    min-height: 34px;
+    padding: 8px 13px;
+}
+
+.favorite-button,
+.phone-button,
+.map-button,
+.message-button,
+.seller-profile-link {
+    width: 100%;
+}
+
+.price-card {
+    overflow: hidden;
+}
+
+.details-price {
+    line-height: 1.15;
+}
+
+.seller-confirmed,
+.ad-status-published,
+.status-confirmed {
+    background: rgba(22, 163, 74, 0.16);
+}
+
+.error-message,
+.alert-error,
+.alter-error {
+    background: rgba(220, 38, 38, 0.16);
+}
+
+/* Typography rhythm */
+.page-title,
+.ads-page-title,
+.details-title,
+.admin-content-card > h1,
+.profile-card > h1,
+.profile-edit-card > h1,
+.favorites-header h1,
+.seller-ads-header-v2 h2 {
+    line-height: 1.15;
+}
+
+.admin-content-card > h1,
+.profile-card > h1,
+.profile-edit-card > h1,
+.favorites-header h1,
+.seller-ads-header-v2 h2 {
+    font-size: 30px;
+}
+
+.auth-card h1,
+.auth-card h2,
+.admin-sidebar h2,
+.profile-sidebar h2 {
+    font-size: 26px;
+    line-height: 1.18;
+}
+
+.details-section h3,
+.form-box h1,
+.form-box h2,
+.form-box h3,
+.filters-modal-header h3,
+.details-map-modal-header h3,
+.map-header h3,
+.cluster-ads-list h4,
+.admin-photo-moderation h4 {
+    font-size: 21px;
+    line-height: 1.2;
+}
+
+.form-box h1,
+.form-box h2,
+.form-box h3 {
+    margin-top: 0;
+}
+
+.ad-tile-title,
+.favorite-card-title,
+.seller-ad-title-v2,
+.admin-ad-info h3,
+.profile-myads-info h3 {
+    line-height: 1.22;
+}
+
+.ad-tile-title,
+.seller-ad-title-v2 {
+    font-size: 17px;
+}
+
+.favorite-card-title,
+.profile-myads-info h3,
+.admin-ad-info h3 {
+    font-size: 21px;
+}
+
+.ad-tile-price,
+.favorite-card-price,
+.seller-ad-price-v2,
+.profile-myads-price,
+.admin-ad-price {
+    line-height: 1.15;
+}
+
+.ad-tile-price,
+.seller-ad-price-v2 {
+    font-size: 21px;
+}
+
+.favorite-card-price,
+.profile-myads-price,
+.admin-ad-price {
+    font-size: 22px;
+}
+
+@media (max-width: 700px) {
+    .hero-search-content,
+    .ads-section,
+    .form-box,
+    .ad-details-box,
+    .details-section,
+    .price-card {
+        border-radius: 18px;
+    }
+
+    .details-section {
+        padding: 18px;
+    }
+
+    .ads-grid {
+        gap: 18px;
+    }
+
+    .ad-tile {
+        min-height: auto;
+    }
+
+    .ad-tile-image {
+        height: 220px;
+    }
+}

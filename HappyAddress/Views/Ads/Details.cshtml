@@ -1,4 +1,5 @@
-﻿@using System.Text.Json
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
 @model HappyAddress.Models.Ad
 
 @section Styles {
@@ -8,6 +9,7 @@
 
 @{
     string statusClass = "";
+    int? currentUserId = Context.Session.GetInt32("UserId");
 
     if (Model.Status == "На модерации")
     {
@@ -33,7 +35,7 @@
             <div class="details-gallery">
                 <img src="@Model.Images[0].ImagePath"
                      class="details-main-image"
-                     onclick="openGallery(0)"
+                     data-gallery-open="0"
                      alt="Фото объявления" />
 
                 <div class="details-thumbs">
@@ -41,7 +43,7 @@
                     {
                         <img src="@Model.Images[i].ImagePath"
                              class="details-thumb"
-                             onclick="openGallery(@i)"
+                             data-gallery-open="@i"
                              alt="Миниатюра" />
                     }
                 </div>
@@ -56,7 +58,7 @@
 
             @if (Model.PropertyType == "Дом" || Model.PropertyType == "Коттедж" || Model.PropertyType == "Таунхаус")
             {
-                <div class="details-section">
+                <div class="details-section details-section-lined">
                     <h3>О доме</h3>
 
                     @if (!string.IsNullOrWhiteSpace(Model.HouseType))
@@ -100,7 +102,7 @@
                     }
                 </div>
 
-                <div class="details-section">
+                <div class="details-section details-section-lined">
                     <h3>Коммуникации и удобства</h3>
 
                     @if (!string.IsNullOrWhiteSpace(Model.BathroomType))
@@ -169,7 +171,7 @@
 
             @if (Model.PropertyType == "Квартира")
             {
-                <div class="details-section">
+                <div class="details-section details-section-lined">
                     <h3>О квартире</h3>
 
                     @if (Model.Rooms.HasValue)
@@ -258,7 +260,7 @@
 
             @if (Model.PropertyType == "Участок")
             {
-                <div class="details-section">
+                <div class="details-section details-section-lined">
                     <h3>Об участке</h3>
 
                     @if (Model.LandArea.HasValue)
@@ -277,7 +279,7 @@
                     }
                 </div>
 
-                <div class="details-section">
+                <div class="details-section details-section-lined">
                     <h3>Коммуникации</h3>
 
                     @if (!string.IsNullOrWhiteSpace(Model.WaterSupply))
@@ -304,7 +306,7 @@
 
             @if (Model.PropertyType == "Гараж")
             {
-                <div class="details-section">
+                <div class="details-section details-section-lined">
                     <h3>О гараже</h3>
 
                     @if (!string.IsNullOrWhiteSpace(Model.GarageType))
@@ -565,6 +567,25 @@
                         Все объявления продавца
                     </a>
                 </div>
+
+                @if (currentUserId != null && seller.Id != currentUserId.Value)
+                {
+                    <form asp-controller="Chat" asp-action="Start" method="post">
+                        <input type="hidden" name="adId" value="@Model.Id" />
+
+                        <button type="submit" class="message-button">
+                            Написать продавцу
+                        </button>
+                    </form>
+                }
+                else if (currentUserId == null)
+                {
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="message-button message-link-button">
+                        Войти, чтобы написать
+                    </a>
+                }
             }
 
             @if (ViewBag.IsFavorite == true)
@@ -593,13 +614,13 @@
             <button type="button"
                     class="phone-button"
                     data-phone="@Model.PhoneNumber"
-                    onclick="showPhone(this)">
+                    data-action="show-phone">
                 Показать телефон
             </button>
 
             @if (Model.Latitude != null && Model.Longitude != null)
             {
-                <button type="button" class="map-button" onclick="openDetailsMapModal()">
+                <button type="button" class="map-button" data-action="open-details-map">
                     Показать на карте
                 </button>
             }
@@ -619,7 +640,7 @@
 
 @if (Model.Latitude != null && Model.Longitude != null)
 {
-    <div id="detailsMapModal" class="details-map-modal">
+    <div id="detailsMapModal" class="details-map-modal" data-latitude="@Model.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)" data-longitude="@Model.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)" data-title="@Model.Title">
         <div class="details-map-modal-content">
             <div class="details-map-modal-header">
                 <div>
@@ -633,7 +654,7 @@
                     </p>
                 </div>
 
-                <button type="button" class="details-map-modal-close" onclick="closeDetailsMapModal()">
+                <button type="button" class="details-map-modal-close" data-action="close-details-map">
                     ×
                 </button>
             </div>
@@ -645,24 +666,24 @@
 
 @if (Model.Images != null && Model.Images.Count > 0)
 {
-    <div id="galleryModal" class="gallery-modal">
+    <div id="galleryModal" class="gallery-modal" data-gallery-images="@JsonSerializer.Serialize(Model.Images.Select(i => i.ImagePath).ToList())">
         <div class="gallery-header">
             <span>@Model.Title</span>
-            <button type="button" onclick="closeGallery()">×</button>
+            <button type="button" data-action="close-gallery">×</button>
         </div>
 
-        <button type="button" class="gallery-arrow left" onclick="prevImage()">‹</button>
+        <button type="button" class="gallery-arrow left" data-action="previous-gallery-image">‹</button>
 
         <img id="galleryImage" class="gallery-full-image" src="" alt="Фото объявления" />
 
-        <button type="button" class="gallery-arrow right" onclick="nextImage()">›</button>
+        <button type="button" class="gallery-arrow right" data-action="next-gallery-image">›</button>
 
         <div class="gallery-thumbs">
             @for (int i = 0; i < Model.Images.Count; i++)
             {
                 <img src="@Model.Images[i].ImagePath"
                      class="gallery-thumb"
-                     onclick="setImage(@i)"
+                     data-gallery-set="@i"
                      alt="Миниатюра" />
             }
         </div>
@@ -670,147 +691,10 @@
 }
 
 @section Scripts {
-    @if (Model.Images != null && Model.Images.Count > 0)
-    {
-        <script>
-            const galleryImages = @Html.Raw(JsonSerializer.Serialize(Model.Images.Select(i => i.ImagePath).ToList()));
-
-            let currentImageIndex = 0;
-
-            function openGallery(index) {
-                currentImageIndex = index;
-                document.getElementById("galleryModal").style.display = "flex";
-                updateGalleryImage();
-            }
-
-            function closeGallery() {
-                document.getElementById("galleryModal").style.display = "none";
-            }
-
-            function setImage(index) {
-                currentImageIndex = index;
-                updateGalleryImage();
-            }
-
-            function nextImage() {
-                currentImageIndex++;
-
-                if (currentImageIndex >= galleryImages.length) {
-                    currentImageIndex = 0;
-                }
-
-                updateGalleryImage();
-            }
-
-            function prevImage() {
-                currentImageIndex--;
-
-                if (currentImageIndex < 0) {
-                    currentImageIndex = galleryImages.length - 1;
-                }
-
-                updateGalleryImage();
-            }
-
-            function updateGalleryImage() {
-                document.getElementById("galleryImage").src = galleryImages[currentImageIndex];
-            }
-        </script>
-    }
-
-    <script>
-        function showPhone(button) {
-            let phone = button.getAttribute("data-phone");
-
-            if (!phone || phone.trim() === "" || phone === "null") {
-                button.textContent = "Телефон не указан";
-                return;
-            }
-
-            button.textContent = "📞 " + phone.trim();
-            button.disabled = true;
-        }
-    </script>
-
     @if (Model.Latitude != null && Model.Longitude != null)
     {
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-        <script>
-            let detailsModalMap = null;
-
-            const detailsAdLatitude = @Model.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            const detailsAdLongitude = @Model.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            const detailsAdTitle = @Html.Raw(JsonSerializer.Serialize(Model.Title));
-
-            function openDetailsMapModal() {
-                const modal = document.getElementById("detailsMapModal");
-
-                if (!modal) {
-                    return;
-                }
-
-                modal.style.display = "flex";
-                document.body.classList.add("modal-open");
-
-                setTimeout(function () {
-                    initDetailsModalMap();
-                }, 150);
-            }
-
-            function closeDetailsMapModal() {
-                const modal = document.getElementById("detailsMapModal");
-
-                if (!modal) {
-                    return;
-                }
-
-                modal.style.display = "none";
-                document.body.classList.remove("modal-open");
-            }
-
-            function initDetailsModalMap() {
-                const mapElement = document.getElementById("detailsModalMap");
-
-                if (!mapElement || typeof L === "undefined") {
-                    return;
-                }
-
-                if (detailsModalMap) {
-                    detailsModalMap.invalidateSize();
-                    detailsModalMap.setView([detailsAdLatitude, detailsAdLongitude], 16);
-                    return;
-                }
-
-                detailsModalMap = L.map("detailsModalMap").setView([detailsAdLatitude, detailsAdLongitude], 16);
-
-                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                    attribution: ""
-                }).addTo(detailsModalMap);
-
-                L.marker([detailsAdLatitude, detailsAdLongitude])
-                    .addTo(detailsModalMap)
-                    .bindPopup(detailsAdTitle)
-                    .openPopup();
-
-                setTimeout(function () {
-                    detailsModalMap.invalidateSize();
-                }, 250);
-            }
-
-            document.addEventListener("keydown", function (event) {
-                if (event.key === "Escape") {
-                    closeDetailsMapModal();
-                }
-            });
-
-            document.addEventListener("click", function (event) {
-                const modal = document.getElementById("detailsMapModal");
-
-                if (modal && event.target === modal) {
-                    closeDetailsMapModal();
-                }
-            });
-        </script>
     }
+
+    <script src="~/js/ad-details.js" asp-append-version="true"></script>
 }

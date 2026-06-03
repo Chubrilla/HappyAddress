@@ -1,0 +1,102 @@
+@model List<HappyAddress.Models.ChatListItemViewModel>
+
+@{
+    ViewData["Title"] = "Сообщения";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" />
+}
+
+<div class="chat-page">
+    <section class="chat-list-panel">
+        <div class="chat-list-header">
+            <h1>Сообщения</h1>
+            <p>Ваши диалоги с продавцами и покупателями</p>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="chat-empty-box">
+                У вас пока нет сообщений.
+            </div>
+        }
+        else
+        {
+            <div class="chat-list">
+                @foreach (var item in Model)
+                {
+                    string otherUserName = $"{item.OtherUser.FirstName} {item.OtherUser.LastName}".Trim();
+
+                    if (string.IsNullOrWhiteSpace(otherUserName))
+                    {
+                        otherUserName = "Пользователь";
+                    }
+
+                    string avatarLetter = otherUserName.Substring(0, 1).ToUpper();
+
+                    <a asp-controller="Chat"
+                       asp-action="Details"
+                       asp-route-id="@item.Chat.Id"
+                       class="chat-list-item">
+
+                        <div class="chat-ad-preview">
+                            @if (!string.IsNullOrWhiteSpace(item.AdImagePath))
+                            {
+                                <img src="@item.AdImagePath" alt="Фото объявления" />
+                            }
+                            else
+                            {
+                                <span>Нет фото</span>
+                            }
+                        </div>
+
+                        <div class="chat-list-content">
+                            <div class="chat-list-top">
+                                <div>
+                                    <h2>@item.Ad.Title</h2>
+                                    <p>@otherUserName</p>
+                                </div>
+
+                                @if (item.UnreadCount > 0)
+                                {
+                                    <span class="chat-unread-badge">
+                                        @item.UnreadCount
+                                    </span>
+                                }
+                            </div>
+
+                            @if (item.LastMessage != null)
+                            {
+                                <div class="chat-last-message">
+                                    @item.LastMessage.Text
+                                </div>
+
+                                <div class="chat-last-date">
+                                    @item.LastMessage.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="chat-last-message muted">
+                                    Диалог создан. Напишите первое сообщение.
+                                </div>
+                            }
+                        </div>
+
+                        <div class="chat-user-avatar-small">
+                            @if (!string.IsNullOrWhiteSpace(item.OtherUser.AvatarPath))
+                            {
+                                <img src="@item.OtherUser.AvatarPath" alt="Аватар" />
+                            }
+                            else
+                            {
+                                @avatarLetter
+                            }
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </section>
+</div>

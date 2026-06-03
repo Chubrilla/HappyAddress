@@ -5,7 +5,7 @@
     --color-accent-hover: #596FC7;
     --color-orange: #F97316;
     --color-orange-hover: #EA580C;
-    --color-bg-glass: rgba(147, 147, 147, 0.42);
+    --color-bg-glass: rgba(110, 110, 110, 0.42);
     --color-card-glass: rgba(255, 255, 255, 0.92);
     --color-text-main: #111827;
     --color-text-light: #ffffff;
@@ -290,3 +290,69 @@ body {
         object-fit: cover;
         display: block;
     }
+
+/* =========================================
+   ПЛАВАЮЩАЯ КНОПКА ЧАТА
+========================================= */
+
+.floating-chat-btn {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 9999;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff !important;
+    text-decoration: none !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    transition: 0.2s ease;
+}
+
+    .floating-chat-btn:hover {
+        transform: translateY(-3px);
+        background: linear-gradient(135deg, #596FC7, #253959);
+        color: #ffffff !important;
+        text-decoration: none !important;
+    }
+
+.floating-chat-icon {
+    font-size: 30px;
+    line-height: 1;
+}
+
+.floating-chat-badge {
+    position: absolute;
+    right: -4px;
+    top: -4px;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #EF4444, #B91C1C);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 900;
+    border: 2px solid #101827;
+    box-sizing: border-box;
+}
+
+@media (max-width: 700px) {
+    .floating-chat-btn {
+        right: 18px;
+        bottom: 18px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .floating-chat-icon {
+        font-size: 26px;
+    }
+}

@@ -55,14 +55,14 @@
 .details-map-block,
 .details-section,
 .form-box {
-    background: rgba(199, 199, 199, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-left: none;
     border-radius: 24px;
     box-shadow: 0 16px 45px rgba(0, 0, 0, 0.22);
-    margin-top: 20px;
+    margin: 20px 0 0;
 }
 
 .ads-card p,
@@ -154,11 +154,27 @@
 .details-map-block,
 .details-section {
     padding: 22px;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .details-gallery {
     margin-bottom: 20px;
+}
+
+.details-section h3 {
+    margin: 0 0 16px;
+    padding: 0 0 6px;
+    border-bottom: none;
+    font-size: 20px;
+}
+
+.details-section-lined h3 {
+    border-bottom: 2px solid #3F54A7;
+}
+
+.details-title,
+.details-price {
+    border-bottom: none;
 }
 
 .details-main-image {
@@ -572,7 +588,7 @@ input[type="file"] {
 
 .details-map-modal-content {
     width: min(1050px, 100%);
-    background: rgba(147, 147, 147, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 24px;
@@ -627,7 +643,7 @@ input[type="file"] {
     margin: 36px auto;
     padding: 28px;
     border-radius: 24px;
-    background: rgba(147, 147, 147, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 16px 45px rgba(0, 0, 0, 0.22);
@@ -1181,7 +1197,7 @@ input[type="file"] {
     max-width: 720px;
     padding: 22px;
     border-radius: 18px;
-    background: rgba(147, 147, 147, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     color: #ffffff;
     font-weight: 800;
 }
@@ -1245,7 +1261,7 @@ input[type="file"] {
 
 .seller-profile-card-v2,
 .seller-ads-panel-v2 {
-    background: rgba(147, 147, 147, 0.42);
+    background: rgba(110, 110, 110, 0.42);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -1257,6 +1273,7 @@ input[type="file"] {
     position: sticky;
     top: 90px;
     padding: 24px;
+    text-align: center;
 }
 
 .seller-avatar-v2 {
@@ -1271,6 +1288,9 @@ input[type="file"] {
     color: #ffffff;
     font-size: 52px;
     font-weight: 900;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
 }
 
 .seller-profile-card-v2 h1 {
@@ -1279,6 +1299,7 @@ input[type="file"] {
     font-size: 28px;
     line-height: 1.15;
     font-weight: 900;
+    text-align: center;
 }
 
 .seller-rating-v2 {
@@ -1287,6 +1308,7 @@ input[type="file"] {
     gap: 7px;
     margin-bottom: 16px;
     color: #ffffff;
+    justify-content: center;
 }
 
     .seller-rating-v2 strong {
@@ -1308,6 +1330,7 @@ input[type="file"] {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-bottom: 16px;
+    text-align: left;
 }
 
     .seller-meta-v2 div {
@@ -1346,6 +1369,7 @@ input[type="file"] {
     color: #111827;
     font-size: 14px;
     font-weight: 900;
+    text-align: left;
 }
 
     .seller-check-v2 span {
@@ -1368,6 +1392,7 @@ input[type="file"] {
 
 .seller-rate-form-v2 {
     margin-bottom: 12px;
+    text-align: left;
 }
 
     .seller-rate-form-v2 label {
@@ -1420,6 +1445,7 @@ input[type="file"] {
 .seller-ads-panel-v2 {
     padding: 28px;
     min-height: 520px;
+    max-width: 860px;
 }
 
 .seller-ads-header-v2 {
@@ -1441,8 +1467,8 @@ input[type="file"] {
 
 .seller-ads-grid-v2 {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
 }
 
 .seller-ad-card-v2 {
@@ -1464,7 +1490,7 @@ input[type="file"] {
 .seller-ad-image-v2 {
     display: block;
     width: 100%;
-    height: 190px;
+    height: 210px;
     background: #e5e7eb;
     text-decoration: none;
 }
@@ -1521,6 +1547,7 @@ input[type="file"] {
     font-size: 14px;
     line-height: 1.35;
     font-weight: 700;
+    min-height: 42px;
 }
 
 .seller-ad-more-v2 {
@@ -1568,82 +1595,6 @@ input[type="file"] {
 
     .seller-ad-image-v2 {
         height: 230px;
-    }
-}
-
-/* =========================================
-   ПРОФИЛЬ ПРОДАВЦА — ЦЕНТР СЛЕВА И 2 КАРТОЧКИ СПРАВА
-========================================= */
-
-/* Левая карточка */
-.seller-profile-card-v2 {
-    text-align: center !important;
-}
-
-.seller-avatar-v2 {
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
-
-.seller-profile-card-v2 h1 {
-    text-align: center !important;
-}
-
-.seller-rating-v2 {
-    justify-content: center !important;
-}
-
-/* Статистика оставляем аккуратно в 2 колонки */
-.seller-meta-v2 {
-    text-align: left !important;
-}
-
-/* Галочки и формы — на всю ширину, но текст внутри не по центру */
-.seller-check-v2 {
-    text-align: left !important;
-}
-
-.seller-rate-form-v2 {
-    text-align: left !important;
-}
-
-/* Правая карточка с объявлениями */
-.seller-ads-panel-v2 {
-    max-width: 860px !important;
-}
-
-/* Ровно 2 объявления в ряд */
-.seller-ads-grid-v2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 22px !important;
-}
-
-/* Карточка объявления */
-.seller-ad-card-v2 {
-    width: 100% !important;
-}
-
-/* Чтобы карточки выглядели ровно */
-.seller-ad-image-v2 {
-    height: 210px !important;
-}
-
-.seller-ad-title-v2 {
-    min-height: 44px !important;
-}
-
-.seller-ad-address-v2 {
-    min-height: 42px !important;
-}
-
-/* На маленьких экранах снова 1 объявление */
-@media (max-width: 900px) {
-    .seller-ads-grid-v2 {
-        grid-template-columns: 1fr !important;
-    }
-
-    .seller-ads-panel-v2 {
-        max-width: none !important;
     }
 }
 
@@ -1738,6 +1689,7 @@ input[type="file"] {
 .seller-ad-delete-v2 {
     background: linear-gradient(135deg, #DC2626, #991B1B);
     color: #ffffff;
+    justify-content: center;
 }
 
     .seller-ad-delete-v2:hover {
@@ -1746,17 +1698,6 @@ input[type="file"] {
 
 .seller-owner-ad-actions-v2 form {
     margin: 0;
-}
-
-/* Чтобы две карточки объявления красиво помещались */
-.seller-ads-grid-v2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-}
-
-@media (max-width: 900px) {
-    .seller-ads-grid-v2 {
-        grid-template-columns: 1fr !important;
-    }
 }
 
 /* Кнопка выхода в профиле */
@@ -1768,10 +1709,6 @@ input[type="file"] {
     .seller-owner-logout-btn-v2:hover {
         background: linear-gradient(135deg, #EF4444, #B91C1C) !important;
     }
-
-.seller-avatar-v2 {
-    overflow: hidden;
-}
 
     .seller-avatar-v2 img {
         width: 100%;
@@ -1790,3 +1727,25 @@ input[type="file"] {
         object-fit: cover;
         display: block;
     }
+/* Кнопка сообщения продавцу */
+.message-button {
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #16A34A, #15803D);
+    color: #ffffff !important;
+    text-align: center;
+    text-decoration: none !important;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.message-button:hover {
+    background: linear-gradient(135deg, #22C55E, #166534);
+    color: #ffffff !important;
+    text-decoration: none !important;
+}

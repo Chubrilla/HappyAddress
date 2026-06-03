@@ -208,8 +208,7 @@
 
                                     <form asp-controller="Ads"
                                           asp-action="Delete"
-                                          method="post"
-                                          onsubmit="return confirm('Удалить объявление?');">
+                                          method="post" data-confirm="Удалить объявление?">
                                         <input type="hidden" name="id" value="@ad.Id" />
 
                                         <button type="submit" class="seller-ad-delete-v2">

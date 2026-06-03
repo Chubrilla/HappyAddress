@@ -1,0 +1,683 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/0qc6w9",
+    "id": "0qc6w9",
+    "slide": 2,
+    "layoutId": "a30eaf11-d8a5-4b63-98a0-9126d20e13a5",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "6203a2ce-3d71-40b0-90e5-ea421e53e071",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "a30eaf11-d8a5-4b63-98a0-9126d20e13a5",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "6203a2ce-3d71-40b0-90e5-ea421e53e071",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "6203a2ce-3d71-40b0-90e5-ea421e53e071",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/knih4byh",
+      "id": "1",
+      "bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#F7F9FC",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/v6psfil0",
+      "id": "2",
+      "bbox": [
+        54,
+        34,
+        760,
+        26
+      ],
+      "geometry": "rect",
+      "text": "HappyAddress · преддипломная практика",
+      "textPreview": "HappyAddress · преддипломная практика",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "HappyAddress · преддипломная практика"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "HappyAddress · преддипломная практика",
+          "runs": [
+            {
+              "index": 1,
+              "text": "HappyAddress · преддипломная практика",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#667085"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2lszqtcj",
+      "id": "3",
+      "bbox": [
+        54,
+        72,
+        940,
+        76
+      ],
+      "geometry": "rect",
+      "text": "Актуальность разработки",
+      "textPreview": "Актуальность разработки",
+      "resolvedFontSize": 34,
+      "resolvedTextStyle": {
+        "fontSize": 34,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Актуальность разработки"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Актуальность разработки",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Актуальность разработки",
+              "fontSize": 34,
+              "typeface": "Arial",
+              "color": "#172033",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d0z61032",
+      "id": "4",
+      "bbox": [
+        54,
+        150,
+        1172,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#CBD5E1",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kf6dcbul",
+      "id": "5",
+      "bbox": [
+        74,
+        205,
+        340,
+        230
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FEE2E2",
+      "lineColor": "#DC2626",
+      "lineWidth": 2
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vu9knih4",
+      "id": "6",
+      "bbox": [
+        96,
+        223,
+        296,
+        32
+      ],
+      "geometry": "rect",
+      "text": "Проблема",
+      "textPreview": "Проблема",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Проблема"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Проблема",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Проблема",
+              "fontSize": 22,
+              "typeface": "Arial",
+              "color": "#172033",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/29gr2p8n",
+      "id": "7",
+      "bbox": [
+        96,
+        263,
+        296,
+        156
+      ],
+      "geometry": "rect",
+      "text": "Данные об объектах, фотографиях, контактах, статусах и переписке часто хранятся разрозненно.",
+      "textPreview": "Данные об объектах, фотографиях, контактах, статусах и переписке часто хранятся разрозненно.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Данные об объектах, фотографиях,"
+          },
+          {
+            "index": 2,
+            "text": "контактах, статусах и переписке"
+          },
+          {
+            "index": 3,
+            "text": "часто хранятся разрозненно."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Данные об объектах, фотографиях, контактах, статусах и переписке часто хранятся разрозненно.",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Данные об объектах, фотографиях, контактах, статусах и переписке часто хранятся разрозненно.",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#667085"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/donyd0z6",
+      "id": "8",
+      "bbox": [
+        470,
+        205,
+        340,
+        230
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FFEDD5",
+      "lineColor": "#EA580C",
+      "lineWidth": 2
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3q5o7qp",
+      "id": "9",
+      "bbox": [
+        492,
+        223,
+        296,
+        32
+      ],
+      "geometry": "rect",
+      "text": "Риск",
+      "textPreview": "Риск",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Риск"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Риск",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Риск",
+              "fontSize": 22,
+              "typeface": "Arial",
+              "color": "#172033",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/at47y1kr",
+      "id": "10",
+      "bbox": [
+        492,
+        263,
+        296,
+        156
+      ],
+      "geometry": "rect",
+      "text": "Ошибки в цене, адресе, площади или статусе объявления снижают доверие и увеличивают время обработки.",
+      "textPreview": "Ошибки в цене, адресе, площади или статусе объявления снижают доверие и увеличивают время обработки.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Ошибки в цене, адресе, площади"
+          },
+          {
+            "index": 2,
+            "text": "или статусе объявления снижают"
+          },
+          {
+            "index": 3,
+            "text": "доверие и увеличивают время"
+          },
+          {
+            "index": 4,
+            "text": "обработки."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Ошибки в цене, адресе, площади или статусе объявления снижают доверие и увеличивают время обработки.",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Ошибки в цене, адресе, площади или статусе объявления снижают доверие и увеличивают время обработки.",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#667085"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3ex0nuxc",
+      "id": "11",
+      "bbox": [
+        866,
+        205,
+        340,
+        230
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#DCFCE7",
+      "lineColor": "#16A34A",
+      "lineWidth": 2
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/szqtcj6t",
+      "id": "12",
+      "bbox": [
+        888,
+        223,
+        296,
+        32
+      ],
+      "geometry": "rect",
+      "text": "Решение",
+      "textPreview": "Решение",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "fontSize": 22,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Решение"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Решение",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Решение",
+              "fontSize": 22,
+              "typeface": "Arial",
+              "color": "#172033",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lkjm1cfa",
+      "id": "13",
+      "bbox": [
+        888,
+        263,
+        296,
+        156
+      ],
+      "geometry": "rect",
+      "text": "Единая веб-система централизует объявления, упрощает поиск и вводит модерацию публикаций.",
+      "textPreview": "Единая веб-система централизует объявления, упрощает поиск и вводит модерацию публикаций.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Единая веб-система централизует"
+          },
+          {
+            "index": 2,
+            "text": "объявления, упрощает поиск и"
+          },
+          {
+            "index": 3,
+            "text": "вводит модерацию публикаций."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Единая веб-система централизует объявления, упрощает поиск и вводит модерацию публикаций.",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Единая веб-система централизует объявления, упрощает поиск и вводит модерацию публикаций.",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#667085"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ahoza1gv",
+      "id": "14",
+      "bbox": [
+        112,
+        508,
+        1056,
+        80
+      ],
+      "geometry": "rect",
+      "text": "HappyAddress объединяет каталог недвижимости, личный кабинет, карту, избранное, модерацию и коммуникацию между пользователями.",
+      "textPreview": "HappyAddress объединяет каталог недвижимости, личный кабинет, карту, избранное, модерацию и коммуникацию между пользователями.",
+      "resolvedFontSize": 28,
+      "resolvedTextStyle": {
+        "fontSize": 28,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "center"
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "HappyAddress объединяет каталог недвижимости, личный кабинет, карту,"
+          },
+          {
+            "index": 2,
+            "text": "избранное, модерацию и коммуникацию между пользователями."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "HappyAddress объединяет каталог недвижимости, личный кабинет, карту, избранное, модерацию и коммуникацию между пользователями.",
+          "runs": [
+            {
+              "index": 1,
+              "text": "HappyAddress объединяет каталог недвижимости, личный кабинет, карту, избранное, модерацию и коммуникацию между пользователями.",
+              "fontSize": 28,
+              "typeface": "Arial",
+              "color": "#172033",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/32lszqtc",
+      "id": "15",
+      "bbox": [
+        1168,
+        664,
+        60,
+        28
+      ],
+      "geometry": "rect",
+      "text": "02",
+      "textPreview": "02",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "fontSize": 16,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "right"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02",
+          "runs": [
+            {
+              "index": 1,
+              "text": "02",
+              "fontSize": 16,
+              "typeface": "Arial",
+              "color": "#667085",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

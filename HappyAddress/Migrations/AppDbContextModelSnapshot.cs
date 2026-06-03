@@ -271,6 +271,73 @@ namespace HappyAddress.Migrations
                     b.ToTable("AdImages");
                 });
 
+            modelBuilder.Entity("HappyAddress.Models.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BuyerUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SellerUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdId");
+
+                    b.HasIndex("BuyerUserId");
+
+                    b.HasIndex("SellerUserId");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("HappyAddress.Models.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("SenderUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("SenderUserId");
+
+                    b.ToTable("ChatMessages");
+                });
+
             modelBuilder.Entity("HappyAddress.Models.Favorite", b =>
                 {
                     b.Property<int>("Id")
@@ -427,6 +494,52 @@ namespace HappyAddress.Migrations
                     b.Navigation("Ad");
                 });
 
+            modelBuilder.Entity("HappyAddress.Models.Chat", b =>
+                {
+                    b.HasOne("HappyAddress.Models.Ad", "Ad")
+                        .WithMany()
+                        .HasForeignKey("AdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HappyAddress.Models.User", "BuyerUser")
+                        .WithMany()
+                        .HasForeignKey("BuyerUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HappyAddress.Models.User", "SellerUser")
+                        .WithMany()
+                        .HasForeignKey("SellerUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ad");
+
+                    b.Navigation("BuyerUser");
+
+                    b.Navigation("SellerUser");
+                });
+
+            modelBuilder.Entity("HappyAddress.Models.ChatMessage", b =>
+                {
+                    b.HasOne("HappyAddress.Models.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HappyAddress.Models.User", "SenderUser")
+                        .WithMany()
+                        .HasForeignKey("SenderUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("SenderUser");
+                });
+
             modelBuilder.Entity("HappyAddress.Models.Favorite", b =>
                 {
                     b.HasOne("HappyAddress.Models.Ad", "Ad")
@@ -487,6 +600,11 @@ namespace HappyAddress.Migrations
             modelBuilder.Entity("HappyAddress.Models.Ad", b =>
                 {
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("HappyAddress.Models.Chat", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

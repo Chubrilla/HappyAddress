@@ -1,45 +1,27 @@
-﻿@model HappyAddress.Models.AdFilterViewModel
+@using System.Text.Json
+@model HappyAddress.Models.AdFilterViewModel
+
+@{
+    var mapAdsJson = JsonSerializer.Serialize(
+        (Model.Ads ?? Enumerable.Empty<HappyAddress.Models.Ad>())
+            .Where(a => a.Latitude.HasValue && a.Longitude.HasValue)
+            .Select(a => new
+            {
+                id = a.Id,
+                title = a.Title,
+                price = a.Price,
+                city = a.City,
+                address = a.Address,
+                latitude = a.Latitude,
+                longitude = a.Longitude
+            }));
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/home.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-
-    <style>
-        /* Исправление модального окна фильтров */
-        .filters-modal {
-            position: fixed !important;
-            inset: 0 !important;
-            z-index: 9998 !important;
-
-            display: none;
-            align-items: center !important;
-            justify-content: center !important;
-
-            padding: 86px 20px 28px !important;
-            overflow: hidden !important;
-
-            background: rgba(0, 0, 0, 0.62) !important;
-        }
-
-        .filters-modal-content {
-            width: min(1120px, 100%) !important;
-            max-height: calc(100vh - 125px) !important;
-            overflow-y: auto !important;
-            margin: 0 auto !important;
-        }
-
-        .filter-actions,
-        .filters-actions {
-            position: sticky !important;
-            z-index: 5 !important;
-        }
-
-        body.modal-open {
-            overflow: hidden !important;
-        }
-    </style>
 }
 
 <section class="hero-search">
@@ -61,17 +43,17 @@
                     <button type="submit"
                             class="search-submit-btn"
                             title="Найти"
-                            onclick="document.getElementById('searchMode').value = 'text';">
+                            data-action="submit-text-search">
                         🔍
                     </button>
                 </div>
 
                 <div class="search-actions">
-                    <button type="button" onclick="toggleFilters()" class="filter-open-btn">
+                    <button type="button" data-action="toggle-filters" class="filter-open-btn">
                         Фильтры
                     </button>
 
-                    <button type="button" onclick="toggleMap()" class="map-open-btn">
+                    <button type="button" data-action="toggle-map" class="map-open-btn">
                         Объявления на карте
                     </button>
                 </div>
@@ -88,7 +70,7 @@
         <div class="filters-modal-header">
             <h3>Фильтры</h3>
 
-            <button type="button" class="filters-close-btn" onclick="toggleFilters()">
+            <button type="button" class="filters-close-btn" data-action="toggle-filters">
                 ×
             </button>
         </div>
@@ -785,14 +767,14 @@
     </form>
 </div>
 
-<section id="homeMapBox" class="home-map-box" style="display: none;">
+<section id="homeMapBox" class="home-map-box" style="display: none;" data-map-ads="@mapAdsJson">
     <div class="map-header">
         <div>
             <h3>Объявления на карте</h3>
             <p>На карте отображаются объявления из текущей выдачи.</p>
         </div>
 
-        <button type="button" class="map-close-btn" onclick="toggleMap()">
+        <button type="button" class="map-close-btn" data-action="toggle-map">
             Закрыть карту
         </button>
     </div>
@@ -930,384 +912,8 @@
     }
 </section>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-
-<script>
-    const mapAds = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
-        Model.Ads
-            .Where(a => a.Latitude.HasValue && a.Longitude.HasValue)
-            .Select(a => new
-            {
-          id = a.Id,
-          title = a.Title,
-          price = a.Price,
-          city = a.City,
-          address = a.Address,
-          latitude = a.Latitude,
-          longitude = a.Longitude
-            })
-    ));
-</script>
-
-<script>
-    function openFilters() {
-        const filtersModal = document.getElementById("filtersModal");
-
-        if (!filtersModal) {
-            return;
-        }
-
-        filtersModal.style.display = "flex";
-        document.body.classList.add("modal-open");
-    }
-
-    function closeFilters() {
-        const filtersModal = document.getElementById("filtersModal");
-
-        if (!filtersModal) {
-            return;
-        }
-
-        filtersModal.style.display = "none";
-        document.body.classList.remove("modal-open");
-    }
-
-    function toggleFilters() {
-        const filtersModal = document.getElementById("filtersModal");
-
-        if (!filtersModal) {
-            return;
-        }
-
-        const isOpen = filtersModal.style.display === "flex";
-
-        if (isOpen) {
-            closeFilters();
-        } else {
-            openFilters();
-        }
-    }
-
-    document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-            closeFilters();
-        }
-    });
-
-    document.addEventListener("click", function (event) {
-        const filtersModal = document.getElementById("filtersModal");
-
-        if (filtersModal && event.target === filtersModal) {
-            closeFilters();
-        }
-    });
-
-    let homeMap = null;
-    let homeClusterGroup = null;
-
-    function toggleMap() {
-        const mapBox = document.getElementById("homeMapBox");
-        const adsSection = document.querySelector(".ads-section");
-
-        if (!mapBox) {
-            return;
-        }
-
-        if (mapBox.style.display === "none" || mapBox.style.display === "") {
-            mapBox.style.display = "block";
-
-            if (adsSection) {
-                adsSection.style.display = "none";
-            }
-
-            setTimeout(function () {
-                initAdsMap();
-            }, 200);
-        } else {
-            mapBox.style.display = "none";
-
-            if (adsSection) {
-                adsSection.style.display = "block";
-            }
-
-            clearClusterAdsList();
-        }
-    }
-
-    function initAdsMap() {
-        const mapElement = document.getElementById("adsMap");
-
-        if (!mapElement) {
-            console.log("Не найден блок #adsMap");
-            return;
-        }
-
-        if (typeof L === "undefined") {
-            console.log("Leaflet не подключился");
-            return;
-        }
-
-        if (!homeMap) {
-            homeMap = L.map("adsMap").setView([55.751244, 37.618423], 10);
-
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: ""
-            }).addTo(homeMap);
-        }
-
-        homeMap.invalidateSize();
-
-        if (homeClusterGroup) {
-            homeMap.removeLayer(homeClusterGroup);
-        }
-
-        homeClusterGroup = L.markerClusterGroup({
-            showCoverageOnHover: false,
-            spiderfyOnMaxZoom: true,
-            zoomToBoundsOnClick: false
-        });
-
-        if (!mapAds || mapAds.length === 0) {
-            homeMap.setView([55.751244, 37.618423], 10);
-            clearClusterAdsList();
-            return;
-        }
-
-        const bounds = [];
-
-        mapAds.forEach(ad => {
-            const lat = Number(String(ad.latitude).replace(",", "."));
-            const lng = Number(String(ad.longitude).replace(",", "."));
-
-            if (Number.isNaN(lat) || Number.isNaN(lng)) {
-                return;
-            }
-
-            const marker = L.marker([lat, lng]);
-
-            marker.adData = ad;
-
-            const price = ad.price
-                ? Number(ad.price).toLocaleString("ru-RU")
-                : "Цена не указана";
-
-            marker.bindPopup(`
-                <div class="map-popup">
-                    <strong>${ad.title ?? "Объявление"}</strong>
-                    <br />
-                    <span>${price} ₽</span>
-                    <br />
-                    <small>${ad.city ?? ""}${ad.address ? ", " + ad.address : ""}</small>
-                    <br />
-                    <a href="/Ads/Details/${ad.id}">Подробнее</a>
-                </div>
-            `);
-
-            marker.on("click", function () {
-                showClusterAdsList([ad]);
-            });
-
-            homeClusterGroup.addLayer(marker);
-            bounds.push([lat, lng]);
-        });
-
-        homeClusterGroup.on("clusterclick", function (event) {
-            const markers = event.layer.getAllChildMarkers();
-
-            const ads = markers
-                .map(marker => marker.adData)
-                .filter(ad => ad);
-
-            showClusterAdsList(ads);
-
-            homeMap.fitBounds(event.layer.getBounds(), {
-                padding: [40, 40]
-            });
-        });
-
-        homeMap.addLayer(homeClusterGroup);
-
-        if (bounds.length > 0) {
-            homeMap.fitBounds(bounds, {
-                padding: [40, 40]
-            });
-        }
-    }
-
-    function showClusterAdsList(ads) {
-        const listBox = document.getElementById("clusterAdsList");
-        const itemsBox = document.getElementById("clusterAdsItems");
-
-        if (!listBox || !itemsBox) {
-            return;
-        }
-
-        if (!ads || ads.length === 0) {
-            clearClusterAdsList();
-            return;
-        }
-
-        listBox.style.display = "block";
-
-        itemsBox.innerHTML = ads.map(ad => {
-            const price = ad.price
-                ? Number(ad.price).toLocaleString("ru-RU") + " ₽"
-                : "Цена не указана";
-
-            const title = ad.title ?? "Объявление";
-            const city = ad.city ?? "";
-            const address = ad.address ?? "";
-
-            return `
-                <div class="cluster-ad-card">
-                    <div>
-                        <h5>${title}</h5>
-                        <p class="cluster-ad-price">${price}</p>
-                        <p class="cluster-ad-address">${city}${address ? ", " + address : ""}</p>
-                    </div>
-
-                    <a href="/Ads/Details/${ad.id}" class="cluster-ad-link">
-                        Подробнее
-                    </a>
-                </div>
-            `;
-        }).join("");
-    }
-
-    function clearClusterAdsList() {
-        const listBox = document.getElementById("clusterAdsList");
-        const itemsBox = document.getElementById("clusterAdsItems");
-
-        if (listBox) {
-            listBox.style.display = "none";
-        }
-
-        if (itemsBox) {
-            itemsBox.innerHTML = "";
-        }
-    }
-
-    const searchInput = document.querySelector('input[name="searchText"]');
-
-    if (searchInput) {
-        searchInput.addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-                const searchMode = document.getElementById("searchMode");
-
-                if (searchMode) {
-                    searchMode.value = "text";
-                }
-            }
-        });
-    }
-
-    const propertyTypeFilter = document.getElementById("propertyType");
-    const dealTypeFilter = document.getElementById("dealType");
-
-    const houseFilterFields = document.getElementById("houseFilterFields");
-    const flatFilterFields = document.getElementById("flatFilterFields");
-    const landFilterFields = document.getElementById("landFilterFields");
-    const garageFilterFields = document.getElementById("garageFilterFields");
-
-    const dailyRentFilterFields = document.getElementById("dailyRentFilterFields");
-    const longRentFilterFields = document.getElementById("longRentFilterFields");
-
-    function updatePropertyOptionsByDealType() {
-        if (!dealTypeFilter || !propertyTypeFilter) {
-            return;
-        }
-
-        const dealValue = dealTypeFilter.value;
-        const options = propertyTypeFilter.querySelectorAll("option");
-
-        options.forEach(option => {
-            option.disabled = false;
-            option.hidden = false;
-            option.style.display = "";
-        });
-
-        if (dealValue === "Посуточная аренда") {
-            options.forEach(option => {
-                if (option.value === "Участок" || option.value === "Гараж") {
-                    option.disabled = true;
-                    option.hidden = true;
-                    option.style.display = "none";
-                }
-            });
-
-            if (propertyTypeFilter.value === "Участок" || propertyTypeFilter.value === "Гараж") {
-                propertyTypeFilter.value = "";
-            }
-        }
-    }
-
-    function updateFilterFields() {
-        if (!propertyTypeFilter) {
-            return;
-        }
-
-        const propertyValue = propertyTypeFilter.value;
-        const dealValue = dealTypeFilter ? dealTypeFilter.value : "";
-
-        const isDailyRent = dealValue === "Посуточная аренда";
-        const isLongRent = dealValue === "Долгосрочная аренда";
-
-        if (houseFilterFields) {
-            houseFilterFields.style.display =
-                (propertyValue === "Дом" ||
-                 propertyValue === "Коттедж" ||
-                 propertyValue === "Таунхаус") && !isDailyRent
-                    ? "block"
-                    : "none";
-        }
-
-        if (flatFilterFields) {
-            flatFilterFields.style.display =
-                propertyValue === "Квартира" && !isDailyRent
-                    ? "block"
-                    : "none";
-        }
-
-        if (landFilterFields) {
-            landFilterFields.style.display =
-                propertyValue === "Участок" && !isDailyRent
-                    ? "block"
-                    : "none";
-        }
-
-        if (garageFilterFields) {
-            garageFilterFields.style.display =
-                propertyValue === "Гараж" && !isDailyRent
-                    ? "block"
-                    : "none";
-        }
-
-        if (dailyRentFilterFields) {
-            dailyRentFilterFields.style.display =
-                isDailyRent ? "block" : "none";
-        }
-
-        if (longRentFilterFields) {
-            longRentFilterFields.style.display =
-                isLongRent ? "block" : "none";
-        }
-    }
-
-    if (propertyTypeFilter) {
-        propertyTypeFilter.addEventListener("change", function () {
-            updatePropertyOptionsByDealType();
-            updateFilterFields();
-        });
-    }
-
-    if (dealTypeFilter) {
-        dealTypeFilter.addEventListener("change", function () {
-            updatePropertyOptionsByDealType();
-            updateFilterFields();
-        });
-    }
-
-    updatePropertyOptionsByDealType();
-    updateFilterFields();
-</script>
+@section Scripts {
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="~/js/home-index.js" asp-append-version="true"></script>
+}

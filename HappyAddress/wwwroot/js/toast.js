@@ -1,24 +1,20 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    if (!window.toastMessage) {
-        return;
-    }
-
+document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById("toastContainer");
 
-    if (!container) {
+    if (!container || !container.dataset.toastMessage) {
         return;
     }
 
     const toast = document.createElement("div");
     toast.classList.add("toast");
 
-    if (window.toastType === "error") {
+    if (container.dataset.toastType === "error") {
         toast.classList.add("toast-error");
     } else {
         toast.classList.add("toast-success");
     }
 
-    toast.textContent = window.toastMessage;
+    toast.textContent = container.dataset.toastMessage;
     container.appendChild(toast);
 
     setTimeout(function () {

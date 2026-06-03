@@ -17,5 +17,8 @@ namespace HappyAddress.Data
 
         public DbSet<UserRating> UserRatings { get; set; }
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
+
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
     }
 }

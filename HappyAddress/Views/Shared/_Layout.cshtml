@@ -1,10 +1,23 @@
 ﻿@using Microsoft.AspNetCore.Http
-@using System.Text.Json;
+@inject HappyAddress.Data.AppDbContext DbContext
 
 @{
     int? currentUserId = Context.Session.GetInt32("UserId");
     string? currentUserName = Context.Session.GetString("UserName");
     string? currentUserAvatarPath = Context.Session.GetString("UserAvatarPath");
+
+    int unreadMessagesCount = 0;
+    string? toastMessage = TempData["Success"]?.ToString() ?? TempData["Error"]?.ToString();
+    string? toastType = TempData["Error"] != null ? "error" : (TempData["Success"] != null ? "success" : null);
+
+    if (currentUserId != null)
+    {
+        unreadMessagesCount = DbContext.ChatMessages.Count(m =>
+            m.SenderUserId != currentUserId.Value &&
+            !m.IsRead &&
+            (m.Chat.BuyerUserId == currentUserId.Value ||
+             m.Chat.SellerUserId == currentUserId.Value));
+    }
 
     string avatarLetter = "П";
 
@@ -25,6 +38,8 @@
     <link rel="stylesheet" href="~/css/common.css" />
 
     @RenderSection("Styles", required: false)
+
+    <link rel="stylesheet" href="~/css/site-polish.css" asp-append-version="true" />
 </head>
 
 <body>
@@ -111,28 +126,33 @@
 
     <main class="container main-content">
 
-        <div id="toastContainer"></div>
-
-        @if (TempData["Success"] != null)
-        {
-            <script>
-                window.toastMessage = @Html.Raw(JsonSerializer.Serialize(TempData["Success"]));
-                window.toastType = 'success';
-            </script>
-        }
-
-        @if (TempData["Error"] != null)
-        {
-            <script>
-                window.toastMessage = @Html.Raw(JsonSerializer.Serialize(TempData["Error"]));
-                window.toastType = 'error';
-            </script>
-        }
+        <div id="toastContainer"
+             data-toast-message="@toastMessage"
+             data-toast-type="@toastType"></div>
 
         @RenderBody()
     </main>
 
+    @if (currentUserId != null)
+    {
+        <a asp-controller="Chat"
+           asp-action="Index"
+           class="floating-chat-btn"
+           title="Сообщения">
+
+            <span class="floating-chat-icon">💬</span>
+
+            @if (unreadMessagesCount > 0)
+            {
+                <span class="floating-chat-badge">
+                    @unreadMessagesCount
+                </span>
+            }
+        </a>
+    }
+
     <script src="~/js/toast.js"></script>
+    <script src="~/js/confirm-submit.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

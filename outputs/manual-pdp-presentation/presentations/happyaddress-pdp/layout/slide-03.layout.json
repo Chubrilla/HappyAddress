@@ -1,0 +1,722 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/p1olfz",
+    "id": "p1olfz",
+    "slide": 3,
+    "layoutId": "a30eaf11-d8a5-4b63-98a0-9126d20e13a5",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "6203a2ce-3d71-40b0-90e5-ea421e53e071",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "a30eaf11-d8a5-4b63-98a0-9126d20e13a5",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "6203a2ce-3d71-40b0-90e5-ea421e53e071",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "6203a2ce-3d71-40b0-90e5-ea421e53e071",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2t83itgf",
+      "id": "1",
+      "bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#F7F9FC",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9knih4by",
+      "id": "2",
+      "bbox": [
+        54,
+        34,
+        760,
+        26
+      ],
+      "geometry": "rect",
+      "text": "HappyAddress · преддипломная практика",
+      "textPreview": "HappyAddress · преддипломная практика",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "HappyAddress · преддипломная практика"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "HappyAddress · преддипломная практика",
+          "runs": [
+            {
+              "index": 1,
+              "text": "HappyAddress · преддипломная практика",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#667085"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kzupwb2h",
+      "id": "3",
+      "bbox": [
+        54,
+        72,
+        940,
+        76
+      ],
+      "geometry": "rect",
+      "text": "Цель и задачи практики",
+      "textPreview": "Цель и задачи практики",
+      "resolvedFontSize": 34,
+      "resolvedTextStyle": {
+        "fontSize": 34,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Цель и задачи практики"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Цель и задачи практики",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Цель и задачи практики",
+              "fontSize": 34,
+              "typeface": "Arial",
+              "color": "#172033",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rqd4vmtw",
+      "id": "4",
+      "bbox": [
+        54,
+        150,
+        1172,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#CBD5E1",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/25kb6xkf",
+      "id": "5",
+      "bbox": [
+        70,
+        198,
+        500,
+        360
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#DBEAFE",
+      "lineColor": "#2563EB",
+      "lineWidth": 2
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9w3m94fu",
+      "id": "6",
+      "bbox": [
+        100,
+        230,
+        220,
+        42
+      ],
+      "geometry": "rect",
+      "text": "Цель",
+      "textPreview": "Цель",
+      "resolvedFontSize": 28,
+      "resolvedTextStyle": {
+        "fontSize": 28,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Цель"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Цель",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Цель",
+              "fontSize": 28,
+              "typeface": "Arial",
+              "color": "#2563EB",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kb6xkf6d",
+      "id": "7",
+      "bbox": [
+        100,
+        292,
+        420,
+        170
+      ],
+      "geometry": "rect",
+      "text": "Разработать веб-приложение для размещения, поиска, обработки и сопровождения объявлений о недвижимости.",
+      "textPreview": "Разработать веб-приложение для размещения, поиска, обработки и сопровождения объявлений о недвижимости.",
+      "resolvedFontSize": 28,
+      "resolvedTextStyle": {
+        "fontSize": 28,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Разработать веб-приложение"
+          },
+          {
+            "index": 2,
+            "text": "для размещения, поиска,"
+          },
+          {
+            "index": 3,
+            "text": "обработки и сопровождения"
+          },
+          {
+            "index": 4,
+            "text": "объявлений о недвижимости."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Разработать веб-приложение для размещения, поиска, обработки и сопровождения объявлений о недвижимости.",
+          "runs": [
+            {
+              "index": 1,
+              "text": "Разработать веб-приложение для размещения, поиска, обработки и сопровождения объявлений о недвижимости.",
+              "fontSize": 28,
+              "typeface": "Arial",
+              "color": "#172033",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r2p8nqxs",
+      "id": "8",
+      "bbox": [
+        650,
+        218,
+        10,
+        10
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#2563EB",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2hwfyxob",
+      "id": "9",
+      "bbox": [
+        674,
+        210,
+        500,
+        44
+      ],
+      "geometry": "rect",
+      "text": "изучить предметную область и требования к сервису недвижимости",
+      "textPreview": "изучить предметную область и требования к сервису недвижимости",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "изучить предметную область и требования к сервису"
+          },
+          {
+            "index": 2,
+            "text": "недвижимости"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "изучить предметную область и требования к сервису недвижимости",
+          "runs": [
+            {
+              "index": 1,
+              "text": "изучить предметную область и требования к сервису недвижимости",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#172033"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/crmhk3q5",
+      "id": "10",
+      "bbox": [
+        650,
+        293,
+        10,
+        10
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#2563EB",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1cfa9w3m",
+      "id": "11",
+      "bbox": [
+        674,
+        285,
+        500,
+        44
+      ],
+      "geometry": "rect",
+      "text": "спроектировать структуру ASP.NET Core MVC-приложения и базы данных",
+      "textPreview": "спроектировать структуру ASP.NET Core MVC-приложения и базы данных",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "спроектировать структуру ASP.NET Core"
+          },
+          {
+            "index": 2,
+            "text": "MVC-приложения и базы данных"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "спроектировать структуру ASP.NET Core MVC-приложения и базы данных",
+          "runs": [
+            {
+              "index": 1,
+              "text": "спроектировать структуру ASP.NET Core MVC-приложения и базы данных",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#172033"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ulwval87",
+      "id": "12",
+      "bbox": [
+        650,
+        368,
+        10,
+        10
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#2563EB",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/j6tovaho",
+      "id": "13",
+      "bbox": [
+        674,
+        360,
+        500,
+        44
+      ],
+      "geometry": "rect",
+      "text": "реализовать регистрацию, объявления, фильтры, карту, избранное и чат",
+      "textPreview": "реализовать регистрацию, объявления, фильтры, карту, избранное и чат",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "реализовать регистрацию, объявления, фильтры,"
+          },
+          {
+            "index": 2,
+            "text": "карту, избранное и чат"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "реализовать регистрацию, объявления, фильтры, карту, избранное и чат",
+          "runs": [
+            {
+              "index": 1,
+              "text": "реализовать регистрацию, объявления, фильтры, карту, избранное и чат",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#172033"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c3ylc7u5",
+      "id": "14",
+      "bbox": [
+        650,
+        443,
+        10,
+        10
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#2563EB",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1kre1w7m",
+      "id": "15",
+      "bbox": [
+        674,
+        435,
+        500,
+        44
+      ],
+      "geometry": "rect",
+      "text": "добавить модерацию объявлений и изображений",
+      "textPreview": "добавить модерацию объявлений и изображений",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "добавить модерацию объявлений и изображений"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "добавить модерацию объявлений и изображений",
+          "runs": [
+            {
+              "index": 1,
+              "text": "добавить модерацию объявлений и изображений",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#172033"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/uxc3ylc7",
+      "id": "16",
+      "bbox": [
+        650,
+        518,
+        10,
+        10
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#2563EB",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ji5snelo",
+      "id": "17",
+      "bbox": [
+        674,
+        510,
+        500,
+        44
+      ],
+      "geometry": "rect",
+      "text": "проверить основные пользовательские сценарии",
+      "textPreview": "проверить основные пользовательские сценарии",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "alignment": "left"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "проверить основные пользовательские сценарии"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "проверить основные пользовательские сценарии",
+          "runs": [
+            {
+              "index": 1,
+              "text": "проверить основные пользовательские сценарии",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#172033"
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8bat47y1",
+      "id": "18",
+      "bbox": [
+        1168,
+        664,
+        60,
+        28
+      ],
+      "geometry": "rect",
+      "text": "03",
+      "textPreview": "03",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "fontSize": 16,
+        "typeface": "Arial",
+        "bold": true,
+        "alignment": "right"
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03",
+          "runs": [
+            {
+              "index": 1,
+              "text": "03",
+              "fontSize": 16,
+              "typeface": "Arial",
+              "color": "#667085",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

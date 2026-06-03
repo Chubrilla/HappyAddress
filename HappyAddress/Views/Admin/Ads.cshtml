@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HappyAddress.Models.Ad>
+@model IEnumerable<HappyAddress.Models.Ad>
 
 @{
     ViewData["Title"] = "Объявления";
@@ -151,8 +151,7 @@
 
                             <form asp-controller="Admin"
                                   asp-action="DeleteAd"
-                                  method="post"
-                                  onsubmit="return confirm('Удалить объявление?');">
+                                  method="post" data-confirm="Удалить объявление?">
                                 <input type="hidden" name="id" value="@ad.Id" />
 
                                 <button type="submit" class="admin-delete-btn">

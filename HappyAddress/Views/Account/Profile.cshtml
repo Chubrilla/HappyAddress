@@ -125,54 +125,6 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
-    <script>
-        const phoneInput = document.querySelector('input[name="PhoneNumber"]');
-
-        function formatPhone(value) {
-            let x = value.replace(/\D/g, '');
-
-            if (x.startsWith('8')) {
-                x = '7' + x.slice(1);
-            }
-
-            if (x.length === 10) {
-                x = '7' + x;
-            }
-
-            if (!x.startsWith('7') && x.length > 0) {
-                x = '7' + x;
-            }
-
-            x = x.substring(0, 11);
-
-            let formatted = '+7';
-
-            if (x.length > 1) {
-                formatted += ' (' + x.substring(1, 4);
-            }
-
-            if (x.length >= 4) {
-                formatted += ') ' + x.substring(4, 7);
-            }
-
-            if (x.length >= 7) {
-                formatted += '-' + x.substring(7, 9);
-            }
-
-            if (x.length >= 9) {
-                formatted += '-' + x.substring(9, 11);
-            }
-
-            return formatted;
-        }
-
-        if (phoneInput) {
-            phoneInput.value = formatPhone(phoneInput.value);
-
-            phoneInput.addEventListener('input', function () {
-                phoneInput.value = formatPhone(phoneInput.value);
-            });
-        }
-    </script>
+    <script src="~/js/phone-format.js" asp-append-version="true"></script>
+    <script src="~/js/account-profile.js" asp-append-version="true"></script>
 }

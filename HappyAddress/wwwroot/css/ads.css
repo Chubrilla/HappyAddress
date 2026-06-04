@@ -554,6 +554,15 @@ input[type="file"] {
     text-decoration: none;
 }
 
+.form-box .edit-form-actions > button[type="submit"] {
+    border-color: rgba(187, 247, 208, 0.4);
+    background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.form-box .edit-form-actions > button[type="submit"]:hover {
+    background: linear-gradient(135deg, #22c55e, #15803d);
+}
+
 /* Fullscreen галерея */
 .gallery-modal {
     display: none;

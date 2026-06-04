@@ -1717,7 +1717,7 @@ input[type="file"] {
     margin-top: 12px;
     padding: 13px 16px;
     border-radius: 13px;
-    background: linear-gradient(135deg, #3F54A7, #253959);
+    background: linear-gradient(135deg, #F59E0B, #D97706);
     color: #ffffff !important;
     text-align: center;
     text-decoration: none;
@@ -1725,7 +1725,7 @@ input[type="file"] {
 }
 
     .seller-owner-btn-v2:hover {
-        background: linear-gradient(135deg, #596FC7, #253959);
+        background: linear-gradient(135deg, #FBBF24, #D97706);
         color: #ffffff !important;
         text-decoration: none;
     }
@@ -1760,12 +1760,12 @@ input[type="file"] {
 }
 
 .seller-ad-edit-v2 {
-    background: linear-gradient(135deg, #3F54A7, #253959);
+    background: linear-gradient(135deg, #F59E0B, #D97706);
     color: #ffffff !important;
 }
 
     .seller-ad-edit-v2:hover {
-        background: linear-gradient(135deg, #596FC7, #253959);
+        background: linear-gradient(135deg, #FBBF24, #D97706);
         color: #ffffff !important;
         text-decoration: none;
     }

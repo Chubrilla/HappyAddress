@@ -27,15 +27,15 @@
             formatted += " (" + digits.substring(0, 3);
         }
 
-        if (digits.length >= 3) {
+        if (digits.length > 3) {
             formatted += ") " + digits.substring(3, 6);
         }
 
-        if (digits.length >= 6) {
+        if (digits.length > 6) {
             formatted += "-" + digits.substring(6, 8);
         }
 
-        if (digits.length >= 8) {
+        if (digits.length > 8) {
             formatted += "-" + digits.substring(8, 10);
         }
 

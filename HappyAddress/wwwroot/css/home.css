@@ -96,6 +96,10 @@
 
 .filter-open-btn,
 .map-open-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     padding: 13px 20px;
     border: none;
     border-radius: 14px;
@@ -105,7 +109,19 @@
     font-weight: 800;
 }
 
-.filter-open-btn:hover,
+.filter-open-btn {
+    background: linear-gradient(135deg, #4F67B5, #3F54A7);
+}
+
+.filter-open-btn:hover {
+    background: linear-gradient(135deg, #657BC4, #3F54A7);
+}
+
+.search-action-icon {
+    font-size: 17px;
+    line-height: 1;
+}
+
 .map-open-btn:hover {
     background: linear-gradient(135deg, #596FC7, #253959);
 }

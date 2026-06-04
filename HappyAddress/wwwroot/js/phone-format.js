@@ -54,8 +54,44 @@
             phoneInput.value = formatPhoneNumber(phoneInput.value);
         }
 
-        phoneInput.addEventListener("input", function () {
-            phoneInput.value = formatPhoneNumber(phoneInput.value);
+        phoneInput.addEventListener("input", function (event) {
+            const valueBeforeFormatting = phoneInput.value;
+            const cursorBeforeFormatting = phoneInput.selectionStart ?? valueBeforeFormatting.length;
+            const digitsBeforeCursor = valueBeforeFormatting
+                .slice(0, cursorBeforeFormatting)
+                .replace(/\D/g, "")
+                .length;
+            const digits = valueBeforeFormatting.replace(/\D/g, "");
+
+            // Allow the user to remove the last remaining country-code digit.
+            if (event.inputType?.startsWith("delete") && digits === "7") {
+                phoneInput.value = "";
+                return;
+            }
+
+            const formatted = formatPhoneNumber(valueBeforeFormatting);
+            phoneInput.value = formatted;
+
+            if (cursorBeforeFormatting >= valueBeforeFormatting.length) {
+                phoneInput.setSelectionRange(formatted.length, formatted.length);
+                return;
+            }
+
+            let digitsSeen = 0;
+            let cursorAfterFormatting = formatted.length;
+
+            for (let index = 0; index < formatted.length; index++) {
+                if (/\d/.test(formatted[index])) {
+                    digitsSeen++;
+                }
+
+                if (digitsSeen >= digitsBeforeCursor) {
+                    cursorAfterFormatting = index + 1;
+                    break;
+                }
+            }
+
+            phoneInput.setSelectionRange(cursorAfterFormatting, cursorAfterFormatting);
         });
     }
 

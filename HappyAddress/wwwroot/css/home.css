@@ -387,6 +387,29 @@
     margin-bottom: 0;
 }
 
+.cluster-ad-image {
+    flex: 0 0 132px;
+    width: 132px;
+    height: 88px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: rgba(148, 163, 184, 0.45);
+}
+
+.cluster-ad-image-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.cluster-ad-content {
+    flex: 1;
+    min-width: 0;
+}
+
 .cluster-ad-card h5 {
     margin: 0 0 6px;
     font-size: 17px;
@@ -659,11 +682,19 @@
     }
 
     .cluster-ad-card {
-        flex-direction: column;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: 96px minmax(0, 1fr);
+        align-items: center;
+    }
+
+    .cluster-ad-image {
+        width: 96px;
+        height: 72px;
+        flex-basis: auto;
     }
 
     .cluster-ad-link {
+        grid-column: 1 / -1;
         width: 100%;
         text-align: center;
     }

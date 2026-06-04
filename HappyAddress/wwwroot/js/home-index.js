@@ -100,10 +100,16 @@
             const title = escapeHtml(ad.title || "Объявление");
             const city = escapeHtml(ad.city || "");
             const address = escapeHtml(ad.address || "");
+            const imagePath = escapeHtml(ad.imagePath || "");
+            const imageMarkup = imagePath
+                ? `<img src="${imagePath}" alt="Фото объявления" class="cluster-ad-image" />`
+                : `<div class="cluster-ad-image cluster-ad-image-empty">Нет фото</div>`;
 
             return `
                 <div class="cluster-ad-card">
-                    <div>
+                    ${imageMarkup}
+
+                    <div class="cluster-ad-content">
                         <h5>${title}</h5>
                         <p class="cluster-ad-price">${price}</p>
                         <p class="cluster-ad-address">${city}${address ? ", " + address : ""}</p>

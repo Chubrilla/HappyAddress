@@ -13,7 +13,10 @@
                 city = a.City,
                 address = a.Address,
                 latitude = a.Latitude,
-                longitude = a.Longitude
+                longitude = a.Longitude,
+                imagePath = a.Images != null && a.Images.Count > 0
+                    ? a.Images[0].ImagePath
+                    : null
             }));
 }
 

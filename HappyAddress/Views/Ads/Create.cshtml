@@ -43,10 +43,10 @@
         <div class="form-group">
             <label asp-for="Price">Цена, ₽</label>
             <input asp-for="Price"
-                   type="number"
-                   min="0"
-                   step="1"
-                   placeholder="Например, 3000000" />
+                   type="text"
+                   inputmode="numeric"
+                   data-money-input
+                   placeholder="Например, 3 000 000" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
     </div>
@@ -514,7 +514,11 @@
 
         <div class="form-group">
             <label asp-for="Deposit">Залог, ₽</label>
-            <input asp-for="Deposit" type="number" min="0" placeholder="Например, 30000" />
+            <input asp-for="Deposit"
+                   type="text"
+                   inputmode="numeric"
+                   data-money-input
+                   placeholder="Например, 30 000" />
             <span asp-validation-for="Deposit" class="text-danger"></span>
         </div>
 
@@ -600,5 +604,6 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="~/js/phone-format.js" asp-append-version="true"></script>
+    <script src="~/js/money-format.js" asp-append-version="true"></script>
     <script src="~/js/ad-form.js" asp-append-version="true"></script>
 }

@@ -15,6 +15,7 @@
       class="form-box">
 
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserId" />
     <input type="hidden" asp-for="Latitude" id="latitudeInput" />
     <input type="hidden" asp-for="Longitude" id="longitudeInput" />
 
@@ -628,7 +629,10 @@
             Сохранить изменения
         </button>
 
-        <a asp-controller="Ads" asp-action="MyAds" class="back-link">
+        <a asp-controller="Users"
+           asp-action="Profile"
+           asp-route-id="@Model.UserId"
+           class="back-link">
             Назад в личный кабинет
         </a>
     </div>

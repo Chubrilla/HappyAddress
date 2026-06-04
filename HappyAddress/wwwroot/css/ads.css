@@ -453,20 +453,30 @@ input[type="file"] {
     border-radius: 50% !important;
     background: #ffffff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+    color: transparent;
+    font-size: 0;
+    line-height: 1;
+    cursor: pointer;
+    transform: none;
+    transition: none;
+}
+
+.photo-delete-btn::before {
+    content: "×";
+    display: block;
     color: #4b5563;
     font-size: 15px;
     font-weight: 500;
     line-height: 1;
-    cursor: pointer;
-    transform: none;
+    transform: translateY(-0.5px);
 }
 
 .form-box .photo-delete-btn:hover,
 .photo-delete-btn:hover {
-    border-color: #9ca3af;
+    border-color: #aeb8c4;
     background: #ffffff;
-    color: #dc2626;
-    transform: scale(1.08);
+    color: transparent;
+    transform: none;
 }
 
 .photo-status-badge {

@@ -435,32 +435,33 @@ input[type="file"] {
 .form-box .photo-delete-btn,
 .photo-delete-btn {
     position: absolute;
-    top: 7px;
-    right: 9px;
-    width: auto;
-    height: auto;
+    top: 6px;
+    right: 6px;
+    width: 30px;
+    height: 30px;
     min-width: 0;
     padding: 0;
     margin: 0;
-    display: block;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 50%;
+    background: rgba(17, 24, 39, 0.72);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
     color: #ffffff;
-    font-size: 28px;
-    font-weight: 900;
+    font-size: 20px;
+    font-weight: 600;
     line-height: 1;
     cursor: pointer;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
     transform: none;
 }
 
 .form-box .photo-delete-btn:hover,
 .photo-delete-btn:hover {
-    background: transparent;
-    color: #ffdddd;
-    transform: scale(1.12);
+    border-color: #ffffff;
+    background: rgba(185, 28, 28, 0.9);
+    color: #ffffff;
+    transform: scale(1.06);
 }
 
 .photo-status-badge {
@@ -479,7 +480,7 @@ input[type="file"] {
     background: rgba(220, 38, 38, 0.92);
 }
 
-.form-box button[type="submit"] {
+.form-box button[type="submit"]:not(.photo-delete-btn) {
     margin-top: 14px;
     padding: 13px 20px;
     border: none;
@@ -490,7 +491,7 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.form-box button[type="submit"]:hover {
+.form-box button[type="submit"]:not(.photo-delete-btn):hover {
     background: linear-gradient(135deg, #596FC7, #253959);
 }
 

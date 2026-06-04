@@ -462,13 +462,27 @@ input[type="file"] {
 }
 
 .photo-delete-btn::before {
-    content: "×";
-    display: block;
-    color: #4b5563;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1;
-    transform: translateY(-0.5px);
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 1px;
+    border-radius: 1px;
+    background: #4b5563;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.photo-delete-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 1px;
+    border-radius: 1px;
+    background: #4b5563;
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .form-box .photo-delete-btn:hover,

@@ -43,7 +43,17 @@
 
                 <div class="form-group">
                     <label asp-for="BirthDate">Дата рождения</label>
-                    <input asp-for="BirthDate" type="date" />
+                    <input type="text"
+                           id="BirthDateDisplay"
+                           inputmode="numeric"
+                           maxlength="10"
+                           autocomplete="bday"
+                           placeholder="ДД.ММ.ГГГГ"
+                           value="@(Model != null && Model.BirthDate != default ? Model.BirthDate.ToString("dd.MM.yyyy") : "")" />
+                    <input type="hidden"
+                           id="BirthDate"
+                           name="BirthDate"
+                           value="@(Model != null && Model.BirthDate != default ? Model.BirthDate.ToString("yyyy-MM-dd") : "")" />
                     <span asp-validation-for="BirthDate" class="text-danger"></span>
                 </div>
             </div>

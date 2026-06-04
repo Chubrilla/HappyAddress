@@ -59,11 +59,11 @@
 }
 
 .phone-button {
-    background: linear-gradient(135deg, #0EA5E9, #0284C7);
+    background: linear-gradient(135deg, #3F54A7, #253959);
 }
 
 .phone-button:hover {
-    background: linear-gradient(135deg, #38BDF8, #0284C7);
+    background: linear-gradient(135deg, #596FC7, #253959);
 }
 
 .map-button {

@@ -266,7 +266,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #3F54A7, #253959);
+    background: linear-gradient(135deg, #16A34A, #15803D);
     color: #ffffff;
     font-size: 17px;
     font-weight: 900;
@@ -315,7 +315,7 @@ body {
 
     .floating-chat-btn:hover {
         transform: translateY(-3px);
-        background: linear-gradient(135deg, #596FC7, #253959);
+        background: linear-gradient(135deg, #22C55E, #166534);
         color: #ffffff !important;
         text-decoration: none !important;
     }

@@ -3,6 +3,7 @@
 
     const DEFAULT_LATITUDE = 55.751244;
     const DEFAULT_LONGITUDE = 37.618423;
+    const WORLD_BOUNDS = L.latLngBounds([[-85, -180], [85, 180]]);
 
     let map = null;
     let marker = null;
@@ -188,13 +189,16 @@
         const initialLatitude = parseNumber(initialLatitudeRaw, DEFAULT_LATITUDE);
         const initialLongitude = parseNumber(initialLongitudeRaw, DEFAULT_LONGITUDE);
 
-        map = L.map("map").setView(
-            [initialLatitude, initialLongitude],
-            hasInitialCoordinates ? 16 : 10
-        );
+        map = L.map("map", {
+            minZoom: 2,
+            maxBounds: WORLD_BOUNDS,
+            maxBoundsViscosity: 1
+        }).setView([initialLatitude, initialLongitude], hasInitialCoordinates ? 16 : 10);
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: ""
+            attribution: "",
+            noWrap: true,
+            bounds: WORLD_BOUNDS
         }).addTo(map);
 
         if (hasInitialCoordinates) {

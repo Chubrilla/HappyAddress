@@ -3,6 +3,7 @@
 
     let homeMap = null;
     let homeClusterGroup = null;
+    const WORLD_BOUNDS = L.latLngBounds([[-85, -180], [85, 180]]);
 
     function parseMapAds() {
         const mapBox = document.getElementById("homeMapBox");
@@ -125,10 +126,16 @@
         }
 
         if (!homeMap) {
-            homeMap = L.map("adsMap").setView([55.751244, 37.618423], 10);
+            homeMap = L.map("adsMap", {
+                minZoom: 2,
+                maxBounds: WORLD_BOUNDS,
+                maxBoundsViscosity: 1
+            }).setView([55.751244, 37.618423], 10);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: ""
+                attribution: "",
+                noWrap: true,
+                bounds: WORLD_BOUNDS
             }).addTo(homeMap);
         }
 

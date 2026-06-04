@@ -128,10 +128,18 @@
             return;
         }
 
-        detailsModalMap = L.map("detailsModalMap").setView([config.latitude, config.longitude], 16);
+        const worldBounds = L.latLngBounds([[-85, -180], [85, 180]]);
+
+        detailsModalMap = L.map("detailsModalMap", {
+            minZoom: 2,
+            maxBounds: worldBounds,
+            maxBoundsViscosity: 1
+        }).setView([config.latitude, config.longitude], 16);
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: ""
+            attribution: "",
+            noWrap: true,
+            bounds: worldBounds
         }).addTo(detailsModalMap);
 
         L.marker([config.latitude, config.longitude])

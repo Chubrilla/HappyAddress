@@ -42,8 +42,36 @@
     margin-bottom: 10px;
 }
 
+.favorite-button {
+    background: linear-gradient(135deg, #DB2777, #BE185D);
+}
+
+.favorite-button:hover {
+    background: linear-gradient(135deg, #EC4899, #BE185D);
+}
+
 .favorite-button.favorite-active {
-    background: linear-gradient(135deg, #881616, #B91C1C);
+    background: linear-gradient(135deg, #9D174D, #831843);
+}
+
+.favorite-button.favorite-active:hover {
+    background: linear-gradient(135deg, #BE185D, #831843);
+}
+
+.phone-button {
+    background: linear-gradient(135deg, #16A34A, #15803D);
+}
+
+.phone-button:hover {
+    background: linear-gradient(135deg, #22C55E, #15803D);
+}
+
+.map-button {
+    background: linear-gradient(135deg, #0891B2, #0E7490);
+}
+
+.map-button:hover {
+    background: linear-gradient(135deg, #06B6D4, #0E7490);
 }
 
 /* Общие блоки */

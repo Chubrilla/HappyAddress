@@ -524,8 +524,34 @@ input[type="file"] {
     background: linear-gradient(135deg, #596FC7, #253959);
 }
 
-.form-box > .back-link {
-    margin-left: 12px;
+.edit-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.form-box .edit-form-actions > button[type="submit"],
+.form-box .edit-form-actions > .back-link {
+    min-height: 44px;
+    margin: 0;
+    padding: 13px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #3F54A7, #253959);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.15;
+    text-decoration: none;
+    box-shadow: 0 8px 18px rgba(37, 57, 89, 0.18);
+}
+
+.form-box .edit-form-actions > .back-link:hover {
+    background: linear-gradient(135deg, #596FC7, #253959);
+    color: #ffffff;
+    text-decoration: none;
 }
 
 /* Fullscreen галерея */
@@ -896,10 +922,14 @@ input[type="file"] {
         padding: 20px;
     }
 
-    .form-box > .back-link {
-        display: block;
-        width: fit-content;
-        margin: 16px 0 0;
+    .edit-form-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .form-box .edit-form-actions > button[type="submit"],
+    .form-box .edit-form-actions > .back-link {
+        width: 100%;
     }
 }
 

@@ -623,13 +623,15 @@
         </div>
     }
 
-    <button type="submit">
-        Сохранить изменения
-    </button>
+    <div class="edit-form-actions">
+        <button type="submit">
+            Сохранить изменения
+        </button>
 
-    <a asp-controller="Account" asp-action="Profile" class="back-link">
-        Назад в личный кабинет
-    </a>
+        <a asp-controller="Ads" asp-action="MyAds" class="back-link">
+            Назад в личный кабинет
+        </a>
+    </div>
 </form>
 
 @section Scripts {

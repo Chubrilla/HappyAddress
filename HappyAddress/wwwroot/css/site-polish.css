@@ -132,7 +132,7 @@ textarea {
 }
 
 .ad-tile {
-    min-height: 435px;
+    min-height: 0;
     border-radius: 18px;
 }
 
@@ -148,7 +148,9 @@ textarea {
 }
 
 .ad-tile-body {
-    padding: 15px;
+    padding: 12px 14px 14px;
+    color: inherit;
+    text-decoration: none;
 }
 
 .ad-tile-title,
@@ -165,7 +167,7 @@ textarea {
 }
 
 .ad-tile-price {
-    margin-bottom: 9px;
+    margin-bottom: 4px;
     font-size: 22px;
     line-height: 1.15;
 }
@@ -179,11 +181,16 @@ textarea {
 }
 
 .ad-tile-meta {
-    min-height: 20px;
+    min-height: 0;
+    margin-bottom: 4px;
+    color: var(--ha-text-dark);
+    line-height: 1.3;
 }
 
 .ad-tile-address {
-    min-height: 40px;
+    min-height: 0;
+    color: #58709b;
+    line-height: 1.35;
 }
 
 .ad-tile-footer {

@@ -1,6 +1,31 @@
 @using System.Text.Json
 @model HappyAddress.Models.AdFilterViewModel
 
+@functions {
+    private static string FormatCardNumber(double value, string suffix)
+    {
+        return $"{value:0.#} {suffix}";
+    }
+
+    private static string Pluralize(int value, string one, string few, string many)
+    {
+        var lastTwo = value % 100;
+        var last = value % 10;
+
+        if (lastTwo >= 11 && lastTwo <= 14)
+        {
+            return many;
+        }
+
+        return last switch
+        {
+            1 => one,
+            >= 2 and <= 4 => few,
+            _ => many
+        };
+    }
+}
+
 @{
     var mapAdsJson = JsonSerializer.Serialize(
         (Model.Ads ?? Enumerable.Empty<HappyAddress.Models.Ad>())
@@ -813,19 +838,33 @@
         <div class="ads-grid">
             @foreach (var ad in Model.Ads)
             {
-                string statusClass = "ad-status-default";
+                var cardFacts = new List<string>();
 
-                if (ad.Status == "Опубликовано")
+                if (!string.IsNullOrWhiteSpace(ad.PropertyType))
                 {
-                    statusClass = "ad-status-published";
+                    cardFacts.Add(ad.PropertyType);
                 }
-                else if (ad.Status == "На модерации")
+
+                if (ad.TotalArea.HasValue)
                 {
-                    statusClass = "ad-status-moderation";
+                    cardFacts.Add(FormatCardNumber(ad.TotalArea.Value, "м²"));
                 }
-                else if (ad.Status == "Отклонено")
+
+                if (ad.LandArea.HasValue)
                 {
-                    statusClass = "ad-status-rejected";
+                    cardFacts.Add(FormatCardNumber(ad.LandArea.Value, "сот."));
+                }
+
+                if (ad.Bedrooms.HasValue)
+                {
+                    var bedroomWord = Pluralize(ad.Bedrooms.Value, "спальня", "спальни", "спален");
+                    cardFacts.Add($"{ad.Bedrooms.Value} {bedroomWord}");
+                }
+
+                if (ad.TotalFloors.HasValue)
+                {
+                    var floorWord = Pluralize(ad.TotalFloors.Value, "этаж", "этажа", "этажей");
+                    cardFacts.Add($"{ad.TotalFloors.Value} {floorWord}");
                 }
 
                 <article class="ad-tile">
@@ -848,20 +887,16 @@
                         </div>
                     </a>
 
-                    <div class="ad-tile-body">
-                        <a asp-controller="Ads"
-                           asp-action="Details"
-                           asp-route-id="@ad.Id"
-                           class="ad-tile-title">
-                            @ad.Title
-                        </a>
-
+                    <a asp-controller="Ads"
+                       asp-action="Details"
+                       asp-route-id="@ad.Id"
+                       class="ad-tile-body">
                         <div class="ad-tile-price">
                             @ad.Price.ToString("N0") ₽
                         </div>
 
                         <div class="ad-tile-meta">
-                            @ad.PropertyType · @ad.DealType
+                            @string.Join(" · ", cardFacts)
                         </div>
 
                         <div class="ad-tile-address">
@@ -872,20 +907,7 @@
                                 <span>, @ad.Address</span>
                             }
                         </div>
-
-                        <div class="ad-tile-footer">
-                            <span class="ad-tile-status @statusClass">
-                                @ad.Status
-                            </span>
-
-                            <a asp-controller="Ads"
-                               asp-action="Details"
-                               asp-route-id="@ad.Id"
-                               class="ad-tile-details">
-                                Подробнее
-                            </a>
-                        </div>
-                    </div>
+                    </a>
                 </article>
             }
         </div>

@@ -545,7 +545,9 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 16px;
+    padding: 12px 14px 14px;
+    color: inherit;
+    text-decoration: none;
 }
 
 .ad-tile-title {
@@ -564,22 +566,23 @@
 }
 
 .ad-tile-price {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     color: #0f172a;
-    font-size: 21px;
+    font-size: 22px;
     font-weight: 900;
 }
 
 .ad-tile-meta {
-    margin-bottom: 6px;
-    color: #475569;
+    margin-bottom: 4px;
+    color: #111827;
     font-size: 14px;
     font-weight: 700;
+    line-height: 1.3;
 }
 
 .ad-tile-address {
-    min-height: 44px;
-    color: #64748b;
+    min-height: 0;
+    color: #58709b;
     font-size: 14px;
     line-height: 1.35;
 }

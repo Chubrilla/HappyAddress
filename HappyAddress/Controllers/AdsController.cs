@@ -100,6 +100,7 @@ namespace HappyAddress.Controllers
             }
 
             model.Title = BuildGeneratedTitle(model);
+            ModelState.Remove(nameof(model.Title));
 
             if (string.IsNullOrWhiteSpace(model.Description))
             {
@@ -331,6 +332,7 @@ namespace HappyAddress.Controllers
             }
 
             model.Title = BuildGeneratedTitle(model);
+            ModelState.Remove(nameof(model.Title));
 
             if (model.PropertyType == "Квартира" &&
                 model.Floor.HasValue &&

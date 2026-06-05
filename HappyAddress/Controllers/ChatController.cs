@@ -279,5 +279,36 @@ namespace HappyAddress.Controllers
                 createdAt = message.CreatedAt.ToString("dd.MM.yyyy HH:mm")
             });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var chat = _context.Chats.FirstOrDefault(c =>
+                c.Id == id &&
+                (c.BuyerUserId == userId.Value || c.SellerUserId == userId.Value));
+
+            if (chat == null)
+            {
+                TempData["Error"] = "Чат не найден";
+                return RedirectToAction("Index");
+            }
+
+            var messages = _context.ChatMessages.Where(m => m.ChatId == chat.Id).ToList();
+
+            _context.ChatMessages.RemoveRange(messages);
+            _context.Chats.Remove(chat);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Чат удален";
+            return RedirectToAction("Index");
+        }
     }
 }

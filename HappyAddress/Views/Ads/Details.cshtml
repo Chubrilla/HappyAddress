@@ -2,6 +2,48 @@
 @using Microsoft.AspNetCore.Http
 @model HappyAddress.Models.Ad
 
+@functions {
+    private static string FormatDetailsNumber(double value)
+    {
+        return $"{value:0.#}";
+    }
+
+    private static string GetDealVerb(string? dealType)
+    {
+        return dealType switch
+        {
+            "Продажа" => "Продаётся",
+            "Посуточная аренда" => "Сдаётся посуточно",
+            "Долгосрочная аренда" => "Сдаётся",
+            _ => "Объявление"
+        };
+    }
+
+    private static string BuildDetailsTitle(HappyAddress.Models.Ad ad)
+    {
+        var titleParts = new List<string>
+        {
+            GetDealVerb(ad.DealType)
+        };
+
+        if (!string.IsNullOrWhiteSpace(ad.PropertyType))
+        {
+            titleParts.Add(ad.PropertyType.ToLowerInvariant());
+        }
+
+        if (ad.PropertyType == "Участок" && ad.LandArea.HasValue)
+        {
+            titleParts.Add($"{FormatDetailsNumber(ad.LandArea.Value)} сот.");
+        }
+        else if (ad.TotalArea.HasValue)
+        {
+            titleParts.Add($"{FormatDetailsNumber(ad.TotalArea.Value)} м²");
+        }
+
+        return string.Join(" ", titleParts);
+    }
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/css/ads.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -24,6 +66,8 @@
         statusClass = "status-red";
     }
 }
+
+<h2 class="details-title">@BuildDetailsTitle(Model)</h2>
 
 <div class="details-layout">
 

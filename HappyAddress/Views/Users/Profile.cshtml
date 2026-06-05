@@ -159,6 +159,14 @@
             <div class="seller-ads-grid-v2">
                 @foreach (var ad in Model.Ads)
                 {
+                    var statusClass = ad.Status switch
+                    {
+                        "Опубликовано" => "seller-ad-status-published",
+                        "На модерации" => "seller-ad-status-moderation",
+                        "Отклонено" => "seller-ad-status-rejected",
+                        _ => "seller-ad-status-default"
+                    };
+
                     <article class="seller-ad-card-v2">
                         <a href="/Ads/Details/@ad.Id" class="seller-ad-image-v2">
                             @if (ad.Images != null && ad.Images.Count > 0)
@@ -194,6 +202,13 @@
                                     <span>, @ad.Address</span>
                                 }
                             </div>
+
+                            @if (Model.IsOwner)
+                            {
+                                <div class="seller-ad-status-v2 @statusClass">
+                                    @ad.Status
+                                </div>
+                            }
 
                             @if (Model.IsOwner)
                             {

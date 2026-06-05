@@ -215,40 +215,7 @@ namespace HappyAddress.Controllers
             }
             
             TempData["Success"] = "Объявление успешно создано";
-            return RedirectToAction("MyAds");
-        }
-
-        [HttpGet]
-        public IActionResult MyAds(int page = 1)
-        {
-            int? userId = HttpContext.Session.GetInt32("UserId");
-
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var query = _context.Ads
-                .Where(a => a.UserId == userId.Value)
-                .OrderByDescending(a => a.CreatedAt);
-
-            int totalAds = query.Count();
-            int totalPages = (int)System.Math.Ceiling((double)totalAds / PageSize);
-
-            var ads = query
-                .Skip((page  - 1) * PageSize)
-                .Take(PageSize)
-                .ToList();
-
-            foreach (var ad in ads)
-            {
-                ad.Images = _context.AdImages.Where(i => i.AdId == ad.Id).ToList();
-            }
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(ads);
+            return RedirectToAction("Profile", "Users", new { id = userId.Value });
         }
 
         [HttpGet]
@@ -605,7 +572,7 @@ namespace HappyAddress.Controllers
                 TempData["Success"] = "Изменения сохранены";
             }
             
-            return RedirectToAction("MyAds");
+            return RedirectToAction("Profile", "Users", new { id = userId.Value });
         }
 
         [HttpPost]
@@ -643,7 +610,7 @@ namespace HappyAddress.Controllers
             _context.SaveChanges();
 
             TempData["Success"] = "Объявление удалено";
-            return RedirectToAction("MyAds");
+            return RedirectToAction("Profile", "Users", new { id = userId.Value });
         }
 
         [HttpPost]
@@ -761,7 +728,7 @@ namespace HappyAddress.Controllers
             if (image == null)
             {
                 TempData["Error"] = "Фото не найдено";
-                return RedirectToAction("MyAds");
+                return RedirectToAction("Profile", "Users", new { id = userId.Value });
             }
 
             var ad = _context.Ads

@@ -1754,6 +1754,36 @@ input[type="file"] {
     min-height: 42px;
 }
 
+.seller-ad-status-v2 {
+    align-self: flex-start;
+    margin: 2px 0 12px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.seller-ad-status-published {
+    background: rgba(22, 163, 74, 0.16);
+    color: #15803D;
+}
+
+.seller-ad-status-moderation {
+    background: rgba(249, 115, 22, 0.16);
+    color: #C2410C;
+}
+
+.seller-ad-status-rejected {
+    background: rgba(220, 38, 38, 0.14);
+    color: #B91C1C;
+}
+
+.seller-ad-status-default {
+    background: rgba(100, 116, 139, 0.16);
+    color: #475569;
+}
+
 .seller-ad-more-v2 {
     margin-top: auto;
     display: block;

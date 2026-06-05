@@ -19,6 +19,22 @@
         };
     }
 
+    private static string? GetAreaText(HappyAddress.Models.Ad ad)
+    {
+        if (ad.PropertyType == "Участок")
+        {
+            return ad.LandArea.HasValue
+                ? $"{FormatDetailsNumber(ad.LandArea.Value)} сот."
+                : null;
+        }
+
+        var area = ad.TotalArea ?? ad.LivingArea ?? ad.KitchenArea;
+
+        return area.HasValue
+            ? $"{FormatDetailsNumber(area.Value)} м²"
+            : null;
+    }
+
     private static string BuildDetailsTitle(HappyAddress.Models.Ad ad)
     {
         var titleParts = new List<string>
@@ -31,13 +47,11 @@
             titleParts.Add(ad.PropertyType.ToLowerInvariant());
         }
 
-        if (ad.PropertyType == "Участок" && ad.LandArea.HasValue)
+        var areaText = GetAreaText(ad);
+
+        if (!string.IsNullOrWhiteSpace(areaText))
         {
-            titleParts.Add($"{FormatDetailsNumber(ad.LandArea.Value)} сот.");
-        }
-        else if (ad.TotalArea.HasValue)
-        {
-            titleParts.Add($"{FormatDetailsNumber(ad.TotalArea.Value)} м²");
+            titleParts.Add(areaText);
         }
 
         return string.Join(" ", titleParts);

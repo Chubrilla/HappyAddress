@@ -8,6 +8,18 @@
         return $"{value:0.#}";
     }
 
+    private static string FormatDetailsPrice(decimal price, string? dealType)
+    {
+        var suffix = dealType switch
+        {
+            "Долгосрочная аренда" => "/мес",
+            "Посуточная аренда" => "/сутки",
+            _ => ""
+        };
+
+        return $"{price:N0} ₽{suffix}";
+    }
+
     private static string GetDealVerb(string? dealType)
     {
         return dealType switch
@@ -580,7 +592,7 @@
     <div class="details-sidebar">
         <div class="price-card">
             <h2 class="details-price">
-                @Model.Price.ToString("N0") ₽
+                @FormatDetailsPrice(Model.Price, Model.DealType)
             </h2>
 
             @{

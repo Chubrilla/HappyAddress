@@ -7,6 +7,18 @@
         return $"{value:0.#} {suffix}";
     }
 
+    private static string FormatPrice(decimal price, string? dealType)
+    {
+        var suffix = dealType switch
+        {
+            "Долгосрочная аренда" => "/мес",
+            "Посуточная аренда" => "/сутки",
+            _ => ""
+        };
+
+        return $"{price:N0} ₽{suffix}";
+    }
+
     private static string Pluralize(int value, string one, string few, string many)
     {
         var lastTwo = value % 100;
@@ -35,6 +47,7 @@
                 id = a.Id,
                 title = a.Title,
                 price = a.Price,
+                priceText = FormatPrice(a.Price, a.DealType),
                 city = a.City,
                 address = a.Address,
                 latitude = a.Latitude,
@@ -892,7 +905,7 @@
                        asp-route-id="@ad.Id"
                        class="ad-tile-body">
                         <div class="ad-tile-price">
-                            @ad.Price.ToString("N0") ₽
+                            @FormatPrice(ad.Price, ad.DealType)
                         </div>
 
                         <div class="ad-tile-meta">

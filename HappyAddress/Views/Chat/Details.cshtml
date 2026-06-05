@@ -1,5 +1,19 @@
 @model HappyAddress.Models.ChatDetailsViewModel
 
+@functions {
+    private static string FormatPrice(decimal price, string? dealType)
+    {
+        var suffix = dealType switch
+        {
+            "Долгосрочная аренда" => "/мес",
+            "Посуточная аренда" => "/сутки",
+            _ => ""
+        };
+
+        return $"{price:N0} ₽{suffix}";
+    }
+}
+
 @{
     ViewData["Title"] = "Чат";
 
@@ -71,7 +85,7 @@
 
             <div>
                 <h2>@Model.Ad.Title</h2>
-                <p>@Model.Ad.Price.ToString("N0") ₽</p>
+                <p>@FormatPrice(Model.Ad.Price, Model.Ad.DealType)</p>
                 <span>@Model.Ad.PropertyType · @Model.Ad.DealType</span>
             </div>
         </a>

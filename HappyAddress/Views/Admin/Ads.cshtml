@@ -1,5 +1,19 @@
 @model IEnumerable<HappyAddress.Models.Ad>
 
+@functions {
+    private static string FormatPrice(decimal price, string? dealType)
+    {
+        var suffix = dealType switch
+        {
+            "Долгосрочная аренда" => "/мес",
+            "Посуточная аренда" => "/сутки",
+            _ => ""
+        };
+
+        return $"{price:N0} ₽{suffix}";
+    }
+}
+
 @{
     ViewData["Title"] = "Объявления";
 }
@@ -81,7 +95,7 @@
                             <h3>@ad.Title</h3>
 
                             <p class="admin-ad-price">
-                                @ad.Price.ToString("N0") ₽
+                                @FormatPrice(ad.Price, ad.DealType)
                             </p>
 
                             <p>

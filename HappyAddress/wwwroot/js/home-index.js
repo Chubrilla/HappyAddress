@@ -93,9 +93,9 @@
         listBox.style.display = "block";
 
         itemsBox.innerHTML = ads.map(function (ad) {
-            const price = ad.price
+            const price = ad.priceText || (ad.price
                 ? Number(ad.price).toLocaleString("ru-RU") + " ₽"
-                : "Цена не указана";
+                : "Цена не указана");
 
             const title = escapeHtml(ad.title || "Объявление");
             const city = escapeHtml(ad.city || "");
@@ -174,7 +174,7 @@
             }
 
             const marker = L.marker([lat, lng]);
-            const price = ad.price ? Number(ad.price).toLocaleString("ru-RU") : "Цена не указана";
+            const price = ad.priceText || (ad.price ? Number(ad.price).toLocaleString("ru-RU") + " ₽" : "Цена не указана");
             const title = escapeHtml(ad.title || "Объявление");
             const city = escapeHtml(ad.city || "");
             const address = escapeHtml(ad.address || "");
@@ -184,7 +184,7 @@
                 <div class="map-popup">
                     <strong>${title}</strong>
                     <br />
-                    <span>${price} ₽</span>
+                    <span>${price}</span>
                     <br />
                     <small>${city}${address ? ", " + address : ""}</small>
                     <br />

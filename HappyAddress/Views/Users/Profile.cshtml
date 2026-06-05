@@ -1,5 +1,19 @@
 @model HappyAddress.Models.PublicUserProfileViewModel
 
+@functions {
+    private static string FormatPrice(decimal price, string? dealType)
+    {
+        var suffix = dealType switch
+        {
+            "Долгосрочная аренда" => "/мес",
+            "Посуточная аренда" => "/сутки",
+            _ => ""
+        };
+
+        return $"{price:N0} ₽{suffix}";
+    }
+}
+
 @{
     ViewData["Title"] = "Профиль пользователя";
 
@@ -187,7 +201,7 @@
                             </a>
 
                             <div class="seller-ad-price-v2">
-                                @ad.Price.ToString("N0") ₽
+                                @FormatPrice(ad.Price, ad.DealType)
                             </div>
 
                             <div class="seller-ad-meta-v2">

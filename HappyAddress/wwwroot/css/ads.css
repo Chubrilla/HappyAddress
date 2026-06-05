@@ -205,6 +205,36 @@
     border-bottom: none;
 }
 
+.details-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.details-summary p {
+    margin: 0;
+}
+
+.details-description {
+    margin-top: 18px;
+    padding: 16px 18px;
+    border: 1px solid rgba(147, 197, 253, 0.24);
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.22);
+}
+
+.details-description strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.details-description p {
+    margin: 0;
+    line-height: 1.55;
+}
+
 .features-list {
     display: flex;
     flex-wrap: wrap;

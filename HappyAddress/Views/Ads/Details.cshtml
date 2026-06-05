@@ -51,10 +51,19 @@
         }
 
         <div class="ad-details-box">
-            <p><strong>Описание:</strong> @Model.Description</p>
-            <p><strong>Адрес:</strong> @Model.Address</p>
-            <p><strong>Тип недвижимости:</strong> @Model.PropertyType</p>
-            <p><strong>Статус:</strong> <span class="@statusClass">@Model.Status</span></p>
+            <div class="details-summary">
+                <p><strong>Статус:</strong> <span class="@statusClass">@Model.Status</span></p>
+                <p><strong>Адрес:</strong> @Model.Address</p>
+                <p><strong>Тип недвижимости:</strong> @Model.PropertyType</p>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <div class="details-description">
+                    <strong>Описание</strong>
+                    <p>@Model.Description</p>
+                </div>
+            }
 
             @if (Model.PropertyType == "Дом" || Model.PropertyType == "Коттедж" || Model.PropertyType == "Таунхаус")
             {

@@ -22,6 +22,60 @@ namespace HappyAddress.Controllers
             _environment = environment;
         }
 
+        private static string FormatTitleNumber(double value)
+        {
+            return $"{value:0.#}";
+        }
+
+        private static string GetDealVerb(string? dealType)
+        {
+            return dealType switch
+            {
+                "Продажа" => "Продаётся",
+                "Посуточная аренда" => "Сдаётся посуточно",
+                "Долгосрочная аренда" => "Сдаётся",
+                _ => "Объявление"
+            };
+        }
+
+        private static string? GetTitleAreaText(Ad ad)
+        {
+            if (ad.PropertyType == "Участок")
+            {
+                return ad.LandArea.HasValue
+                    ? $"{FormatTitleNumber(ad.LandArea.Value)} сот."
+                    : null;
+            }
+
+            var area = ad.TotalArea ?? ad.LivingArea ?? ad.KitchenArea;
+
+            return area.HasValue
+                ? $"{FormatTitleNumber(area.Value)} м²"
+                : null;
+        }
+
+        private static string BuildGeneratedTitle(Ad ad)
+        {
+            var titleParts = new List<string>
+            {
+                GetDealVerb(ad.DealType)
+            };
+
+            if (!string.IsNullOrWhiteSpace(ad.PropertyType))
+            {
+                titleParts.Add(ad.PropertyType.ToLowerInvariant());
+            }
+
+            var areaText = GetTitleAreaText(ad);
+
+            if (!string.IsNullOrWhiteSpace(areaText))
+            {
+                titleParts.Add(areaText);
+            }
+
+            return string.Join(" ", titleParts);
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -45,10 +99,7 @@ namespace HappyAddress.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            if (string.IsNullOrWhiteSpace(model.Title))
-            {
-                ModelState.AddModelError("Title", "Введите заголовок");
-            }
+            model.Title = BuildGeneratedTitle(model);
 
             if (string.IsNullOrWhiteSpace(model.Description))
             {
@@ -279,17 +330,14 @@ namespace HappyAddress.Controllers
                 return NotFound();
             }
 
+            model.Title = BuildGeneratedTitle(model);
+
             if (model.PropertyType == "Квартира" &&
                 model.Floor.HasValue &&
                 model.TotalFloors.HasValue &&
                 model.Floor.Value > model.TotalFloors.Value)
             {
                 ModelState.AddModelError("Floor", "Этаж квартиры не может быть больше общего количества этажей в доме.");
-            }
-
-            if (string.IsNullOrWhiteSpace(model.Title))
-            {
-                ModelState.AddModelError("Title", "Введите заголовок");
             }
 
             if (string.IsNullOrWhiteSpace(model.Description))
